@@ -1,364 +1,752 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="google-adsense-account" content="ca-pub-7270178671003990" />
-  <title>Central ARG · Membrana</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>iHorror 13 · iPhone fake 2026</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/img/icon-192.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    body {
-      background-color: #0a0c0f;
-      background-image: radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.02) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.02) 0%, transparent 50%);
-      color: #e0e0e0;
-      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-      line-height: 1.5;
-      scroll-behavior: smooth;
-    }
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
 
-    /* header fixo com blur */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 2rem;
-      z-index: 1000;
-      transition: all 0.2s;
-    }
+        /* iPhone container responsivo */
+        .iphone {
+            width: min(380px, 92%);
+            height: 90vh;
+            max-height: 700px;
+            background: #111;
+            border-radius: 44px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.6), 0 0 0 6px #333, 0 0 0 10px #555;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s ease;
+        }
 
-    .logo {
-      font-weight: 800;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #a0f0ff, #ff99ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 5px cyan;
-    }
+        /* notch responsivo */
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 30px;
+            background: #0a0a0a;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            color: #eee;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.6);
+        }
 
-    /* menu hambúrguer */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-    }
+        .notch .time {
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 5px cyan;
+        }
 
-    .hamburger div {
-      width: 26px;
-      height: 2px;
-      background: #0ff;
-      transition: all 0.3s ease;
-    }
+        .notch .icons i {
+            margin-left: 5px;
+            font-size: 10px;
+        }
 
-    .hamburger.active .bar1 { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active .bar2 { opacity: 0; }
-    .hamburger.active .bar3 { transform: rotate(-45deg) translate(5px, -5px); }
+        /* tela principal com rolagem */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #121212;
+            background-image: radial-gradient(circle at 30% 40%, #2a2a2a 0%, #0a0a0a 90%);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 40px 12px 20px 12px;
+            scrollbar-width: thin;
+            transition: filter 0.2s ease;
+        }
 
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.8rem;
-    }
+        .screen.glitch {
+            filter: url(#glitch) brightness(1.2);
+            animation: glitchSkew 0.3s infinite alternate;
+        }
 
-    .nav-links a {
-      color: #ccddee;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.2s;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 4px;
-    }
+        @keyframes glitchSkew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(1.5deg); }
+            40% { transform: skew(-1.5deg); }
+            60% { transform: skew(0.8deg); }
+            80% { transform: skew(-0.8deg); }
+            100% { transform: skew(0deg); }
+        }
 
-    .nav-links a:hover {
-      color: #0ff;
-      border-bottom-color: #0ff;
-      text-shadow: 0 0 4px cyan;
-    }
+        /* HOME SCREEN – grid responsivo */
+        .home-screen {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px 8px;
+            padding-bottom: 30px;
+        }
 
-    main {
-      padding-top: 75px;
-    }
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.12s ease, filter 0.2s;
+        }
 
-    .section {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 4rem 1.5rem;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+        .app-icon:active {
+            transform: scale(0.94);
+        }
 
-    .section.reveal {
-      opacity: 1;
-      transform: translateY(0);
-    }
+        .icon-bg {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.15);
+            margin-bottom: 6px;
+        }
 
-    h2 {
-      font-size: clamp(1.8rem, 5vw, 2.5rem);
-      margin-bottom: 1.5rem;
-      border-left: 5px solid cyan;
-      padding-left: 1rem;
-      letter-spacing: -0.5px;
-    }
+        .app-label {
+            font-size: 10px;
+            font-weight: 500;
+            color: #f0f0f0;
+            text-shadow: 0 1px 2px black;
+            max-width: 70px;
+            text-align: center;
+            line-height: 1.3;
+        }
 
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 700px;
-      color: #bbccff;
-    }
-
-    /* grid de cards */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background: rgba(18, 22, 30, 0.8);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(0, 255, 255, 0.2);
-      border-radius: 24px;
-      padding: 1.4rem;
-      text-decoration: none;
-      color: #f0f0f0;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .card i {
-      font-size: 2rem;
-      color: #0ff;
-    }
-
-    .card h3 {
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-
-    .card p {
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: cyan;
-      box-shadow: 0 10px 25px rgba(0, 255, 255, 0.2);
-      background: rgba(20, 30, 45, 0.9);
-    }
-
-    /* botão principal */
-    .btn-acesso {
-      background: linear-gradient(90deg, #00c3ff, #ff00c3);
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 60px;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-      margin-top: 1rem;
-      box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
-    }
-
-    .btn-acesso:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 20px cyan;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: #05070a;
-      border-top: 1px solid #1f3a4a;
-      font-size: 0.85rem;
-      margin-top: 3rem;
-    }
-
-    footer a {
-      color: #0ff;
-      text-decoration: none;
-    }
-
-    /* responsivo */
-    @media (max-width: 768px) {
-      header {
-        padding: 0.8rem 1.2rem;
+        /* Cores específicas para apps originais */
+      .audio-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  border-radius: 12px;
+  overflow: hidden;
       }
-      .hamburger {
-        display: flex;
-      }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: rgba(8, 10, 18, 0.95);
-        backdrop-filter: blur(16px);
-        flex-direction: column;
-        width: 220px;
-        padding: 1.2rem;
-        border-radius: 20px;
-        gap: 1rem;
-        text-align: right;
-        border: 1px solid cyan;
-      }
-      .nav-links.show {
-        display: flex;
-      }
-      .section {
-        padding: 3rem 1rem;
-      }
-    }
+        .icon-spotify .icon-bg { background: #1DB954; }
+        .icon-instagram .icon-bg { background: linear-gradient(45deg, #f09433, #d62976, #962fbf); }
+        .icon-safari .icon-bg { background: #007aff; }
+        .icon-files .icon-bg { background: #636366; }
+        .icon-game .icon-bg { background: #5e5ce0; }
 
-    /* glitch pequeno */
-    @keyframes subtleGlitch {
-      0% { text-shadow: -1px 0 red; }
-      50% { text-shadow: 1px 0 cyan; }
-      100% { text-shadow: 0 0 magenta; }
-    }
-    .logo:hover {
-      animation: subtleGlitch 0.3s infinite;
-    }
-  </style>
+        /* Cores para novos apps do lore */
+        .icon-membrana .icon-bg { background: #8b00ff; box-shadow: 0 0 12px magenta; }
+        .icon-darkwiki .icon-bg { background: #1a1a2e; border: 1px solid #00ffff; }
+        .icon-ppd .icon-bg { background: #004d66; }
+        .icon-terms .icon-bg { background: #2c3e50; }
+        .icon-jornal .icon-bg { background: #b45f06; }
+        .icon-lysander .icon-bg { background: #5e2a6e; }
+        .icon-enigmas .icon-bg { background: #d4af37; color: black; }
+        .icon-ego .icon-bg { background: #ff3366; }
+        .icon-historias .icon-bg { background: #e67e22; }
+        .icon-github .icon-bg { background: #24292e; }
+
+        /* APP VIEWS (telas internas) */
+      .search-terminal {
+  width: min(700px, 92%);
+  margin: 2rem auto;
+  padding: 14px 16px;
+
+  background: #050505;
+  border: 1px solid #333;
+  border-radius: 4px;
+
+  font-family: "Courier New", monospace;
+  color: #aaa;
+
+  box-shadow:
+    0 0 20px rgba(0, 0, 0, 0.8),
+    inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.search-terminal > span {
+  display: block;
+  margin-bottom: 10px;
+
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #666;
+
+  text-transform: uppercase;
+}
+
+.search-terminal form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-terminal input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 12px;
+
+  background: #000;
+  border: 1px solid #292929;
+  border-radius: 2px;
+
+  outline: none;
+
+  color: #ddd;
+  font-family: inherit;
+  font-size: 14px;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-terminal input::placeholder {
+  color: #444;
+}
+
+.search-terminal input:focus {
+  border-color: #666;
+
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.08);
+}
+
+.search-terminal button {
+  width: 44px;
+  height: 42px;
+
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 2px;
+
+  color: #aaa;
+  font-family: inherit;
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.search-terminal button:hover {
+  background: #151515;
+  border-color: #666;
+  color: #fff;
+}
+
+.search-terminal button:active {
+  transform: translateY(1px);
+}
+        .app-view {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 40px);
+            background: #1c1c1e;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 16px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+            color: #eee;
+            box-shadow: 0 -4px 20px black;
+        }
+
+        .back-home {
+            background: #2c2c2e;
+            border: none;
+            color: #0a84ff;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        /* Spotify creep clock */
+        .creep-clock {
+            background: #2c2c2e;
+            padding: 12px;
+            border-radius: 24px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #ff3b30;
+            box-shadow: 0 0 15px #ff3b3044;
+        }
+        .creep-clock .label { font-size: 11px; color: #ff9a9a; letter-spacing: 2px; }
+        .creep-clock .value { font-size: 28px; font-weight: 800; color: #ff3b30; text-shadow: 0 0 8px red; font-family: monospace; }
+
+        /* Feed do Instagram */
+        .stories { display: flex; gap: 12px; overflow-x: auto; padding: 8px 0 16px; }
+        .story { display: flex; flex-direction: column; align-items: center; min-width: 64px; }
+        .story-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #d62976); padding: 3px; margin-bottom: 5px; }
+        .story-avatar img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #1c1c1e; object-fit: cover; }
+        .feed-post { background: #262628; border-radius: 16px; margin-bottom: 20px; padding: 12px; }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .post-avatar { width: 36px; height: 36px; background: #aaa; border-radius: 50%; overflow: hidden; }
+        .post-image { width: 100%; height: 160px; background: #3a3a3c; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #8e8e93; }
+
+        /* Safari browser */
+        .browser-url { background: #2c2c2e; border-radius: 30px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .browser-url input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+        .browser-content { background: #2c2c2e; border-radius: 20px; padding: 20px; text-align: center; height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+
+        /* Files */
+        .file-item { display: flex; align-items: center; gap: 16px; padding: 12px; background: #2c2c2e; border-radius: 14px; margin-bottom: 8px; }
+        .file-item i { font-size: 22px; width: 30px; }
+
+        /* Floating Game (arrastável) */
+        .floating-game {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            width: calc(100% - 40px);
+            max-width: 320px;
+            height: 500px;
+            background: #1d1d1f;
+            border-radius: 24px;
+            border: 2px solid #5e5ce0;
+            box-shadow: 0 20px 40px black, 0 0 30px #5e5ce0;
+            z-index: 50;
+            display: none;
+            cursor: move;
+            resize: both;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        .floating-header { background: #2c2c2e; padding: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #5e5ce0; cursor: move; }
+        .floating-header i { color: #5e5ce0; }
+        .close-float { margin-left: auto; cursor: pointer; background: #3a3a3c; border: none; color: white; border-radius: 20px; padding: 4px 10px; font-size: 12px; }
+        .floating-content { height: calc(100% - 48px); background: #111; }
+        .floating-content iframe { width: 100%; height: 100%; border: none; background: #222; }
+
+        /* Efeitos de tempo */
+        .glitch-time { animation: timeGlitch 0.6s infinite; }
+        @keyframes timeGlitch {
+            0% { opacity: 1; text-shadow: -1px 0 red; }
+            30% { opacity: 0.9; transform: translateX(1px); }
+            60% { opacity: 0.8; text-shadow: 1px 0 cyan; }
+            100% { opacity: 1; transform: translateX(-1px); }
+        }
+
+        /* Rolagem customizada */
+        .screen::-webkit-scrollbar { width: 4px; }
+        .screen::-webkit-scrollbar-track { background: #1a1a1a; }
+        .screen::-webkit-scrollbar-thumb { background: #ff3b30; border-radius: 4px; }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">⌇ MEMBRANA · ARG</div>
-  <nav>
-    <div class="hamburger" id="hamburger">
-      <div class="bar1"></div>
-      <div class="bar2"></div>
-      <div class="bar3"></div>
+<div class="iphone">
+    <div class="notch">
+        <span class="time" id="liveTime">13:37</span>
+        <span class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </span>
     </div>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#inicio">Início</a></li>
-      <li><a href="#setores">Setores</a></li>
-      <li><a href="#lore">Lore +</a></li>
-      <li><a href="#acesso">Acesso</a></li>
-    </ul>
-  </nav>
-</header>
 
-<main>
-  <!-- seção herói -->
-  <section id="inicio" class="section hero">
-    <h2>⚠️ PROTOCOLO MEMBRANA</h2>
-    <p>Bem-vindo à central de inteligência do ARG. A QSR-0 já está ativa. Seu objetivo: seguir os rastros digitais, decifrar enigmas e expor a verdade por trás da E.G.O. Technologies.</p>
-    <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #ff77aa;">🔻 a seguir, todos os portais do universo conspiratório 🔻</p>
-  </section>
+    <div class="screen" id="mainScreen">
+        <!-- HOME SCREEN (ícones originais + novos do lore) -->
+        <div class="home-screen" id="homeScreen">
+            <!-- Apps originais (simulados) -->
+            <div class="app-icon icon-spotify" data-app="spotify">
+                <div class="icon-bg"><i class="fab fa-spotify"></i></div>
+                <span class="app-label">Spotify</span>
+            </div>
+            <div class="app-icon icon-instagram" data-app="instagram">
+                <div class="icon-bg"><i class="fab fa-instagram"></i></div>
+                <span class="app-label">Instagram</span>
+            </div>
+            <div class="app-icon icon-safari" data-app="safari">
+                <div class="icon-bg"><i class="fas fa-compass"></i></div>
+                <span class="app-label">Safari</span>
+            </div>
+            <div class="app-icon icon-files" data-app="files">
+                <div class="icon-bg"><i class="fas fa-folder"></i></div>
+                <span class="app-label">Arquivos</span>
+            </div>
+            <div class="app-icon icon-game" id="gameLauncher">
+                <div class="icon-bg"><i class="fas fa-gamepad"></i></div>
+                <span class="app-label">Membrana Game</span>
+            </div>
 
-  <!-- SETORES PRINCIPAIS (links diretos do lore) -->
-  <section id="setores" class="section">
-    <h2>📡 Setores de investigação</h2>
-    <div class="cards-grid">
-      <a href="membrana_news.html" class="card"><i class="fas fa-bullhorn"></i><h3>Avisos Oficiais</h3><p>Alertas e comunicados da rede MEMBRANA.</p></a>
-      <a href="jornal/jornal.html" class="card"><i class="fas fa-newspaper"></i><h3>Jornal Local</h3><p>O Observador de Floripa — 1998.</p></a>
-      <a href="departamento_investigacao/departamento_investigacao.html" class="card"><i class="fas fa-shield-hawk"></i><h3>PPD</h3><p>Polícia de Perseguição Digital, casos abertos.</p></a>
-      <a href="arquivo/arquivo.html" class="card"><i class="fas fa-folder-open"></i><h3>Arquivo Membrana</h3><p>Documentos vazados, relatórios internos.</p></a>
-      <a href="comunicado.html" class="card"><i class="fas fa-users"></i><h3>Fórum Civil</h3><p>Relatos de testemunhas e sobreviventes.</p></a>
-      <a href="wiki/qsr-terminal.html" class="card"><i class="fas fa-skull"></i><h3>Wiki Escura</h3><p>Terminal QSR‑0, enigmas e backdoors.</p></a>
-      <a href="info.html" class="card"><i class="fas fa-circle-info"></i><h3>INFO</h3><p>Glossário e cronologia do ARG.</p></a>
-      <a href="./../P.D.A/index.html" class="card"><i class="fas fa-pda"></i><h3>P.D.A</h3><p>Dispositivo pessoal – diários criptografados.</p></a>
+            <!-- NOVOS APPS DO LORE (abrem links externos / novas guias) -->
+            <div class="app-icon icon-membrana" data-url="../lore.html">
+                <div class="icon-bg"><i class="fas fa-dharmachakra"></i></div>
+                <span class="app-label">Membrana</span>
+            </div>
+            <div class="app-icon icon-darkwiki" data-url="../wiki/qsr-terminal.html">
+                <div class="icon-bg"><i class="fas fa-skull"></i></div>
+                <span class="app-label">Dark Wiki</span>
+            </div>
+            <div class="app-icon icon-ppd" data-url="../paranoicos_digitais_anonimos/index.html">
+                <div class="icon-bg"><i class="fas fa-shield-alt"></i></div>
+                <span class="app-label">PDA</span>
+            </div>
+            <div class="app-icon icon-terms" data-url="https://ops-era-phishing.github.io/membrana-core/info.html">
+                <div class="icon-bg"><i class="fas fa-file-contract"></i></div>
+                <span class="app-label">Termos</span>
+            </div>
+            <div class="app-icon icon-jornal" data-url="../jornal/jornal.html">
+                <div class="icon-bg"><i class="fas fa-newspaper"></i></div>
+                <span class="app-label">Observador</span>
+            </div>
+            <div class="app-icon icon-lysander" data-url="dr_Lysander_Morrow/index.html">
+                <div class="icon-bg"><i class="fas fa-user-secret"></i></div>
+                <span class="app-label">Dr. Lysander</span>
+            </div>
+            <div class="app-icon icon-enigmas" data-url="missoes/painel.html">
+                <div class="icon-bg"><i class="fas fa-puzzle-piece"></i></div>
+                <span class="app-label">Enigmas</span>
+            </div>
+            <div class="app-icon icon-ego" data-url="../ego-technologies.com.html">
+                <div class="icon-bg"><i class="fas fa-microchip"></i></div>
+                <span class="app-label">E.G.O. Tech</span>
+            </div>
+            <div class="app-icon icon-historias" data-url="historias/index.html">
+                <div class="icon-bg"><i class="fas fa-book-open"></i></div>
+                <span class="app-label">Histórias</span>
+            </div>
+            <div class="app-icon icon-github" data-url="https://github.com/ops-era-phishing/membrana-core.git">
+                <div class="icon-bg"><i class="fab fa-github"></i></div>
+                <span class="app-label">GitHub</span>
+            </div>
+        </div>
+
+        <!-- VIEWS INTERNAS (Spotify, Instagram, Safari, Files) -->
+        <!-- Spotify view -->
+      
+        <div class="app-view" id="spotifyView">
+            <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <div class="spotify-header" style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <div style="background:#1DB954; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fab fa-spotify"></i></div>
+                <h2>Boa noite</h2>
+            </div>
+            <div class="creep-clock" id="creepClockSpotify">
+                <div class="label">⏳ TEMPO REAL</div>
+                <div class="value" id="spotifyTime">13:37:01</div>
+                <div style="font-size: 11px; color: #ff6b6b;">você está sendo observado</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin:16px 0 8px;"><span>ouvidas recentemente</span><span style="color:#1DB954;">ver tudo</span></div>
+          <div class="transmission">
+  <div class="transmission-header">
+    AUDIO SIGNAL // 001
+  </div>
+
+  <div class="spotify-player">
+    <iframe
+      src="https://open.spotify.com/embed/track/64l2UDLAACB1Bo1th5r9an"
+      width="100%"
+      height="152"
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <div class="transmission-footer">
+    SOURCE: SPOTIFY
+  </div>
+            <div class="transmission">
+  <div class="transmission-header">
+    AUDIO SIGNAL // 001
+  </div>
+
+  <div class="spotify-player">
+    <iframe
+      src="https://open.spotify.com/embed/track/59AUHYXj5iKhJGwDsbU1CZ"
+      width="100%"
+      height="152"
+      frameborder="0"
+      allowfullscreen
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <div class="transmission-footer">
+    SOURCE: SPOTIFY
+  </div>
+            </div>
+          </div>
+            <div class="track-item" style="display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #3a3a3c;">
+                <div style="width:48px; height:48px; background:#a0a0a0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Echoes in the Void</div><div class="track-artist" style="font-size:13px; color:#98989e;">Static Lullaby</div></div>
+                <i class="fas fa-play" style="color:#1DB954;"></i>
+            </div>
+            <div class="track-item" style="display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #3a3a3c;">
+                <div style="width:48px; height:48px; background:#b0b0b0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Midnight Glitch</div><div class="track-artist">Phantom System</div></div>
+                <i class="fas fa-play" style="color:#1DB954;"></i>
+            </div>
+            <div class="track-item" style="display:flex; align-items:center; gap:12px; padding:8px 0;">
+                <div style="width:48px; height:48px; background:#c0c0c0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Hollow Faces</div><div class="track-artist">Nine Inch Nails (cover)</div></div>
+                <i class="fas fa-play" style="color:#1DB954;"></i>
+            </div>
+        </div>
+
+        <!-- Instagram view -->
+        <div class="app-view" id="instagramView">
+            <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <div class="stories">
+                <div class="story"><div class="story-avatar"><img src="https://i.pravatar.cc/64?u=1" alt=""></div><span class="story-name">_dark_web_</span></div>
+                <div class="story"><div class="story-avatar"><img src="https://i.pravatar.cc/64?u=2" alt=""></div><span class="story-name">gh0st</span></div>
+                <div class="story"><div class="story-avatar"><img src="https://i.pravatar.cc/64?u=3" alt=""></div><span class="story-name">n3m3sis</span></div>
+                <div class="story"><div class="story-avatar"><img src="https://i.pravatar.cc/64?u=4" alt=""></div><span class="story-name">void.exe</span></div>
+            </div>
+            <div class="feed-post">
+                <div class="post-header"><div class="post-avatar"><img src="https://i.pravatar.cc/36?u=10" style="width:100%;"></div><span><strong>horror_daily</strong> • 2h</span></div>
+                <div class="post-image" style="background:#2e2e32;"><span style="filter: blur(2px);">⏚⌂⌋⌉⌊</span></div>
+                <p style="margin-top:8px;">🌑 17:77 • #sinais</p>
+            </div>
+            <div class="feed-post">
+                <div class="post-header"><div class="post-avatar"><img src="https://i.pravatar.cc/36?u=11" style="width:100%;"></div><span><strong>simulacro_</strong> • 6h</span></div>
+                <div class="post-image" style="background:#3e3e42;">🇯​​​👁️</div>
+                <p style="margin-top:8px;">você viu isso?</p>
+            </div>
+        </div>
+
+        <!-- Safari view -->
+        <div class="app-view" id="safariView">
+            <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <div class="browser-url"><i class="fas fa-lock"></i><input type="text" value="app.horror.onion" readonly><i class="fas fa-rotate-right"></i></div>
+            <div class="browser-content"><span style="opacity:0.5; font-size:24px;">⌂⌂⌂</span><br><span style="color:#ff453a;">ERRO 0x00000000</span>
+            </div>
+          <div class="search-terminal">
+  <span>SEARCH_NODE://</span>
+
+  <form action="https://duckduckgo.com/" method="get" target="_blank">
+    <input
+      type="search"
+      name="q"
+      placeholder="query..."
+      autocomplete="off"
+    >
+    <button type="submit">↵</button>
+  </form>
+          </div>
+        </div>
+
+        <!-- Files view -->
+        <div class="app-view" id="filesView">
+            <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <div style="margin-bottom:20px;"><i class="fas fa-magnifying-glass"></i> Pesquisar</div>
+            <div class="file-item"><i class="fas fa-folder" style="color:#ff9f0a;"></i> Documentos <span style="margin-left:auto;">13 itens</span></div>
+            <div class="file-item"><i class="fas fa-folder" style="color:#30b0c0;"></i> Downloads <span style="margin-left:auto;">👁️ 3</span></div>
+            <div class="file-item"><i class="fas fa-folder" style="color:#66aaff;"></i> Música <span style="margin-left:auto;">9 músicas</span></div>
+            <div class="file-item"><i class="fas fa-folder" style="color:#aa44ff;"></i> Arquivos ocultos <span style="margin-left:auto;">???</span></div>
+        </div>
     </div>
-  </section>
 
-  <!-- LORE EXPANDIDO (novos portais solicitados) -->
-  <section id="lore" class="section">
-    <h2>⎔ Expansão do universo</h2>
-    <div class="cards-grid">
-      <a href="opening-membrana.html" class="card"><i class="fas fa-dharmachakra"></i><h3>Membrana · Ingresso</h3><p>Portal de carregamento quântico.</p></a>
-      <a href="wiki-darkweb.html" class="card"><i class="fas fa-eye"></i><h3>Dark Wiki</h3><p>Segredos da deep web conspiratória.</p></a>
-      <a href="termos-transparencia.html" class="card"><i class="fas fa-file-signature"></i><h3>Termos & Transparência</h3><p>Documentos legais (ou armadilhas).</p></a>
-      <a href="arquivos-lysander.html" class="card"><i class="fas fa-user-md"></i><h3>Dr. Lysander Morrow</h3><p>Arquivos pessoais do criador da QSR-0.</p></a>
-      <a href="enigmas.html" class="card"><i class="fas fa-puzzle-piece"></i><h3>Enigmas</h3><p>Desafios para agentes autorizados.</p></a>
-      <a href="ego-technologies.com.html" class="card"><i class="fas fa-microchip"></i><h3>E.G.O. Tech</h3><p>Site institucional (legado fantasma).</p></a>
-      <a href="historias-arg.html" class="card"><i class="fas fa-book-atlas"></i><h3>Histórias</h3><p>Narrativas perdidas do ARG.</p></a>
-      <a href="https://github.com/knnrz/qrs-zero" class="card"><i class="fab fa-github"></i><h3>GitHub oficial</h3><p>Repositório do projeto MEMBRANA.</p></a>
+    <!-- Floating Game (arrastável, com iframe) -->
+    <div class="floating-game" id="floatingGame">
+        <div class="floating-header" id="dragHandle">
+            <i class="fas fa-gamepad"></i> MEMBRANA · QRS-0
+            <button class="close-float" id="closeFloatBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="floating-content">
+            <iframe src="https://knnrz.github.io/qrs-zero/game/membrana/main.html?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnhPpGgHGOShvzmzOxJwmFsvUcxTRnfP5ZYfQlp7HVP2jlhd_0WeohjAtOlzk_aem_snXyEHGzNrKOF7I64GyXOw/" title="jogo flutuante"></iframe>
+        </div>
     </div>
-  </section>
-
-  <!-- ACESSO / INICIAR -->
-  <section id="acesso" class="section">
-    <h2>🎮 Iniciar interface neural</h2>
-    <p style="margin-bottom: 1rem;">Clique abaixo para adentrar a membrana e receber seu primeiro protocolo.</p>
-    <button class="btn-acesso" id="btnEntrar">⟡ ENTRAR NA MEMBRANA ⟡</button>
-  </section>
-</main>
-
-<footer>
-  <p>© 2025 Central ARG · <a href="#">ops, era phishing</a> · Todos os dados são ficção — ou parte de um experimento quântico.</p>
-</footer>
+</div>
 
 <script>
-  (function() {
-    // ---- ANIMAÇÃO REVEAL AO SCROLL (Intersection Observer) ----
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal');
-          observer.unobserve(entry.target); // uma vez revelado, para de observar
+    (function() {
+        // Elementos
+        const home = document.getElementById('homeScreen');
+        const spotifyView = document.getElementById('spotifyView');
+        const instagramView = document.getElementById('instagramView');
+        const safariView = document.getElementById('safariView');
+        const filesView = document.getElementById('filesView');
+        const appViews = [spotifyView, instagramView, safariView, filesView];
+        const liveTimeSpan = document.getElementById('liveTime');
+        const spotifyTimeSpan = document.getElementById('spotifyTime');
+        const mainScreenDiv = document.getElementById('mainScreen');
+
+        // Controle do menu flutuante
+        const gameLauncher = document.getElementById('gameLauncher');
+        const floatMenu = document.getElementById('floatingGame');
+        const closeFloatBtn = document.getElementById('closeFloatBtn');
+        const dragHandle = document.getElementById('dragHandle');
+
+        // ========== RELÓGIO NORMAL ==========
+        function updateNormalTime() {
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2,'0');
+            const mm = String(now.getMinutes()).padStart(2,'0');
+            liveTimeSpan.textContent = `${hh}:${mm}`;
         }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
-    sections.forEach(section => observer.observe(section));
+        setInterval(updateNormalTime, 1000);
+        updateNormalTime();
 
-    // ---- MENU HAMBÚRGUER RESPONSIVO ----
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-    if (hamburger && navLinks) {
-      hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('show');
-      });
-      // Fecha o menu ao clicar em um link
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          hamburger.classList.remove('active');
-          navLinks.classList.remove('show');
+        // ========== RELÓGIO PERTURBADOR (SPOTIFY) ==========
+        let creepInterval = null;
+        function startCreepTime() {
+            if (creepInterval) clearInterval(creepInterval);
+            creepInterval = setInterval(() => {
+                const now = new Date();
+                let hh = now.getHours();
+                let mm = now.getMinutes();
+                let ss = now.getSeconds();
+
+                // Glitch na hora da status bar
+                if (mm % 7 === 0) {
+                    liveTimeSpan.classList.add('glitch-time');
+                    liveTimeSpan.textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+                } else {
+                    liveTimeSpan.classList.remove('glitch-time');
+                    liveTimeSpan.textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+                }
+
+                // Relógio do Spotify com aceleração psicodélica
+                if (spotifyTimeSpan) {
+                    let fakeSs = (ss + 30) % 60;
+                    let fakeMm = (fakeSs < 30) ? mm : (mm + 1) % 60;
+                    let fakeHh = (fakeMm === 0 && fakeSs > 30) ? (hh + 1) % 24 : hh;
+                    spotifyTimeSpan.textContent = `${String(fakeHh).padStart(2,'0')}:${String(fakeMm).padStart(2,'0')}:${String(fakeSs).padStart(2,'0')}`;
+                    if (ss % 13 === 0) document.querySelector('.creep-clock .label').innerText = '⏳ VOCÊ ESTÁ AQUI HÁ';
+                    else document.querySelector('.creep-clock .label').innerText = '⏳ TEMPO REAL';
+                }
+
+                // Glitch na tela a cada 10 segundos
+                if (ss % 10 === 0) {
+                    mainScreenDiv.classList.add('glitch');
+                    setTimeout(() => mainScreenDiv.classList.remove('glitch'), 200);
+                }
+            }, 1000);
+        }
+        function stopCreepTime() {
+            if (creepInterval) { clearInterval(creepInterval); creepInterval = null; }
+            liveTimeSpan.classList.remove('glitch-time');
+            updateNormalTime();
+        }
+
+        // ========== NAVEGAÇÃO ENTRE APPS INTERNOS ==========
+        window.showHome = function() {
+            appViews.forEach(v => v.style.display = 'none');
+            home.style.display = 'grid';
+            stopCreepTime();
+        };
+
+        function showApp(appId) {
+            home.style.display = 'none';
+            appViews.forEach(v => v.style.display = 'none');
+            const selected = document.getElementById(appId);
+            if (selected) selected.style.display = 'block';
+            if (appId === 'spotifyView') startCreepTime();
+            else stopCreepTime();
+        }
+
+        // ========== EVENTOS DOS ÍCONES ==========
+        // Ícones com data-app (apps simulados)
+        document.querySelectorAll('.app-icon[data-app]').forEach(icon => {
+            icon.addEventListener('click', () => {
+                const app = icon.dataset.app;
+                if (app === 'spotify') showApp('spotifyView');
+                else if (app === 'instagram') showApp('instagramView');
+                else if (app === 'safari') showApp('safariView');
+                else if (app === 'files') showApp('filesView');
+            });
         });
-      });
-    }
 
-    // ---- BOTÃO PRINCIPAL (redireciona para a abertura do ARG) ----
-    const btn = document.getElementById('btnEntrar');
-    if (btn) {
-      btn.addEventListener('click', () => {
-        btn.textContent = "⬤ ACESSANDO MEMBRANA...";
-        btn.disabled = true;
-        setTimeout(() => {
-          // escolha da página inicial do jogo: pode ser info.html ou opening-membrana.html
-          window.location.href = "opening-membrana.html";
-        }, 1000);
-      });
-    }
+        // Ícones com data-url (abrem links externos - lore)
+        document.querySelectorAll('.app-icon[data-url]').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const url = icon.dataset.url;
+                if (url && url !== '#') {
+                    window.open(url, '_blank');
+                } else {
+                    alert('Página em construção. O arquivo será adicionado em breve.');
+                }
+            });
+        });
 
-    // pequeno glitch no console para imersão
-    console.log("%c⚠️ ACESSO AUTORIZADO — você está na grade principal da MEMBRANA.", "color: #0ff; font-size: 14px;");
-    console.log("%cExplore os setores. A QSR-0 observa.", "color: magenta;");
-  })();
+        // Game flutuante
+        gameLauncher.addEventListener('click', () => {
+            floatMenu.style.display = 'block';
+            mainScreenDiv.classList.add('glitch');
+            setTimeout(() => mainScreenDiv.classList.remove('glitch'), 400);
+        });
+        closeFloatBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            floatMenu.style.display = 'none';
+        });
+
+        // ========== DRAG DO MENU FLUTUANTE ==========
+        let dragActive = false, offsetX, offsetY;
+        dragHandle.addEventListener('mousedown', (e) => {
+            dragActive = true;
+            offsetX = e.clientX - floatMenu.getBoundingClientRect().left;
+            offsetY = e.clientY - floatMenu.getBoundingClientRect().top;
+            floatMenu.style.cursor = 'grabbing';
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (dragActive) {
+                e.preventDefault();
+                const left = e.clientX - offsetX;
+                const top = e.clientY - offsetY;
+                const parentRect = document.querySelector('.iphone').getBoundingClientRect();
+                floatMenu.style.left = Math.min(parentRect.width - 80, Math.max(10, left - parentRect.left)) + 'px';
+                floatMenu.style.top = Math.min(parentRect.height - 100, Math.max(40, top - parentRect.top)) + 'px';
+            }
+        });
+        document.addEventListener('mouseup', () => { dragActive = false; floatMenu.style.cursor = 'default'; });
+        dragHandle.ondragstart = () => false;
+
+        // Iniciar com home visível
+        showHome();
+
+        // Mensagem no console para imersão
+        console.log('%c📱 iHorror 13 · Todos os apps do lore carregados. Navegue pelos portais.', 'color: #ff3366; font-size: 14px;');
+    })();
 </script>
+
+<svg style="display: none;">
+    <filter id="glitch">
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+        <feComponentTransfer><feFuncR type="linear" slope="1.5" intercept="-0.2"/><feFuncG type="linear" slope="0.8"/><feFuncB type="linear" slope="1.2"/></feComponentTransfer>
+        <feOffset dx="2" dy="1" result="off1"/><feOffset dx="-2" dy="-1" result="off2"/>
+        <feBlend in="SourceGraphic" in2="off1" mode="screen"/><feBlend in2="off2" mode="overlay"/>
+    </filter>
+</svg>
+
 </body>
 </html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Fragmento de Código</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #f2f2f2;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ff0055;
+      font-size: 2em;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px #0ff, -2px -2px #ff0; }
+      50% { text-shadow: -2px -2px #f0f, 2px 2px #0f0; }
+      100% { text-shadow: 2px 2px #0ff, -2px -2px #ff0; }
+    }
+
+    .destaque {
+      background: #111;
+      padding: 10px;
+      border-left: 3px solid #ff0055;
+      margin-top: 20px;
+    }
+
+    input, button {
+      margin-top: 20px;
+      padding: 10px;
+      background: #111;
+      color: white;
+      border: 1px solid #333;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    #mensagem-secreta {
+      display: none;
+      margin-top: 30px;
+      background: #111;
+      padding: 20px;
+      border-left: 5px solid #ff0055;
+    }
+
+    .dica {
+      color: #ff0055;
+      font-size: 0.9em;
+      margin-top: 5px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fragmento de Código</h1>
+  <p>
+    Era pra ser só um script. Um teste.  
+    Mas ele falava com ela.  
+    Codificado, disfarçado... vivo.
+  </p>
+
+  <div class="destaque">
+    <p><strong>Log do sistema (recuperado):</strong></p>
+    <p>> [SYS] Acesso não autorizado detectado.</p>
+    <p>> [ERROR] Memória corrompida: *synthetic_dream.wav*</p>
+    <p>> [HINT] O fragmento está na última camada de sintaxe.</p>
+    <p>> [REDE] <a href="conteudo/arquivo-corrompido.zip" download>Baixar backup corrompido</a></p>
+    <p>> [DICA] A chave é "syntheticdream"</p>
+  </div>
+
+  <h2>Digite a chave:</h2>
+  <input type="text" id="input-chave" placeholder="digite a chave aqui">
+  <button onclick="verificarChave()">Verificar</button>
+  <div class="dica">✦ A chave está no log do sistema acima ✦</div>
+
+  <div id="mensagem-secreta">
+    <h3>⚠️ Sistema Desbloqueado</h3>
+    <p>Você acessou o fragmento escondido.  
+    Continue para <a href="enigma.html">a próxima camada</a>.</p>
+    <p>Mas cuidado. Cada nível distorce mais a realidade.</p>
+  </div>
+
+  <script>
+    function verificarChave() {
+      // Pega o valor do input e remove espaços extras
+      const entrada = document.getElementById("input-chave").value.trim();
+      
+      // A chave correta (sem hash por enquanto para testar)
+      const chaveCorreta = "syntheticdream";
+      
+      // Mostra no console para debug
+      console.log("Você digitou: '" + entrada + "'");
+      console.log("Chave correta: '" + chaveCorreta + "'");
+      
+      // Verifica se a entrada não está vazia
+      if (entrada === "") {
+        alert("Digite uma chave para verificar.");
+        return;
+      }
+      
+      // Comparação simples (case insensitive)
+      if (entrada.toLowerCase() === chaveCorreta.toLowerCase()) {
+        document.getElementById("mensagem-secreta").style.display = "block";
+        alert("✓ Chave correta! Sistema desbloqueado.");
+      } else {
+        alert("✗ Essa não é a chave. O código permanece fragmentado.");
+      }
+    }
+  </script>
+</body>
+</html>

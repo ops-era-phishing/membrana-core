@@ -1,110 +1,643 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acesso à Membrana</title>
+
+  <title>MEMBRANA // Acesso Restrito</title>
+
   <style>
+    :root {
+      --bg: #000;
+      --panel: #111;
+      --green: #00ff00;
+      --cyan: #00ffff;
+      --red: #ff003c;
+      --text: #cfcfcf;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-      background: #000;
-      color: #0f0;
-      font-family: 'Courier New', monospace;
       margin: 0;
-      padding: 2rem;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 2rem 1rem;
+
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+
+      background: var(--bg);
+      color: var(--green);
+
+      font-family: "Courier New", Courier, monospace;
+      overflow: hidden;
     }
-    h1 {
-      text-transform: uppercase;
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .title {
+      margin: 0 0 2rem;
+
+      color: var(--cyan);
+      font-size: clamp(1.4rem, 5vw, 1.8rem);
       letter-spacing: 2px;
-      font-size: 1.8rem;
-      color: #0ff;
-      margin-bottom: 2rem;
+      text-align: center;
+      text-transform: uppercase;
+
+      text-shadow:
+        0 0 5px var(--cyan),
+        0 0 15px rgba(0, 255, 255, 0.4);
     }
+
+    /* =========================
+       TERMINAL
+    ========================== */
+
+    .terminal-wrapper {
+      width: min(600px, 100%);
+    }
+
     .terminal {
-      background: #111;
-      border: 2px solid #0f0;
-      padding: 1rem;
       width: 100%;
-      max-width: 600px;
       height: 300px;
+
+      padding: 1rem;
+
       overflow-y: auto;
-      box-shadow: 0 0 20px #0f0;
+
+      background: var(--panel);
+      border: 2px solid var(--green);
+
+      box-shadow:
+        0 0 10px rgba(0, 255, 0, 0.4),
+        0 0 30px rgba(0, 255, 0, 0.15);
+
+      line-height: 1.5;
+
+      scrollbar-color: var(--green) #050505;
+      scrollbar-width: thin;
     }
+
+    .terminal p {
+      margin: 0 0 0.6rem;
+      word-break: break-word;
+    }
+
+    .system {
+      color: var(--green);
+    }
+
+    .command {
+      color: var(--cyan);
+    }
+
+    .error {
+      color: var(--red);
+    }
+
+    .success {
+      color: var(--cyan);
+      text-shadow: 0 0 5px var(--cyan);
+    }
+
+    /* =========================
+       INPUT
+    ========================== */
+
     .input-area {
-      margin-top: 1rem;
       width: 100%;
+
       display: flex;
+      gap: 0.5rem;
+
+      margin-top: 1rem;
     }
+
     .input-area input {
       flex: 1;
-      padding: 0.5rem;
+      min-width: 0;
+
+      padding: 0.7rem;
+
       background: #000;
-      color: #0f0;
-      border: 1px solid #0f0;
-      font-family: inherit;
-      font-size: 1rem;
+      color: var(--green);
+
+      border: 1px solid var(--green);
+      outline: none;
+
+      font: inherit;
     }
+
+    .input-area input:focus {
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 0 8px rgba(0, 255, 255, 0.4);
+    }
+
     .input-area button {
-      padding: 0.5rem 1rem;
-      background: #0f0;
+      padding: 0.7rem 1rem;
+
+      background: var(--green);
       color: #000;
-      border: none;
+
+      border: 0;
+
       cursor: pointer;
+
+      font-family: inherit;
       font-weight: bold;
+
+      transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
     }
+
+    .input-area button:hover {
+      background: var(--cyan);
+
+      box-shadow:
+        0 0 10px rgba(0, 255, 255, 0.5);
+
+      transform: translateY(-1px);
+    }
+
+    .input-area button:active {
+      transform: translateY(0);
+    }
+
+    /* =========================
+       STATUS
+    ========================== */
+
+    .status {
+      width: min(600px, 100%);
+
+      margin-top: 1rem;
+
+      display: flex;
+      justify-content: space-between;
+
+      color: #555;
+      font-size: 0.75rem;
+    }
+
+    .status span:last-child {
+      color: var(--green);
+    }
+
+    /* =========================
+       GLITCH
+    ========================== */
+
     .glitch {
-      animation: glitch 1s infinite;
+      animation: glitch 3s infinite;
     }
+
     @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -2px); }
-      80% { transform: translate(2px, 1px); }
-      100% { transform: translate(0); }
-    }
-  </style>
-</head>
-<body>
-  <h1 class="glitch">Acesso Restrito à Membrana</h1>  <div class="terminal" id="terminal">
-    <p>/// Iniciando protocolo de verificação QSR-0...</p>
-    <p>/// Digite o comando de entrada para acessar a Membrana.</p>
-  </div>  <div class="input-area">
-    <input type="text" id="commandInput" placeholder="Digite o comando...">
-    <button onclick="processCommand()">Enviar</button>
-  </div>  <script>
-    const terminal = document.getElementById('terminal');
-    const input = document.getElementById('commandInput');
 
-    function processCommand() {
-      const cmd = input.value.trim().toLowerCase();
-      appendToTerminal(`> ${cmd}`);
-      input.value = '';
+      0%,
+      90%,
+      100% {
+        transform: translate(0);
+      }
 
-      if (cmd === 'acessar membrana') {
-        appendToTerminal('Acesso autorizado. Redirecionando...');
-        setTimeout(() => {
-          window.location.href = 'membrana_portal.html';
-        }, 2000);
-      } else if (cmd === 'ajuda') {
-        appendToTerminal('Comando válido: acessar membrana');
-      } else {
-        appendToTerminal('Comando não reconhecido. Digite "ajuda" para instruções.');
+      92% {
+        transform: translate(-2px, 1px);
+      }
+
+      94% {
+        transform: translate(2px, -1px);
+      }
+
+      96% {
+        transform: translate(-1px, -2px);
+      }
+
+      98% {
+        transform: translate(2px, 1px);
       }
     }
 
-    function appendToTerminal(text) {
-      const line = document.createElement('p');
-      line.textContent = text;
-      terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
+    /* =========================
+       SCANLINES
+    ========================== */
+
+    body::after {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.015) 0px,
+          rgba(255, 255, 255, 0.015) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+
+      opacity: 0.4;
     }
 
-    input.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') processCommand();
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 500px) {
+
+      body {
+        padding: 1rem;
+      }
+
+      .terminal {
+        height: 260px;
+      }
+
+      .input-area {
+        flex-direction: column;
+      }
+
+      .input-area button {
+        width: 100%;
+      }
+
+      .status {
+        font-size: 0.65rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 class="title glitch">
+    Acesso Restrito à Membrana
+  </h1>
+
+  <main class="terminal-wrapper">
+
+    <div
+      class="terminal"
+      id="terminal"
+      aria-live="polite"
+      aria-label="Terminal da Membrana"
+    >
+      <p class="system">
+        /// MEMBRANA CORE INITIALIZED
+      </p>
+
+      <p class="system">
+        /// protocolo: QSR-0
+      </p>
+
+      <p class="system">
+        /// canal seguro estabelecido...
+      </p>
+
+      <p class="system">
+        /// identidade do observador: não identificada
+      </p>
+
+      <p class="system">
+        /// digite <strong>ajuda</strong> para obter instruções.
+      </p>
+    </div>
+
+    <form class="input-area" id="commandForm">
+
+      <input
+        type="text"
+        id="commandInput"
+        placeholder="Digite o comando..."
+        autocomplete="off"
+        spellcheck="false"
+        autofocus
+      >
+
+      <button type="submit">
+        ENVIAR
+      </button>
+
+    </form>
+
+    <div class="status">
+      <span>MEMBRANA // QSR-0</span>
+      <span id="connectionStatus">ONLINE</span>
+    </div>
+
+  </main>
+
+  <script>
+    /* =================================
+       CONFIGURAÇÃO
+    ================================= */
+
+    const CONFIG = {
+      nextPage: "painel.html",
+      cookieName: "membrana_session",
+      cookieDays: 30,
+      redirectDelay: 1500
+    };
+
+
+    /* =================================
+       ELEMENTOS
+    ================================= */
+
+    const terminal = document.getElementById("terminal");
+    const input = document.getElementById("commandInput");
+    const form = document.getElementById("commandForm");
+    const connectionStatus =
+      document.getElementById("connectionStatus");
+
+
+    /* =================================
+       COOKIE ENGINE
+    ================================= */
+
+    const Cookie = {
+
+      set(name, value, days = 30) {
+
+        const expires = new Date();
+
+        expires.setTime(
+          expires.getTime() +
+          days * 24 * 60 * 60 * 1000
+        );
+
+        document.cookie =
+          `${name}=${encodeURIComponent(value)};` +
+          `expires=${expires.toUTCString()};` +
+          `path=/;` +
+          `SameSite=Lax`;
+      },
+
+      get(name) {
+
+        const cookies =
+          document.cookie.split("; ");
+
+        const cookie =
+          cookies.find(row =>
+            row.startsWith(`${name}=`)
+          );
+
+        if (!cookie) {
+          return null;
+        }
+
+        return decodeURIComponent(
+          cookie.split("=").slice(1).join("=")
+        );
+      }
+    };
+
+
+    /* =================================
+       SESSION
+    ================================= */
+
+    function initializeSession() {
+
+      const existing =
+        Cookie.get(CONFIG.cookieName);
+
+      if (existing) {
+
+        connectionStatus.textContent =
+          "SESSION_ACTIVE";
+
+        appendTerminal(
+          "/// sessão anterior detectada.",
+          "success"
+        );
+
+        return;
+      }
+
+      Cookie.set(
+        CONFIG.cookieName,
+        "observer_initialized",
+        CONFIG.cookieDays
+      );
+    }
+
+
+    /* =================================
+       TERMINAL
+    ================================= */
+
+    function appendTerminal(text, type = "system") {
+
+      const line =
+        document.createElement("p");
+
+      line.className = type;
+
+      line.textContent = text;
+
+      terminal.appendChild(line);
+
+      terminal.scrollTop =
+        terminal.scrollHeight;
+    }
+
+
+    /* =================================
+       COMMAND PROCESSOR
+    ================================= */
+
+    function processCommand(command) {
+
+      const cmd =
+        command.trim().toLowerCase();
+
+      if (!cmd) {
+        return;
+      }
+
+      appendTerminal(
+        `> ${cmd}`,
+        "command"
+      );
+
+      input.value = "";
+
+
+      /* ==============================
+         AJUDA
+      ============================== */
+
+      if (cmd === "ajuda") {
+
+        appendTerminal(
+          "/// comandos disponíveis:",
+          "system"
+        );
+
+        appendTerminal(
+          "/// acessar membrana",
+          "success"
+        );
+
+        appendTerminal(
+          "/// status",
+          "success"
+        );
+
+        appendTerminal(
+          "/// limpar",
+          "success"
+        );
+
+        return;
+      }
+
+
+      /* ==============================
+         STATUS
+      ============================== */
+
+      if (cmd === "status") {
+
+        appendTerminal(
+          "/// MEMBRANA: ONLINE",
+          "success"
+        );
+
+        appendTerminal(
+          "/// QSR-0: ESTÁVEL",
+          "success"
+        );
+
+        appendTerminal(
+          "/// observador: RECONHECIDO",
+          "success"
+        );
+
+        return;
+      }
+
+
+      /* ==============================
+         LIMPAR
+      ============================== */
+
+      if (cmd === "limpar") {
+
+        terminal.innerHTML = "";
+
+        appendTerminal(
+          "/// terminal limpo.",
+          "system"
+        );
+
+        return;
+      }
+
+
+      /* ==============================
+         ACESSO
+      ============================== */
+
+      if (cmd === "acessar membrana") {
+
+        Cookie.set(
+          CONFIG.cookieName,
+          "authorized",
+          CONFIG.cookieDays
+        );
+
+        appendTerminal(
+          "/// comando reconhecido.",
+          "success"
+        );
+
+        appendTerminal(
+          "/// identidade validada.",
+          "success"
+        );
+
+        appendTerminal(
+          "/// acesso à Membrana autorizado.",
+          "success"
+        );
+
+        appendTerminal(
+          "/// transferindo observador...",
+          "success"
+        );
+
+        connectionStatus.textContent =
+          "AUTHORIZED";
+
+        input.disabled = true;
+
+        setTimeout(() => {
+
+          window.location.href =
+            CONFIG.nextPage;
+
+        }, CONFIG.redirectDelay);
+
+        return;
+      }
+
+
+      /* ==============================
+         COMANDO DESCONHECIDO
+      ============================== */
+
+      appendTerminal(
+        "/// comando não reconhecido.",
+        "error"
+      );
+
+      appendTerminal(
+        '/// digite "ajuda" para instruções.',
+        "system"
+      );
+    }
+
+
+    /* =================================
+       FORM
+    ================================= */
+
+    form.addEventListener("submit", event => {
+
+      event.preventDefault();
+
+      processCommand(input.value);
+
     });
-  </script></body>
+
+
+    /* =================================
+       INITIALIZATION
+    ================================= */
+
+    initializeSession();
+
+  </script>
+
+</body>
 </html>

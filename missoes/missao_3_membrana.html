@@ -1,99 +1,1110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Missão 3 – O E-mail que Nunca Chegou</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MEMBRANA // Missão 03</title>
+
   <style>
+
+    :root {
+      --bg: #0e0e0e;
+      --panel: #1a1a1a;
+      --terminal: #121212;
+
+      --red: #ff4c4c;
+      --green: #00ff99;
+      --cyan: #00ffe1;
+
+      --text: #e6e6e6;
+      --muted: #777;
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
     body {
-      font-family: 'Courier New', monospace;
-      background: #0e0e0e;
-      color: #e6e6e6;
-      padding: 2rem;
+
+      font-family:
+        "Courier New",
+        monospace;
+
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(255, 76, 76, .05),
+          transparent 45%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      padding: 2rem 1rem;
+
       max-width: 800px;
+
       margin: auto;
+
+      min-height: 100vh;
+
+      line-height: 1.6;
     }
+
+
+    /* =========================
+       HEADER
+    ========================== */
+
     h1 {
-      color: #ff4c4c;
-      border-bottom: 2px solid #ff4c4c;
-      padding-bottom: 0.5rem;
+
+      color: var(--red);
+
+      border-bottom:
+        2px solid var(--red);
+
+      padding-bottom:
+        .5rem;
+
+      text-shadow:
+        0 0 8px
+        rgba(255, 76, 76, .3);
     }
-    .painel {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      padding: 1rem;
-      margin-top: 1rem;
+
+
+    .agente {
+
+      color: var(--muted);
     }
-    .destacado {
-      color: #00ff99;
-    }
-    textarea {
-      width: 100%;
-      height: 200px;
-      background: #121212;
-      color: #00ff99;
-      border: 1px solid #333;
-      padding: 1rem;
-      font-family: monospace;
-    }
-    button {
-      margin-top: 1rem;
-      background: #00ff99;
-      color: #000;
-      border: none;
-      padding: 0.75rem 1.5rem;
+
+
+    #nomeAgente {
+
+      color: var(--cyan);
+
       font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
     }
+
+
+    /* =========================
+       PAINEL
+    ========================== */
+
+    .painel {
+
+      background:
+        rgba(26, 26, 26, .85);
+
+      border:
+        1px solid #333;
+
+      padding:
+        1.2rem;
+
+      margin-top:
+        1.5rem;
+
+      box-shadow:
+        0 0 20px
+        rgba(255, 76, 76, .05);
+    }
+
+
+    .destacado {
+
+      color:
+        var(--green);
+
+      font-weight:
+        bold;
+    }
+
+
+    /* =========================
+       EMAIL
+    ========================== */
+
+    .email {
+
+      background:
+        var(--terminal);
+
+      border:
+        1px solid #333;
+
+      padding:
+        1rem;
+
+      margin-top:
+        1rem;
+
+      overflow-x:
+        auto;
+    }
+
+
+    .email pre {
+
+      white-space:
+        pre-wrap;
+
+      word-break:
+        break-word;
+
+      color:
+        var(--green);
+
+      font-family:
+        inherit;
+
+      font-size:
+        .9rem;
+    }
+
+
+    /* =========================
+       INPUT
+    ========================== */
+
+    .resposta-area {
+
+      margin-top:
+        1.5rem;
+    }
+
+
+    input {
+
+      width:
+        100%;
+
+      padding:
+        .75rem;
+
+      background:
+        #000;
+
+      color:
+        var(--green);
+
+      border:
+        1px solid #444;
+
+      font-family:
+        inherit;
+
+      font-size:
+        1rem;
+
+      outline:
+        none;
+    }
+
+
+    input:focus {
+
+      border-color:
+        var(--green);
+
+      box-shadow:
+        0 0 8px
+        rgba(0, 255, 153, .15);
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================== */
+
+    button {
+
+      margin-top:
+        1rem;
+
+      background:
+        var(--green);
+
+      color:
+        #000;
+
+      border:
+        none;
+
+      padding:
+        .75rem 1.5rem;
+
+      font-family:
+        inherit;
+
+      font-weight:
+        bold;
+
+      cursor:
+        pointer;
+
+      transition:
+        .2s ease;
+    }
+
+
     button:hover {
-      background: #00cc77;
+
+      background:
+        #00cc77;
+
+      transform:
+        translateY(-1px);
     }
-    .resposta {
-      margin-top: 1rem;
-      background: #222;
-      padding: 1rem;
-      border: 1px dashed #666;
+
+
+    button:disabled {
+
+      opacity:
+        .5;
+
+      cursor:
+        not-allowed;
+
+      transform:
+        none;
     }
+
+
+    /* =========================
+       FEEDBACK
+    ========================== */
+
+    #feedback {
+
+      min-height:
+        1.5rem;
+
+      margin-top:
+        1rem;
+
+      font-weight:
+        bold;
+    }
+
+
+    .sucesso {
+
+      color:
+        var(--green);
+    }
+
+
+    .erro {
+
+      color:
+        var(--red);
+    }
+
+
+    /* =========================
+       RECOMPENSA
+    ========================== */
+
+    .recompensa {
+
+      display:
+        none;
+
+      margin-top:
+        1.5rem;
+
+      padding:
+        1rem;
+
+      border:
+        1px solid
+        var(--cyan);
+
+      color:
+        var(--cyan);
+
+      background:
+        rgba(0, 255, 225, .04);
+
+      text-align:
+        center;
+    }
+
+
+    .recompensa.visivel {
+
+      display:
+        block;
+
+      animation:
+        reveal .6s ease;
+    }
+
+
+    @keyframes reveal {
+
+      from {
+
+        opacity:
+          0;
+
+        transform:
+          translateY(10px);
+
+      }
+
+      to {
+
+        opacity:
+          1;
+
+        transform:
+          translateY(0);
+
+      }
+
+    }
+
+
+    /* =========================
+       BLOQUEIO
+    ========================== */
+
+    .bloqueio {
+
+      display:
+        none;
+
+      border:
+        1px solid
+        var(--red);
+
+      padding:
+        1rem;
+
+      color:
+        var(--red);
+
+      background:
+        rgba(255, 0, 0, .03);
+
+      margin-top:
+        2rem;
+    }
+
+
+    .bloqueio.visivel {
+
+      display:
+        block;
+    }
+
+
+    /* =========================
+       NAVEGAÇÃO
+    ========================== */
+
+    nav {
+
+      text-align:
+        center;
+
+      margin-top:
+        2rem;
+    }
+
+
+    nav a {
+
+      color:
+        var(--cyan);
+
+      text-decoration:
+        none;
+    }
+
+
+    nav a:hover {
+
+      text-decoration:
+        underline;
+    }
+
+
   </style>
 </head>
+
+
 <body>
-  <h1>Missão 3 – O E-mail que Nunca Chegou</h1>
-  <p>Interceptamos um e-mail misterioso que deveria ter sido entregue à sede da <span class="destacado">E.G.O. Technologies</span>, mas ele nunca chegou ao destino. Seu trabalho é encontrar a informação que foi escondida dentro do conteúdo corrompido.</p>
-  
-  <div class="painel">
-    <h2>🕵️ Conteúdo interceptado:</h2>
-    <textarea readonly>
+
+
+  <header>
+
+    <h1>
+      Missão 3 – O E-mail que Nunca Chegou
+    </h1>
+
+    <p class="agente">
+
+      <strong>Agente:</strong>
+
+      <span id="nomeAgente">
+        identificando...
+      </span>
+
+    </p>
+
+  </header>
+
+
+  <!-- =========================
+       BLOQUEIO
+  ========================== -->
+
+  <section
+    id="bloqueio"
+    class="bloqueio"
+  >
+
+    ⚠ ACESSO NEGADO.
+
+    <br><br>
+
+    Este arquivo depende da recuperação
+    do <strong>Dossiê Esquecido</strong>.
+
+    <br><br>
+
+    Complete a Missão 2 antes de
+    tentar acessar este terminal.
+
+    <br><br>
+
+    <a
+      href="missao_2_membrana.html"
+      style="color:#00ffe1;"
+    >
+      ← Retornar à Missão 2
+    </a>
+
+  </section>
+
+
+  <!-- =========================
+       MISSÃO
+  ========================== -->
+
+  <main id="missao">
+
+
+    <p>
+
+      Interceptamos um e-mail misterioso
+      que deveria ter sido entregue à sede da
+
+      <span class="destacado">
+        E.G.O. Technologies
+      </span>,
+
+      mas ele nunca chegou ao destino.
+
+    </p>
+
+
+    <p>
+
+      Seu trabalho é encontrar a informação
+      escondida dentro do conteúdo corrompido.
+
+    </p>
+
+
+    <div class="painel">
+
+      <h2>
+        🕵️ Conteúdo interceptado:
+      </h2>
+
+
+      <div class="email">
+
+<pre>
 From: anon@protonmail.com
 To: e.g.o.admin@confidencial.org
 Subject: [ARQUIVO PERDIDO - QSR-0]
 
-qStz'u Yzngxnxy | rjxxflj: Xjhwjy tk fqq, yt ijhmsnsl dtz nx ymfy xmtzsi tzlm xqfj, xhfq ljsyjw yt dtz si xt ajwd Rfpns mfi Snhp. Nx sty xjhwjy, dtz xbtz lfw gjjs ijxp.
+qStz'u Yzngxnxy | rjxxflj: Xjhwjy tk fqq,
+yt ijhmsnsl dtz nx ymfy xmtzsi tzlm xqfj,
+xhfq ljsyjw yt dtz si xt ajwd Rfpns mfi Snhp.
+Nx sty xjhwjy, dtz xbtz lfw gjjs ijxp.
 
 - Ktw fsi Gzyjw
-    </textarea>
+</pre>
 
-    <p><strong>⚠️ Dica:</strong> Parece cifrado... e bem no estilo <em>César</em>.</p>
+      </div>
 
-    <button onclick="mostrarResposta()">Ver dica do conteúdo</button>
-    <div id="resposta" class="resposta" style="display: none;">
-      <p>Use uma ferramenta de decodificação de <strong>Cifra de César</strong> com deslocamento 5 para descobrir o conteúdo real.</p>
-      <p><code>"Não confie em tudo que vê, principalmente se for fácil demais..."</code></p>
+
+      <p>
+
+        <strong>
+          ⚠️ Dica:
+        </strong>
+
+        Parece cifrado...
+
+        <br>
+
+        E está bem no estilo
+        <em>César</em>.
+
+      </p>
+
+
+      <!-- =========================
+           RESPOSTA
+      ========================== -->
+
+      <div class="resposta-area">
+
+        <label for="resposta">
+
+          Qual é a mensagem escondida?
+
+        </label>
+
+
+        <input
+          type="text"
+          id="resposta"
+          placeholder="Digite a mensagem decodificada..."
+          autocomplete="off"
+        >
+
+
+        <button
+          id="verificar"
+          type="button"
+        >
+
+          DECODIFICAR
+
+        </button>
+
+
+        <p id="feedback"></p>
+
+
+        <div
+          id="recompensa"
+          class="recompensa"
+        >
+
+          <strong>
+            ◉ TRANSMISSÃO RECUPERADA
+          </strong>
+
+          <br><br>
+
+          +200 SYNAPSE
+
+          <br>
+
+          🔓 CONTEÚDO SECRETO 01 DESBLOQUEADO
+
+          <br><br>
+
+          <em>
+            "Não confie em tudo que vê,
+            principalmente se for fácil demais..."
+          </em>
+
+        </div>
+
+      </div>
+
+
     </div>
-  </div>
+
+
+  </main>
+
+
+  <nav>
+
+    <a href="painel.html">
+
+      🔍 Ir para o Painel do Jogador
+
+    </a>
+
+  </nav>
+
 
   <script>
-    function mostrarResposta() {
-      document.getElementById('resposta').style.display = 'block';
+
+    /* =========================================
+       CONFIGURAÇÃO
+    ========================================== */
+
+    const MISSION = {
+
+      id: 3,
+
+      requiredMission: 2,
+
+      xp: 200,
+
+      secret:
+        "conteudo_secreto1",
+
+      reward:
+        "CONTEÚDO SECRETO 01"
+
+    };
+
+
+    /*
+     * IMPORTANTE
+     *
+     * Esta é a resposta que a interface
+     * espera atualmente.
+     *
+     * Se você quiser alterar o enigma,
+     * altere esta variável.
+     */
+
+    const ANSWER =
+      "nao confie em tudo que ve principalmente se for facil demais";
+
+
+    /* =========================================
+       COOKIE DO JOGADOR
+    ========================================== */
+
+    const COOKIE_NAME =
+      "membrana_player";
+
+
+    function loadPlayer() {
+
+      const cookie =
+        document.cookie
+          .split("; ")
+          .find(
+            row =>
+              row.startsWith(
+                COOKIE_NAME + "="
+              )
+          );
+
+
+      if (!cookie) {
+
+        return null;
+
+      }
+
+
+      try {
+
+        return JSON.parse(
+          decodeURIComponent(
+            cookie
+              .split("=")
+              .slice(1)
+              .join("=")
+          )
+        );
+
+      } catch {
+
+        return null;
+
+      }
+
     }
-  </script>
-  <script>
-  localStorage.setItem("missao3", "completa");
-  localStorage.setItem("conteudo_secreto1", "true");
-</script>
 
-<a href="painel.html" style="display:block;text-align:center;margin-top:2rem;">
-  🔍 Ir para o Painel do Jogador
-</a>
+
+    function savePlayer(player) {
+
+      const expires =
+        new Date();
+
+      expires.setDate(
+        expires.getDate() + 30
+      );
+
+
+      document.cookie =
+        `${COOKIE_NAME}=` +
+        `${encodeURIComponent(
+          JSON.stringify(player)
+        )};` +
+        `expires=${expires.toUTCString()};` +
+        `path=/;` +
+        `SameSite=Lax`;
+
+    }
+
+
+    /* =========================================
+       PLAYER
+    ========================================== */
+
+    let player =
+      loadPlayer();
+
+
+    /*
+     * Se o jogador ainda não possui
+     * identidade, cria uma.
+     */
+
+    if (!player) {
+
+      player = {
+
+        id:
+          `observer_${crypto.randomUUID().slice(0, 8)}`,
+
+        level: 1,
+
+        xp: 0,
+
+        completed: [],
+
+        fragments: [],
+
+        rewards: [],
+
+        secrets: []
+
+      };
+
+      savePlayer(player);
+
+    }
+
+
+    document.getElementById(
+      "nomeAgente"
+    ).textContent =
+      player.id;
+
+
+    /* =========================================
+       ELEMENTOS
+    ========================================== */
+
+    const missao =
+      document.getElementById(
+        "missao"
+      );
+
+    const bloqueio =
+      document.getElementById(
+        "bloqueio"
+      );
+
+    const input =
+      document.getElementById(
+        "resposta"
+      );
+
+    const button =
+      document.getElementById(
+        "verificar"
+      );
+
+    const feedback =
+      document.getElementById(
+        "feedback"
+      );
+
+    const recompensa =
+      document.getElementById(
+        "recompensa"
+      );
+
+
+    /* =========================================
+       NORMALIZAÇÃO
+    ========================================== */
+
+    function normalize(text) {
+
+      return text
+
+        .toLowerCase()
+
+        .normalize("NFD")
+
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+
+        .replace(
+          /[^a-z0-9]/g,
+          ""
+        );
+
+    }
+
+
+    /* =========================================
+       ACESSO
+    ========================================== */
+
+    function checkAccess() {
+
+      const unlocked =
+        player.completed.includes(
+          MISSION.requiredMission
+        );
+
+
+      if (!unlocked) {
+
+        missao.style.display =
+          "none";
+
+        bloqueio.classList.add(
+          "visivel"
+        );
+
+        return false;
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /* =========================================
+       COMPLETAR
+    ========================================== */
+
+    function completeMission() {
+
+
+      /*
+       * Missão
+       */
+
+      if (
+        !player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        player.completed.push(
+          MISSION.id
+        );
+
+      }
+
+
+      /*
+       * XP
+       */
+
+      player.xp +=
+        MISSION.xp;
+
+
+      /*
+       * Conteúdo secreto
+       */
+
+      if (
+        !player.secrets.includes(
+          MISSION.secret
+        )
+      ) {
+
+        player.secrets.push(
+          MISSION.secret
+        );
+
+      }
+
+
+      /*
+       * Recompensa
+       */
+
+      if (
+        !player.rewards.includes(
+          MISSION.reward
+        )
+      ) {
+
+        player.rewards.push(
+          MISSION.reward
+        );
+
+      }
+
+
+      savePlayer(player);
+
+
+      feedback.textContent =
+        "✅ TRANSMISSÃO RECUPERADA. A MEMBRANA RESPONDEU.";
+
+      feedback.className =
+        "sucesso";
+
+
+      recompensa.classList.add(
+        "visivel"
+      );
+
+
+      input.disabled =
+        true;
+
+      button.disabled =
+        true;
+
+
+      /*
+       * Efeito visual
+       */
+
+      document.body.style.boxShadow =
+        "inset 0 0 100px rgba(255,76,76,.12)";
+
+
+      setTimeout(() => {
+
+        document.body.style.boxShadow =
+          "";
+
+      }, 1200);
+
+    }
+
+
+    /* =========================================
+       VERIFICAR
+    ========================================== */
+
+    function verify() {
+
+      const resposta =
+        normalize(
+          input.value
+        );
+
+
+      if (!resposta) {
+
+        feedback.textContent =
+          "⚠ Nenhuma mensagem recebida.";
+
+        feedback.className =
+          "erro";
+
+        return;
+
+      }
+
+
+      if (
+        resposta ===
+        normalize(ANSWER)
+      ) {
+
+        completeMission();
+
+        return;
+
+      }
+
+
+      feedback.textContent =
+        "❌ A mensagem continua corrompida. O padrão está incorreto.";
+
+      feedback.className =
+        "erro";
+
+    }
+
+
+    /* =========================================
+       EVENTOS
+    ========================================== */
+
+    button.addEventListener(
+      "click",
+      verify
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          verify();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       RESTAURAR PROGRESSO
+    ========================================== */
+
+    if (
+      checkAccess()
+    ) {
+
+      if (
+        player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        feedback.textContent =
+          "✓ TRANSMISSÃO JÁ RECUPERADA.";
+
+        feedback.className =
+          "sucesso";
+
+        recompensa.classList.add(
+          "visivel"
+        );
+
+        input.disabled =
+          true;
+
+        button.disabled =
+          true;
+
+      }
+
+    }
+
+  </script>
+
 </body>
+
 </html>

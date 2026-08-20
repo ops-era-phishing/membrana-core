@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GAME // MEMBRANA</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #020202;
+      color: #d8d8d8;
+
+      font-family: "Courier New", monospace;
+    }
+
+    .game {
+      width: min(420px, 94vw);
+      height: min(760px, 92vh);
+
+      position: relative;
+      overflow: hidden;
+
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.015) 0px,
+          rgba(255,255,255,.015) 1px,
+          transparent 1px,
+          transparent 4px
+        ),
+        #050505;
+
+      border: 1px solid #292929;
+      box-shadow:
+        0 0 40px rgba(0,0,0,.9),
+        inset 0 0 40px rgba(255,255,255,.015);
+    }
+
+    /* HEADER */
+
+    .header {
+      height: 58px;
+      padding: 12px 16px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      border-bottom: 1px solid #222;
+
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .status {
+      color: #666;
+    }
+
+    .status.online {
+      color: #aaa;
+    }
+
+    /* START SCREEN */
+
+    .start-screen {
+      position: absolute;
+      inset: 58px 0 0;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+
+      padding: 30px;
+    }
+
+    .logo {
+      font-size: 28px;
+      letter-spacing: 10px;
+      margin-bottom: 40px;
+
+      animation: flicker 4s infinite;
+    }
+
+    .connection {
+      color: #777;
+      font-size: 12px;
+      line-height: 2;
+      margin-bottom: 35px;
+    }
+
+    .start-button {
+      padding: 13px 35px;
+
+      background: transparent;
+      color: #aaa;
+
+      border: 1px solid #444;
+
+      font-family: inherit;
+      letter-spacing: 3px;
+
+      cursor: pointer;
+    }
+
+    .start-button:hover {
+      background: #111;
+      color: white;
+      border-color: #777;
+    }
+
+    /* GAME AREA */
+
+    .play-area {
+      position: absolute;
+      inset: 58px 0 0;
+
+      display: none;
+
+      touch-action: none;
+    }
+
+    .play-area.active {
+      display: block;
+    }
+
+    .hud {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+
+      display: flex;
+      justify-content: space-between;
+
+      color: #666;
+      font-size: 11px;
+      z-index: 10;
+    }
+
+    .player {
+      position: absolute;
+
+      width: 18px;
+      height: 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 18px;
+
+      transform: translate(-50%, -50%);
+
+      color: #ddd;
+
+      z-index: 5;
+    }
+
+    .node {
+      position: absolute;
+
+      width: 24px;
+      height: 24px;
+
+      border: 1px solid #666;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: #aaa;
+
+      font-size: 10px;
+
+      animation: pulse 1.5s infinite;
+    }
+
+    .message {
+      position: absolute;
+
+      left: 50%;
+      top: 50%;
+
+      transform: translate(-50%, -50%);
+
+      width: 90%;
+
+      text-align: center;
+
+      color: #888;
+
+      font-size: 13px;
+      letter-spacing: 2px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      z-index: 20;
+    }
+
+    .message.show {
+      animation: messageIn 2s forwards;
+    }
+
+    /* END */
+
+    .end-screen {
+      position: absolute;
+      inset: 58px 0 0;
+
+      display: none;
+
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+
+      padding: 30px;
+    }
+
+    .end-screen.active {
+      display: flex;
+    }
+
+    .end-title {
+      font-size: 20px;
+      letter-spacing: 5px;
+      margin-bottom: 30px;
+    }
+
+    .node-zero {
+      margin: 20px 0;
+
+      padding: 20px;
+
+      border: 1px solid #333;
+
+      color: #777;
+
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    .restart {
+      margin-top: 20px;
+
+      padding: 10px 25px;
+
+      background: transparent;
+      color: #777;
+
+      border: 1px solid #333;
+
+      font-family: inherit;
+
+      cursor: pointer;
+    }
+
+    /* ANIMATIONS */
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: .3;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    @keyframes flicker {
+      0%, 94%, 96%, 100% {
+        opacity: 1;
+      }
+
+      95% {
+        opacity: .3;
+      }
+    }
+
+    @keyframes messageIn {
+      0% {
+        opacity: 0;
+      }
+
+      20%, 80% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .glitch {
+      animation: glitch .15s infinite;
+    }
+
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+      }
+
+      25% {
+        transform: translate(-2px, 1px);
+      }
+
+      50% {
+        transform: translate(2px, -1px);
+      }
+
+      75% {
+        transform: translate(-1px, -2px);
+      }
+
+      100% {
+        transform: translate(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="game">
+
+    <header class="header">
+      <span>GAME // MEMBRANA</span>
+      <span id="status" class="status">OFFLINE</span>
+    </header>
+
+
+    <!-- START -->
+
+    <section id="startScreen" class="start-screen">
+
+      <div class="logo">
+        MEMBRANA
+      </div>
+
+      <div class="connection">
+        CONNECTION: 87%<br>
+        NODE: 07<br>
+        SIGNAL: UNKNOWN
+      </div>
+
+      <button id="startButton" class="start-button">
+        START
+      </button>
+
+    </section>
+
+
+    <!-- GAME -->
+
+    <section id="playArea" class="play-area">
+
+      <div class="hud">
+        <span>TIME: <span id="timer">00.00</span></span>
+        <span>NODE: 07</span>
+      </div>
+
+      <div id="player" class="player">
+        ◉
+      </div>
+
+      <div id="message" class="message"></div>
+
+    </section>
+
+
+    <!-- END -->
+
+    <section id="endScreen" class="end-screen">
+
+      <div class="end-title">
+        ACCESS GRANTED
+      </div>
+
+      <div class="node-zero">
+
+        MEMBRANA NODE 00<br>
+
+        ----------------<br><br>
+
+        YOU WERE NOT<br>
+        SUPPOSED TO FIND THIS.<br><br>
+
+        USER: LYSANDER
+
+      </div>
+
+      <button id="restartButton" class="restart">
+        RESTART
+      </button>
+
+    </section>
+
+  </main>
+
+
+<script>
+
+const startScreen = document.getElementById("startScreen");
+const playArea = document.getElementById("playArea");
+const endScreen = document.getElementById("endScreen");
+
+const startButton = document.getElementById("startButton");
+const restartButton = document.getElementById("restartButton");
+
+const player = document.getElementById("player");
+const timerElement = document.getElementById("timer");
+const message = document.getElementById("message");
+const statusElement = document.getElementById("status");
+
+let startTime;
+let gameRunning = false;
+let nodes = [];
+
+let playerX = 50;
+let playerY = 50;
+
+
+/* START */
+
+startButton.addEventListener("click", startGame);
+
+restartButton.addEventListener("click", () => {
+  location.reload();
+});
+
+
+function startGame() {
+
+  startScreen.style.display = "none";
+
+  playArea.classList.add("active");
+
+  statusElement.textContent = "ONLINE";
+  statusElement.classList.add("online");
+
+  gameRunning = true;
+
+  startTime = performance.now();
+
+  createNodes();
+
+  requestAnimationFrame(gameLoop);
+
+}
+
+
+/* PLAYER */
+
+function movePlayer(x, y) {
+
+  const rect = playArea.getBoundingClientRect();
+
+  playerX = ((x - rect.left) / rect.width) * 100;
+  playerY = ((y - rect.top) / rect.height) * 100;
+
+  playerX = Math.max(2, Math.min(98, playerX));
+  playerY = Math.max(5, Math.min(98, playerY));
+
+  player.style.left = playerX + "%";
+  player.style.top = playerY + "%";
+
+}
+
+
+playArea.addEventListener("pointermove", event => {
+
+  if (!gameRunning) return;
+
+  movePlayer(event.clientX, event.clientY);
+
+});
+
+
+/* NODES */
+
+function createNodes() {
+
+  for (let i = 0; i < 5; i++) {
+
+    const node = document.createElement("div");
+
+    node.className = "node";
+
+    node.textContent = "×";
+
+    node.style.left = (10 + Math.random() * 80) + "%";
+    node.style.top = (15 + Math.random() * 75) + "%";
+
+    playArea.appendChild(node);
+
+    nodes.push(node);
+
+  }
+
+}
+
+
+/* COLLISION */
+
+function checkCollision() {
+
+  const playerRect = player.getBoundingClientRect();
+
+  for (const node of nodes) {
+
+    const nodeRect = node.getBoundingClientRect();
+
+    const dx =
+      playerRect.left -
+      nodeRect.left;
+
+    const dy =
+      playerRect.top -
+      nodeRect.top;
+
+    const distance = Math.sqrt(
+      dx * dx + dy * dy
+    );
+
+    if (distance < 30) {
+
+      gameOver();
+
+    }
+
+  }
+
+}
+
+
+/* GAME LOOP */
+
+function gameLoop(now) {
+
+  if (!gameRunning) return;
+
+  const elapsed =
+    (now - startTime) / 1000;
+
+  timerElement.textContent =
+    elapsed.toFixed(2);
+
+  checkCollision();
+
+  /*
+    O sistema começa a perceber
+    o jogador.
+  */
+
+  if (elapsed > 10 && elapsed < 10.1) {
+
+    showMessage(
+      "PLAYER DETECTED"
+    );
+
+  }
+
+  if (elapsed > 20 && elapsed < 20.1) {
+
+    showMessage(
+      "TRACKING INPUT..."
+    );
+
+  }
+
+  if (elapsed > 35 && elapsed < 35.1) {
+
+    showMessage(
+      "WHY ARE YOU STILL HERE?"
+    );
+
+    document.body.classList.add("glitch");
+
+  }
+
+  /*
+    60 segundos = NODE 00
+  */
+
+  if (elapsed >= 5) {
+
+    unlockNode();
+
+    return;
+
+  }
+
+  requestAnimationFrame(gameLoop);
+
+}
+
+
+/* MESSAGE */
+
+function showMessage(text) {
+
+  message.textContent = text;
+
+  message.classList.remove("show");
+
+  void message.offsetWidth;
+
+  message.classList.add("show");
+
+}
+
+
+/* GAME OVER */
+
+function gameOver() {
+
+  gameRunning = false;
+
+  showMessage(
+    "CONNECTION LOST"
+  );
+
+  setTimeout(() => {
+
+    alert(
+      "CONNECTION LOST\n\nUSER: UNKNOWN\n\nRESTART?"
+    );
+
+    location.reload();
+
+  }, 1000);
+
+}
+
+
+/* SECRET */
+
+function unlockNode() {
+
+  gameRunning = false;
+
+  playArea.classList.remove("active");
+
+  endScreen.classList.add("active");
+
+  statusElement.textContent =
+    "NODE_00";
+
+}
+
+</script>
+
+</body>
+</html>

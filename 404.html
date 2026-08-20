@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>404 // MEMBRANA</title>
+
+  <style>
+    :root {
+      --bg: #000;
+      --cyan: #00f7ff;
+      --pink: #ff00f7;
+      --green: #00ff88;
+      --red: #ff2e63;
+      --text: #d8d8d8;
+      --muted: #555;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Courier New", monospace;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    /* =========================
+       BACKGROUND
+    ========================== */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          rgba(255,255,255,.025) 1px,
+          transparent 1px
+        );
+
+      background-size: 100% 4px;
+
+      opacity: .35;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(0,247,255,.04),
+          transparent 60%
+        );
+
+      animation: pulse 5s infinite alternate;
+    }
+
+    /* =========================
+       TERMINAL
+    ========================== */
+
+    .terminal {
+      width: min(850px, 100%);
+
+      border:
+        1px solid rgba(0,247,255,.25);
+
+      background:
+        rgba(5,5,5,.92);
+
+      padding:
+        clamp(20px, 5vw, 45px);
+
+      box-shadow:
+        0 0 40px rgba(0,247,255,.06);
+
+      position: relative;
+    }
+
+    .terminal::before {
+      content: "MEMBRANA // ERROR NODE";
+
+      position: absolute;
+
+      top: -10px;
+      left: 20px;
+
+      padding: 0 8px;
+
+      background: var(--bg);
+
+      color: var(--cyan);
+
+      font-size: 11px;
+
+      letter-spacing: 2px;
+    }
+
+    /* =========================
+       404
+    ========================== */
+
+    .error {
+      font-size:
+        clamp(70px, 18vw, 160px);
+
+      line-height: .8;
+
+      font-weight: bold;
+
+      color: transparent;
+
+      -webkit-text-stroke:
+        1px var(--cyan);
+
+      text-shadow:
+        3px 0 var(--pink),
+        -3px 0 var(--cyan);
+
+      animation: glitch 3s infinite;
+    }
+
+    .title {
+      margin-top: 25px;
+
+      font-size:
+        clamp(20px, 5vw, 32px);
+
+      color: var(--red);
+
+      letter-spacing: 4px;
+    }
+
+    /* =========================
+       LOG
+    ========================== */
+
+    .log {
+      margin-top: 30px;
+
+      color: var(--green);
+
+      line-height: 1.8;
+
+      font-size:
+        clamp(12px, 2vw, 15px);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .warning {
+      color: var(--red);
+
+      animation:
+        blink 1.2s steps(2) infinite;
+    }
+
+    /* =========================
+       INPUT
+    ========================== */
+
+    .command {
+      display: flex;
+
+      margin-top: 30px;
+
+      border:
+        1px solid #222;
+    }
+
+    .command span {
+      padding: 12px;
+
+      color: var(--cyan);
+
+      background: #080808;
+    }
+
+    input {
+      flex: 1;
+
+      min-width: 0;
+
+      border: none;
+      outline: none;
+
+      background: #000;
+
+      color: var(--green);
+
+      font-family: inherit;
+
+      padding: 12px;
+    }
+
+    button {
+      border: none;
+
+      background: var(--cyan);
+
+      color: #000;
+
+      font-family: inherit;
+
+      font-weight: bold;
+
+      padding: 0 18px;
+
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--pink);
+    }
+
+    /* =========================
+       RESPONSE
+    ========================== */
+
+    #response {
+      min-height: 25px;
+
+      margin-top: 18px;
+
+      color: var(--pink);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* =========================
+       GLITCH
+    ========================== */
+
+    @keyframes glitch {
+
+      0%,
+      90%,
+      100% {
+        transform: translate(0);
+      }
+
+      92% {
+        transform: translate(-3px, 2px);
+      }
+
+      94% {
+        transform: translate(3px, -2px);
+      }
+
+      96% {
+        transform: translate(-1px, 1px);
+      }
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: .25;
+      }
+    }
+
+    @keyframes pulse {
+      from {
+        opacity: .4;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 600px) {
+
+      .terminal {
+        padding: 25px 18px;
+      }
+
+      .command {
+        flex-wrap: wrap;
+      }
+
+      .command span {
+        width: 100%;
+      }
+
+      input {
+        width: 100%;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="noise"></div>
+
+  <main class="terminal">
+
+    <div class="error">
+      404
+    </div>
+
+    <div class="title">
+      NODE NOT FOUND
+    </div>
+
+    <div class="log">
+
+      <div>
+        &gt; procurando recurso...
+      </div>
+
+      <div>
+        &gt; endereço: <span id="path"></span>
+      </div>
+
+      <div>
+        &gt; resposta: <span class="warning">NULL</span>
+      </div>
+
+      <div>
+        &gt; integridade da membrana:
+        <span class="warning">UNKNOWN</span>
+      </div>
+
+      <br>
+
+      <div class="muted">
+        [ sistema ]
+        este endereço não deveria existir.
+      </div>
+
+      <div class="muted">
+        [ sistema ]
+        mas alguém deixou uma porta aberta.
+      </div>
+
+    </div>
+
+    <div class="command">
+
+      <span>&gt;</span>
+
+      <input
+        id="command"
+        type="text"
+        autocomplete="off"
+        placeholder="digite um comando..."
+      >
+
+      <button id="send">
+        EXEC
+      </button>
+
+    </div>
+
+    <div id="response"></div>
+
+  </main>
+
+
+  <script>
+
+    const input =
+      document.getElementById("command");
+
+    const button =
+      document.getElementById("send");
+
+    const response =
+      document.getElementById("response");
+
+    const path =
+      document.getElementById("path");
+
+
+    /*
+     * Mostra o endereço que causou o 404.
+     */
+
+    path.textContent =
+      window.location.pathname;
+
+
+    /*
+     * Comandos secretos.
+     */
+
+    const commands = {
+
+      ajuda:
+        "> comandos disponíveis: ajuda / observar / root / repost",
+
+      observar:
+        "> OBSERVER DETECTED.",
+
+      root:
+        "> acesso ROOT recusado.",
+
+      repost:
+        "> canal #repost.ai encontrado.",
+
+      membrana:
+        "> a membrana está observando.",
+
+      qsr:
+        "> QSR-0 não responde.",
+
+      "qsr-0":
+        "> QSR-0 respondeu.",
+      
+      null:
+        "> NULL não significa ausência.",
+
+      exit:
+        "> não existe saída.",
+
+      sair:
+        "> não existe saída."
+
+    };
+
+
+    function execute() {
+
+      const command =
+        input.value
+          .trim()
+          .toLowerCase();
+
+      if (!command) return;
+
+
+      response.className = "";
+      
+
+      if (commands[command]) {
+
+        response.textContent =
+          commands[command];
+
+      }
+
+      else {
+
+        response.textContent =
+          "> comando desconhecido: " +
+          command;
+
+      }
+
+
+      input.value = "";
+
+    }
+
+
+    button.addEventListener(
+      "click",
+      execute
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Enter") {
+          execute();
+        }
+
+      }
+    );
+
+
+    /*
+     * Easter egg:
+     * digitar "morrow"
+     */
+
+    let buffer = "";
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key.length !== 1)
+          return;
+
+        buffer +=
+          event.key.toLowerCase();
+
+        buffer =
+          buffer.slice(-6);
+
+
+        if (buffer === "morrow") {
+
+          response.textContent =
+            "> LYSANDER Morrow está online.";
+
+          response.style.color =
+            "var(--green)";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

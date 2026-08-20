@@ -1,106 +1,926 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Missão 1 - Membrana</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MEMBRANA // Missão 01</title>
+
   <style>
-    body {
-      background: #0f0f0f;
-      color: #f8f8f8;
-      font-family: 'Courier New', monospace;
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
+
+    :root {
+      --bg: #0f0f0f;
+      --panel: #1a1a1a;
+      --terminal: #000;
+      --green: #00ffae;
+      --cyan: #00ffe1;
+      --red: #ff4444;
+      --text: #f8f8f8;
+      --muted: #777;
     }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(0, 255, 174, 0.04),
+          transparent 45%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family:
+        "Courier New",
+        monospace;
+
+      padding: 2rem 1rem;
+
+      max-width: 800px;
+
+      margin: auto;
+
+      min-height: 100vh;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================== */
+
     header {
+
       text-align: center;
+
       margin-bottom: 2rem;
     }
+
     h1 {
-      color: #00ffae;
+
+      color: var(--green);
+
       text-transform: uppercase;
+
+      letter-spacing: 2px;
+
+      text-shadow:
+        0 0 8px
+        rgba(0, 255, 174, 0.4);
     }
-    .missao {
-      background: #1a1a1a;
-      border: 2px dashed #00ffae;
-      padding: 1.5rem;
-      margin-top: 1rem;
-      border-radius: 10px;
+
+    header p {
+
+      color: #aaa;
     }
-    .terminal {
-      background: #000;
-      color: #0f0;
-      padding: 1rem;
-      margin-top: 1rem;
-      font-family: monospace;
-      border-radius: 5px;
-      white-space: pre-line;
-    }
-    button {
-      background: #00ffae;
-      color: #000;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      margin-top: 1rem;
+
+    #nomeAgente {
+
+      color: var(--cyan);
+
       font-weight: bold;
-      cursor: pointer;
+    }
+
+
+    /* =========================
+       MISSÃO
+    ========================== */
+
+    .missao {
+
+      background:
+        rgba(26, 26, 26, 0.9);
+
+      border:
+        2px dashed var(--green);
+
+      padding:
+        clamp(1rem, 4vw, 1.5rem);
+
+      margin-top: 1rem;
+
+      border-radius: 10px;
+
+      box-shadow:
+        0 0 20px
+        rgba(0, 255, 174, 0.08);
+    }
+
+    .missao p {
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================
+       TERMINAL
+    ========================== */
+
+    .terminal {
+
+      background: var(--terminal);
+
+      color: #00ff00;
+
+      padding: 1rem;
+
+      margin-top: 1rem;
+
+      font-family:
+        "Courier New",
+        monospace;
+
       border-radius: 5px;
+
+      white-space: pre-line;
+
+      border:
+        1px solid
+        rgba(0, 255, 0, 0.2);
+
+      overflow-x: auto;
+
+      line-height: 1.5;
+
+      box-shadow:
+        inset 0 0 15px
+        rgba(0, 255, 0, 0.05);
     }
+
+
+    /* =========================
+       RESPOSTA
+    ========================== */
+
+    .resposta-area {
+
+      margin-top: 1.5rem;
+    }
+
+    label {
+
+      display: block;
+
+      margin-bottom: 0.5rem;
+
+      color: #aaa;
+    }
+
+    input {
+
+      width: 100%;
+
+      padding: 0.8rem;
+
+      background: #050505;
+
+      color: var(--green);
+
+      border:
+        1px solid
+        rgba(0, 255, 174, 0.5);
+
+      border-radius: 5px;
+
+      font-family: inherit;
+
+      font-size: 1rem;
+
+      outline: none;
+    }
+
+    input:focus {
+
+      border-color:
+        var(--green);
+
+      box-shadow:
+        0 0 10px
+        rgba(0, 255, 174, 0.15);
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================== */
+
+    button {
+
+      background: var(--green);
+
+      color: #000;
+
+      border: none;
+
+      padding:
+        0.75rem 1.25rem;
+
+      margin-top: 1rem;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      border-radius: 5px;
+
+      font-family: inherit;
+
+      transition:
+        0.2s ease;
+    }
+
     button:hover {
+
       background: #00d99b;
+
+      transform:
+        translateY(-1px);
     }
+
+    button:disabled {
+
+      opacity: 0.5;
+
+      cursor: not-allowed;
+
+      transform: none;
+    }
+
+
+    /* =========================
+       FEEDBACK
+    ========================== */
+
+    #feedback {
+
+      min-height: 1.5rem;
+
+      margin-top: 1rem;
+
+      font-weight: bold;
+    }
+
+    .success {
+
+      color: var(--green);
+    }
+
+    .error {
+
+      color: var(--red);
+    }
+
+
+    /* =========================
+       REWARD
+    ========================== */
+
+    .reward {
+
+      display: none;
+
+      margin-top: 1.5rem;
+
+      padding: 1rem;
+
+      border:
+        1px solid
+        var(--cyan);
+
+      background:
+        rgba(0, 255, 225, 0.05);
+
+      color: var(--cyan);
+
+      border-radius: 5px;
+
+      text-align: center;
+
+      line-height: 1.6;
+    }
+
+    .reward.show {
+
+      display: block;
+
+      animation:
+        reveal 0.6s ease;
+    }
+
+    @keyframes reveal {
+
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================== */
+
+    .navigation {
+
+      text-align: center;
+
+      margin-top: 2rem;
+    }
+
+    .navigation a {
+
+      color: var(--cyan);
+
+      text-decoration: none;
+
+      opacity: 0.8;
+    }
+
+    .navigation a:hover {
+
+      opacity: 1;
+
+      text-decoration: underline;
+    }
+
   </style>
 </head>
+
+
 <body>
+
+
   <header>
-    <h1>Missão 1: A Escuta</h1>
-    <p><strong>Agente:</strong> <span id="nomeAgente">...</span></p>
+
+    <h1>
+      Missão 01: A Escuta
+    </h1>
+
+    <p>
+      <strong>Agente:</strong>
+
+      <span id="nomeAgente">
+        identificando...
+      </span>
+    </p>
+
   </header>
 
-  <section class="missao">
-    <p>Interceptamos uma transmissão vinda do servidor abandonado da E.G.O. Technologies.</p>
-    <p>Seu objetivo é analisar os dados criptografados e identificar o padrão escondido.</p>
 
-    <div class="terminal" id="terminal">
+  <main>
+
+
+    <section class="missao">
+
+
+      <p>
+        Interceptamos uma transmissão vinda do
+        servidor abandonado da
+        <strong>E.G.O. Technologies.</strong>
+      </p>
+
+
+      <p>
+        Seu objetivo é analisar os dados
+        criptografados e identificar o padrão
+        escondido.
+      </p>
+
+
+      <div class="terminal">
+
 [LOG DE ÁUDIO ENCONTRADO]
 
-> "...eles estão ouvindo... 01101001 01101110 01110100 01100101 01110010 01100110 01100101 01110010 ..."
-    </div>
+> "...eles estão ouvindo...
+01101001 01101110 01110100 01100101
+01110010 01100110 01100101 01110010 ..."
 
-    <p><strong>Pergunta:</strong> O que a sequência binária quer dizer?</p>
-    <input type="text" id="resposta" placeholder="Digite sua resposta" />
-    <br>
-    <button onclick="verificarResposta()">Verificar</button>
-    <p id="feedback"></p>
-  </section>
+      </div>
+
+
+      <div class="resposta-area">
+
+        <label for="resposta">
+
+          <strong>
+            Pergunta:
+          </strong>
+
+          O que a sequência binária quer dizer?
+
+        </label>
+
+
+        <input
+          type="text"
+          id="resposta"
+          autocomplete="off"
+          placeholder="Digite sua resposta"
+        >
+
+
+        <button
+          id="verificar"
+          type="button"
+        >
+          VERIFICAR
+        </button>
+
+
+        <p
+          id="feedback"
+          role="status"
+        ></p>
+
+
+      </div>
+
+
+      <div
+        class="reward"
+        id="reward"
+      >
+
+        <strong>
+          ◉ EXPERIÊNCIA CONCLUÍDA
+        </strong>
+
+        <br><br>
+
+        +100 SYNAPSE
+
+        <br>
+
+        🔓 FRAGMENTO 01 DESBLOQUEADO
+
+        <br>
+
+        ◉ RECOMPENSA:
+        MEMBRANA // A ESCUTA
+
+      </div>
+
+
+    </section>
+
+
+    <nav class="navigation">
+
+      <a href="painel.html">
+        ← Voltar para o Painel do Jogador
+      </a>
+
+    </nav>
+
+
+  </main>
+
 
   <script>
-    const nome = localStorage.getItem("nomeUsuario") || "Agente Anônimo";
-    document.getElementById("nomeAgente").textContent = nome;
+
+    /* =========================================
+       CONFIGURAÇÃO DA MISSÃO
+    ========================================== */
+
+    const MISSION = {
+
+      id: 1,
+
+      answer: "interfer",
+
+      xp: 100,
+
+      fragment:
+        "fragmento_01",
+
+      reward:
+        "MEMBRANA // A ESCUTA"
+
+    };
+
+
+    /* =========================================
+       COOKIE
+    ========================================== */
+
+    const COOKIE_NAME =
+      "membrana_player";
+
+
+    function loadPlayer() {
+
+      const cookie =
+        document.cookie
+          .split("; ")
+          .find(
+            row =>
+              row.startsWith(
+                COOKIE_NAME + "="
+              )
+          );
+
+
+      if (!cookie) {
+
+        return null;
+
+      }
+
+
+      try {
+
+        return JSON.parse(
+          decodeURIComponent(
+            cookie
+              .split("=")
+              .slice(1)
+              .join("=")
+          )
+        );
+
+      } catch {
+
+        return null;
+
+      }
+
+    }
+
+
+    function savePlayer(player) {
+
+      const expires =
+        new Date();
+
+      expires.setDate(
+        expires.getDate() + 30
+      );
+
+
+      document.cookie =
+        `${COOKIE_NAME}=` +
+        `${encodeURIComponent(
+          JSON.stringify(player)
+        )};` +
+        `expires=${expires.toUTCString()};` +
+        `path=/;` +
+        `SameSite=Lax`;
+    }
+
+
+    /* =========================================
+       PLAYER
+    ========================================== */
+
+    let player =
+      loadPlayer();
+
+
+    if (!player) {
+
+      player = {
+
+        id:
+          `observer_${crypto.randomUUID().slice(0, 8)}`,
+
+        level: 1,
+
+        xp: 0,
+
+        completed: [],
+
+        fragments: [],
+
+        rewards: [],
+
+        secrets: []
+
+      };
+
+      savePlayer(player);
+
+    }
+
+
+    /* =========================================
+       IDENTIDADE
+    ========================================== */
+
+    document.getElementById(
+      "nomeAgente"
+    ).textContent =
+      player.id;
+
+
+    /* =========================================
+       ELEMENTOS
+    ========================================== */
+
+    const input =
+      document.getElementById(
+        "resposta"
+      );
+
+    const button =
+      document.getElementById(
+        "verificar"
+      );
+
+    const feedback =
+      document.getElementById(
+        "feedback"
+      );
+
+    const reward =
+      document.getElementById(
+        "reward"
+      );
+
+
+    /* =========================================
+       VERIFICAÇÃO
+    ========================================== */
 
     function verificarResposta() {
-      const resposta = document.getElementById("resposta").value.toLowerCase().trim();
-      const feedback = document.getElementById("feedback");
 
-      if (resposta === "interfer") {
-        feedback.innerHTML = "✅ Missão concluída com sucesso! Código aceito.";
-        feedback.style.color = "#00ffae";
-        localStorage.setItem("missao1_concluida", "true");
-      } else {
-        feedback.innerHTML = "❌ Resposta incorreta. Tente novamente.";
-        feedback.style.color = "#ff4444";
+      const resposta =
+        input.value
+          .trim()
+          .toLowerCase();
+
+
+      if (!resposta) {
+
+        feedback.textContent =
+          "⚠ Digite uma resposta.";
+
+        feedback.className =
+          "error";
+
+        return;
+
       }
-    }
-  </script>
-  <script>
-  // Salva o progresso da missão e recompensa
-  localStorage.setItem("missao1", "completa");
-  localStorage.setItem("fragmento1", "true");
-</script>
 
-<a href="painel.html" style="display:block;text-align:center;margin-top:2rem;">
-  🔍 Ir para o Painel do Jogador
-</a>
+
+      /* =========================
+         JÁ CONCLUÍDA
+      ========================== */
+
+      if (
+        player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        feedback.textContent =
+          "✓ Esta experiência já foi registrada.";
+
+        feedback.className =
+          "success";
+
+        reward.classList.add(
+          "show"
+        );
+
+        button.disabled =
+          true;
+
+        return;
+
+      }
+
+
+      /* =========================
+         RESPOSTA CORRETA
+      ========================== */
+
+      if (
+        resposta ===
+        MISSION.answer
+      ) {
+
+        completarMissao();
+
+        return;
+
+      }
+
+
+      /* =========================
+         RESPOSTA ERRADA
+      ========================== */
+
+      feedback.textContent =
+        "❌ Resposta incorreta. A transmissão ainda está ativa.";
+
+      feedback.className =
+        "error";
+
+    }
+
+
+    /* =========================================
+       COMPLETAR MISSÃO
+    ========================================== */
+
+    function completarMissao() {
+
+
+      /* =========================
+         MISSÃO
+      ========================== */
+
+      player.completed.push(
+        MISSION.id
+      );
+
+
+      /* =========================
+         XP
+      ========================== */
+
+      player.xp +=
+        MISSION.xp;
+
+
+      /* =========================
+         FRAGMENTO
+      ========================== */
+
+      if (
+        !player.fragments.includes(
+          MISSION.fragment
+        )
+      ) {
+
+        player.fragments.push(
+          MISSION.fragment
+        );
+
+      }
+
+
+      /* =========================
+         RECOMPENSA
+      ========================== */
+
+      if (
+        !player.rewards.includes(
+          MISSION.reward
+        )
+      ) {
+
+        player.rewards.push(
+          MISSION.reward
+        );
+
+      }
+
+
+      /* =========================
+         LEVEL UP
+      ========================== */
+
+      while (
+        player.xp >=
+        player.level * 100
+      ) {
+
+        player.xp -=
+          player.level * 100;
+
+        player.level++;
+
+      }
+
+
+      /* =========================
+         SALVAR
+      ========================== */
+
+      savePlayer(player);
+
+
+      /* =========================
+         UI
+      ========================== */
+
+      feedback.textContent =
+        "✅ MISSÃO CONCLUÍDA. CÓDIGO ACEITO.";
+
+      feedback.className =
+        "success";
+
+
+      reward.classList.add(
+        "show"
+      );
+
+
+      button.disabled =
+        true;
+
+
+      input.disabled =
+        true;
+
+
+      input.value =
+        "interfer";
+
+
+      /* =========================
+         EFEITO
+      ========================== */
+
+      document.body.style.boxShadow =
+        "inset 0 0 80px rgba(0,255,174,.15)";
+
+
+      setTimeout(() => {
+
+        document.body.style.boxShadow =
+          "";
+
+      }, 1000);
+
+    }
+
+
+    /* =========================================
+       EVENTS
+    ========================================== */
+
+    button.addEventListener(
+      "click",
+      verificarResposta
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          verificarResposta();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       RESTAURAR ESTADO
+    ========================================== */
+
+    if (
+      player.completed.includes(
+        MISSION.id
+      )
+    ) {
+
+      feedback.textContent =
+        "✓ MISSÃO JÁ CONCLUÍDA.";
+
+      feedback.className =
+        "success";
+
+      reward.classList.add(
+        "show"
+      );
+
+      button.disabled =
+        true;
+
+      input.disabled =
+        true;
+
+      input.value =
+        "interfer";
+
+    }
+
+  </script>
+
 </body>
+
 </html>

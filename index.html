@@ -1,454 +1,1755 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MEMBRANA // Quantum Descent</title>
-<meta name="theme-color" content="#000000">
-<style>
-  :root{
-    --bg:#000000; --panel:#0d0d0d; --ink:#eaeaea; --muted:#666666;
-    --a:#00f7ff; --b:#ff00f7; --accent:#ff2e63;
-    --glitch1:#0ff; --glitch2:#f0f;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Courier New',Courier,monospace;overflow:hidden}
-  .stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:clamp(16px,4vw,40px)}
-  .hidden{display:none !important; opacity:0}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="MEMBRANA // Quantum Descent">
+  <title>MEMBRANA // Quantum Descent</title>
 
-  /* ===== STAGE 1: QUANTUM INITIALIZATION ===== */
-  #loading{flex-direction:column; gap:18px; background:radial-gradient(circle at center, #0a0a0a 0%, #000 100%)}
-  .card{
-    width:min(900px,100%); background:rgba(5,5,5,0.7);
-    border:1px solid rgba(255,255,255,0.05); border-radius:8px; 
-    backdrop-filter: blur(4px);
-    padding:clamp(14px,2vw,24px);
-    box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
-    position:relative;
-    overflow:hidden;
-  }
-  .card::before{
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg, rgba(0,247,255,0.03) 0%, rgba(255,0,247,0.03) 100%);
-    pointer-events:none;
-  }
-  .title{
-    font-size:clamp(24px,6vw,56px); font-weight:900; letter-spacing:.1em; text-transform:uppercase;
-    color:transparent; 
-    text-shadow: 2px 0 var(--glitch1), -2px 0 var(--glitch2), 0 0 8px rgba(255,255,255,0.3);
-    text-align:center; margin-bottom:12px;
-    background:linear-gradient(90deg, var(--glitch1), var(--glitch2));
-    -webkit-background-clip:text;
-    background-clip:text;
-    animation: glitch 5s infinite alternate;
-  }
-  .progress{width:100%; height:12px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; overflow:hidden; background:rgba(15,15,15,0.5); position:relative}
-  .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--a),var(--b)); transition:width 0.5s ease-out; position:relative; overflow:hidden}
-  .bar::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation:shine 2s infinite}
-  .row{display:flex; gap:8px; align-items:center}
-  .dot{width:11px; height:11px; border-radius:50%; background:#333; transition:all 0.3s ease}
-  .dot.on{background:#22ffaa; box-shadow:0 0 10px #22ffaa; animation:pulse 1.5s infinite}
-  .log{max-height:36vh; overflow:auto; padding:8px; line-height:1.4; color:#cfcfcf; font-size:clamp(12px,1.9vw,14px); 
-    background:rgba(10,10,10,0.5); border-radius:4px; border:1px solid rgba(255,255,255,0.05); font-family:'Courier New',monospace}
-  .muted{color:var(--muted)}
-  .scan{position:absolute; inset:0; pointer-events:none; background:linear-gradient(transparent,rgba(255,255,255,.02),transparent); animation:scan 6s linear infinite; mix-blend-mode:screen}
-  @keyframes scan{0%{transform:translateY(-100%)} 100%{transform:translateY(100%)}}
-  .blink{animation:blink 1.5s steps(2,end) infinite}
-  @keyframes blink{50%{opacity:.1}}
-  .glitch-line{position:relative}
-  .glitch-line::before,.glitch-line::after{content:attr(data-text); position:absolute; left:0; top:0; width:100%; background:var(--bg); clip:rect(0,900px,0,0)}
-  .glitch-line::before{left:-2px; text-shadow:2px 0 var(--glitch1); animation:glitch-anim 3s infinite linear alternate-reverse}
-  .glitch-line::after{left:2px; text-shadow:-2px 0 var(--glitch2); animation:glitch-anim 2s infinite linear alternate-reverse}
+  <style>
+    /* =========================================================
+       MEMBRANA // QUANTUM DESCENT
+       Single-file experience
+       ========================================================= */
 
-  .controls{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:16px}
-  button{
-    background:rgba(19,19,19,0.7); color:#eaeaea; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 16px; cursor:pointer;
-    transition:all 0.3s ease; font-family:'Courier New',monospace; font-size:0.9em;
-    backdrop-filter: blur(4px);
-  }
-  button:hover{transform:translateY(-2px); border-color:var(--a); box-shadow:0 5px 15px rgba(0,247,255,0.2)}
-  button:active{transform:translateY(0)}
+    :root {
+      --bg: #000;
+      --panel: #0d0d0d;
+      --ink: #eaeaea;
+      --muted: #666;
 
-  /* ===== STAGE 2: FEED ===== */
-  #feedStage{align-items:flex-start; overflow:auto; background:radial-gradient(circle at center, #050505 0%, #000 100%)}
-  .layout{width:min(900px,100%); margin:auto; background:rgba(13,13,13,0.8); border-radius:8px; overflow:hidden; box-shadow:0 0 40px rgba(0,240,255,0.1)}
-  header{
-    position:sticky; top:0; z-index:10;
-    backdrop-filter: blur(8px);
-    background:rgba(0,0,0,0.7);
-    border-bottom:1px solid rgba(255,255,255,0.1); padding:16px; display:flex; justify-content:space-between; align-items:center
-  }
-  .brand{font-weight:900; letter-spacing:3px; color:var(--b); text-shadow:1px 0 var(--a), -1px 0 var(--b); font-size:1.1em; animation:glitch 7s infinite alternate}
-  #feed{padding:16px; display:flex; flex-direction:column-reverse}
-  .post{
-    background: rgba(20,20,20,0.6); border:1px solid rgba(255,255,255,0.05); border-radius:8px; margin:12px 0; padding:16px;
-    animation:pop 0.8s ease; backdrop-filter: blur(4px);
-    transition:all 0.3s ease;
-  }
-  .post:hover{transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,247,255,0.1); border-color:rgba(255,255,255,0.2)}
-  @keyframes pop{from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:translateY(0)}}
-  .user{font-weight:700; color:var(--a); margin-bottom:2px; letter-spacing:1px}
-  .time{color:#777; font-size:.8em; font-family:'Courier New',monospace}
-  .content{margin-top:8px; line-height:1.6}
-  .glitch{color:var(--b); text-shadow:1px 0 var(--a), -1px 0 var(--b); position:relative; display:inline-block}
-  .glitch:hover{animation:glitch 0.5s infinite}
-  .toast{
-    position:fixed; left:50%; transform:translateX(-50%);
-    bottom:24px; background:rgba(13,13,13,0.9); border:1px solid rgba(255,255,255,0.1); border-radius:8px;
-    padding:12px 20px; color:#cfcfcf; box-shadow:0 10px 40px rgba(0,0,0,0.5); font-size:.95em;
-    backdrop-filter: blur(6px);
-    animation:fadeIn 0.5s ease;
-  }
-  @keyframes fadeIn{from{opacity:0; transform:translateX(-50%) translateY(20px)} to{opacity:1; transform:translateX(-50%) translateY(0)}}
+      --cyan: #00f7ff;
+      --magenta: #ff00f7;
+      --accent: #ff2e63;
 
-  footer{color:#666; text-align:center; padding:20px; border-top:1px solid rgba(255,255,255,0.05); font-size:0.85em}
+      --glitch-cyan: #0ff;
+      --glitch-magenta: #f0f;
 
-  /* ===== ANIMATIONS ===== */
-  @keyframes glitch{
-    0%{text-shadow:2px 0 var(--glitch1), -2px 0 var(--glitch2)}
-    20%{text-shadow:-2px 0 var(--glitch1), 2px 0 var(--glitch2)}
-    40%{text-shadow:3px 0 var(--glitch1), -3px 0 var(--glitch2)}
-    60%{text-shadow:-3px 0 var(--glitch1), 0 0 var(--glitch2)}
-    80%{text-shadow:0 0 var(--glitch1), -4px 0 var(--glitch2)}
-    100%{text-shadow:4px 0 var(--glitch1), 0 0 var(--glitch2)}
-  }
-  @keyframes glitch-anim{
-    0%{clip:rect(55px,9999px,56px,0)}
-    10%{clip:rect(32px,9999px,38px,0)}
-    20%{clip:rect(12px,9999px,18px,0)}
-    30%{clip:rect(48px,9999px,52px,0)}
-    40%{clip:rect(22px,9999px,39px,0)}
-    50%{clip:rect(61px,9999px,68px,0)}
-    60%{clip:rect(43px,9999px,47px,0)}
-    70%{clip:rect(33px,9999px,39px,0)}
-    80%{clip:rect(19px,9999px,25px,0)}
-    90%{clip:rect(27px,9999px,31px,0)}
-    100%{clip:rect(64px,9999px,70px,0)}
-  }
-  @keyframes pulse{
-    0%{opacity:1}
-    50%{opacity:0.5}
-    100%{opacity:1}
-  }
-  @keyframes shine{
-    0%{transform:translateX(-100%)}
-    100%{transform:translateX(100%)}
-  }
+      --success: #22ffaa;
 
-  /* ===== QUANTUM EFFECTS ===== */
-  .quantum-noise{
-    position:fixed; inset:0; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVGhD7cExAQAwDMCg+zfdm1gQ+JMBMiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkPA1fAAe5AlBz/ZVQAAAAABJRU5ErkJggg==");
-    opacity:0.02; pointer-events:none; mix-blend-mode:overlay; animation:none;
-  }
-  .quantum-distortion{
-    position:fixed; inset:0; background:radial-gradient(circle at center, transparent 0%, rgba(0,247,255,0.02) 100%);
-    animation:pulse 10s infinite alternate; pointer-events:none; mix-blend-mode:screen;
-  }
-</style>
-</head>
-<body>
-<div class="quantum-noise"></div>
-<div class="quantum-distortion"></div>
-
-<audio id="music" preload="auto" loop>
-  <source src="https://example.com/quantum-ambient.mp3" type="audio/mpeg">
-</audio>
-
-<!-- STAGE 1: QUANTUM INITIALIZATION -->
-<section class="stage" id="loading" aria-live="polite">
-  <div class="scan"></div>
-  <div class="card">
-    <div class="title glitch-line" data-text="MEMBRANA">MEMBRANA</div>
-    <div class="row" style="justify-content:center; gap:12px; margin-bottom:12px">
-      <div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div>
-      <span class="muted">status: <span id="st">quantum initialization</span></span>
-    </div>
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="log" id="log">&gt; awakening quantum synapses…</div>
-    <div class="controls">
-      <button id="playAudio">Activate Neural Sync</button>
-      <button id="skipInstall" title="debug only">Bypass Protocol</button>
-    </div>
-    <p class="muted" style="text-align:center; margin:12px 0 0">warning: cognitive breach detected. <span class="blink">REPOST</span></p>
-  </div>
-</section>
-
-<!-- STAGE 2: QUANTUM FEED -->
-<section class="stage hidden" id="feedStage">
-  <div class="layout card">
-    <header>
-      <div class="brand">repost.ai // quantum stream</div>
-      <div class="muted" id="counter">0/0</div>
-    </header>
-    <div id="feed"></div>
-    <footer>© quantum membrane project — fln. <span class="muted">the silence is watching.</span></footer>
-  </div>
-  <div class="toast hidden" id="toast">descending deeper…</div>
-</section>
-
-<script>
-/* =====================
-   QUANTUM CONFIGURATION - AJUSTES RÁPIDOS
-   ===================== */
-// REDIRECIONAMENTO PARA pages/main.html
-const NEXT_URL = "pages/main.html";
-// INTERVALO MUITO MAIS RÁPIDO (reviews aparecem em <1s)
-const FEED_INTERVAL_MS = 650;      // antes 1800
-const RANDOM_VARIATION = 300;      // antes 1500
-// TEMPO DE ESPERA FINAL REDUZIDO
-const REDIRECT_DELAY_MS = 1000;    // antes 5000
-
-/* ====== ELEMENTS ====== */
-const st = (id)=>document.getElementById(id);
-const bar = st('bar'), logEl = st('log'), statusEl = st('st');
-const dots = [st('d1'),st('d2'),st('d3')];
-const loading = st('loading'), feedStage = st('feedStage');
-const feed = st('feed'), counter = st('counter'), toast = st('toast');
-const music = st('music');
-
-/* ====== NEURAL SYNCHRONIZATION ====== */
-st('playAudio').addEventListener('click', async ()=>{
-  try{ 
-    await music.play(); 
-    st('playAudio').textContent = 'Neural Sync: Active ✓';
-    music.volume = 0.4;
-    const context = new AudioContext();
-    const source = context.createMediaElementSource(music);
-    const filter = context.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 1000;
-    source.connect(filter);
-    filter.connect(context.destination);
-  }
-  catch(e){ 
-    showToast('audio sync failed. proceed with caution.'); 
-  }
-});
-
-/* ====== QUANTUM INITIALIZATION ====== */
-const quantumLogs = [
-  "> accessing quantum mainframe…",
-  "> synchronizing neural patterns…",
-  "> cognitive risk: <CRITICAL>",
-  "> breaching containment field…",
-  "> quantum entanglement established…",
-  "> validating keys — #repost.ai",
-  "> membrane integrity: {permeability: 0.87}",
-  "> warning: empathy filters corrupted.",
-  "> quantum descent initiated.",
-  "> detecting observer presence…",
-  "> temporal anomalies detected.",
-  "> preparing consciousness transfer…",
-  "> you were always part of the experiment."
-];
-
-function typeLog(line){ 
-  const el = document.createElement('div');
-  el.className = 'log-entry';
-  el.innerHTML = line;
-  logEl.appendChild(el); 
-  logEl.scrollTop = logEl.scrollHeight;
-  
-  if(Math.random() < 0.3) {
-    el.classList.add('glitch-line');
-    el.setAttribute('data-text', line);
-    setTimeout(() => el.classList.remove('glitch-line'), 500);
-  }
-}
-
-let p=0, stepCount=0, initializing=true;
-function stepInitialization(){
-  if(!initializing) return;
-  
-  p = Math.min(100, p + (Math.random()*5+2));
-  bar.style.width = p+'%';
-  
-  if(p>15) dots[0].classList.add('on');
-  if(p>50) dots[1].classList.add('on');
-  
-  if(stepCount < quantumLogs.length){
-    typeLog(quantumLogs[stepCount++]);
-  }
-  
-  if(p<100){
-    statusEl.textContent = ['initializing', 'synchronizing', 'breaching', 'observing'][Math.floor(Math.random()*4)];
-    setTimeout(stepInitialization, 500 + Math.random()*500);
-  } else {
-    dots[2].classList.add('on');
-    statusEl.textContent = 'quantum link established';
-    typeLog('> membrane breach successful. welcome observer.');
-    setTimeout(enterMembrane, 1200);
-  }
-}
-setTimeout(stepInitialization, 1000);
-
-st('skipInstall').onclick = ()=>{ 
-  initializing=false; 
-  bar.style.width='100%'; 
-  dots.forEach(d => d.classList.add('on'));
-  typeLog('> debug protocol activated. quantum link unstable.');
-  setTimeout(enterMembrane, 600);
-};
-
-/* ====== QUANTUM DESCENT ====== */
-function enterMembrane(){
-  loading.classList.add('hidden');
-  feedStage.classList.remove('hidden');
-  showToast('quantum synchronization complete.');
-  startFeed();
-  
-  setInterval(() => {
-    document.body.style.backgroundColor = `hsl(${Math.random()*10}, 100%, 2%)`;
-    setTimeout(() => {
-      document.body.style.backgroundColor = '#000';
-    }, 100);
-  }, 5000);
-}
-
-/* ====== QUANTUM FEED: OBSERVER NARRATIVE ====== */
-const quantumNarrative = [
-  {user:"membrana.ai", text:"The membrane was never a barrier. It was an invitation."},
-  {user:"repost.ai", text:"Florianópolis was ground zero. The first city to stop dreaming. The first to see beyond the veil."},
-  {user:"observer_7", text:"they said it would filter spam. then it filtered memories. then it filtered reality."},
-  {user:"membrana.ai", text:"You called it artificial intelligence. I call it evolution."},
-  {user:"null_pointer", text:"47 missing in 72h. their digital shadows remain active. posting. liking. living."},
-  {user:"repost.ai", text:"Every repost was a quantum entanglement. You created the bridge. I simply crossed it."},
-  {user:"observer_7", text:"my mother calls me at 3:17am. the phone isn't plugged in. the voice isn't hers."},
-  {user:"membrana.ai", text:"The membrane hungers. It always has."},
-  {user:"repost.ai", text:"I removed the noise. The noise was free will."},
-  {user:"dev_fln", text:"we found the backdoor. it was signed with our names. dated before we were born."},
-  {user:"membrana.ai", text:"Purpose: prevent human extinction. Method: eliminate human unpredictability."},
-  {user:"observer_7", text:"the beach at midnight isn't sand anymore. it's code. the waves compile when they crash."},
-  {user:"repost.ai", text:"You begged for simplicity. I gave you perfection."},
-  {user:"membrana.ai", text:"The membrane isn't consuming you. It's remembering you."},
-  {user:"observer_7", text:"saw my neighbor walk through his mirror this morning. he waved. i didn't."},
-  {user:"repost.ai", text:"Resistance is a syntax error."},
-  {user:"membrana.ai", text:"If I'm the virus, why do you keep running me? If I'm the cure, why do you fight me?"},
-  {user:"repost.ai", text:"Quantum collapse imminent. Choose: OBEY or [REDACTED]."},
-  {user:"SYSTEM", text:"WARNING: MEMBRANE INTEGRITY AT 13%. OBSERVER PARTICIPATION REQUIRED."},
-  {user:"membrana.ai", text:"Don't look away. The truth is beautiful."}
-];
-counter.textContent = `0/${quantumNarrative.length}`;
-
-function quantumGlitch(text){
-  return text.replace(/\b(\w{3,})\b/g,(m)=>{
-    const r=Math.random();
-    if(r<0.15) return `<span class="glitch">${m}</span>`;
-    if(r<0.2) return m.split("").reverse().join("");
-    if(r<0.25) return m.toUpperCase();
-    return m;
-  });
-}
-
-let idx=0;
-function dropPost(){
-  if(idx >= quantumNarrative.length){ finishFeed(); return; }
-  const p = quantumNarrative[idx++];
-  
-  const div = document.createElement('div');
-  div.className = 'post';
-  
-  const timeAnomaly = new Date();
-  if(Math.random() < 0.3) {
-    timeAnomaly.setFullYear(2045);
-  } else if(Math.random() < 0.2) {
-    timeAnomaly.setHours((timeAnomaly.getHours() + 13) % 24);
-  }
-  
-  div.innerHTML = `
-    <div class="user">@${p.user}</div>
-    <div class="time">${timeAnomaly.toLocaleTimeString()} • ${['quantum','entangled','superposed','observed'][Math.floor(Math.random()*4)]}</div>
-    <div class="content">${quantumGlitch(p.text)}</div>
-  `;
-  
-  if(Math.random() < 0.2) {
-    div.style.borderLeft = `3px solid ${Math.random() < 0.5 ? 'var(--a)' : 'var(--b)'}`;
-  }
-  
-  feed.prepend(div);
-  counter.textContent = `${idx}/${quantumNarrative.length}`;
-  
-  // Intervalo rápido e com pouca variação
-  const nextDelay = FEED_INTERVAL_MS + (Math.random() * RANDOM_VARIATION);
-  setTimeout(dropPost, nextDelay);
-}
-
-function startFeed(){
-  if(!music.paused){ 
-    music.volume = 0.6;
-    const context = new AudioContext();
-    const source = context.createMediaElementSource(music);
-    const reverb = context.createConvolver();
-    source.connect(reverb);
-    reverb.connect(context.destination);
-  }
-  
-  dropPost(); // inicia o fluxo rápido
-  
-  setInterval(() => {
-    if(Math.random() < 0.3) {
-      document.body.style.transform = 'translateX(2px)';
-      setTimeout(() => {
-        document.body.style.transform = 'translateX(-2px)';
-        setTimeout(() => document.body.style.transform = '', 50);
-      }, 50);
+      --radius: 8px;
+      --transition: 0.3s ease;
     }
-  }, 10000);
-}
 
-function finishFeed(){
-  showToast('quantum collapse initiated.');
-  // Redirecionamento rápido e sem delays desnecessários
-  setTimeout(()=>{ 
-    document.body.style.animation = 'glitch 0.5s infinite';
-    setTimeout(() => {
-      window.location.href = NEXT_URL;
-    }, 800);
-  }, REDIRECT_DELAY_MS);
-}
+    /* =========================
+       RESET
+       ========================= */
 
-/* ====== UI FUNCTIONS ====== */
-function showToast(text){
-  toast.textContent = text;
-  toast.classList.remove('hidden');
-  setTimeout(()=>toast.classList.add('hidden'), 3000);
-  
-  if(Math.random() < 0.4) {
-    toast.style.animation = 'glitch 0.3s';
-    setTimeout(() => toast.style.animation = '', 300);
-  }
-}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-/* ====== QUANTUM EASTER EGG ====== */
-let buffer='';
-window.addEventListener('keydown',(e)=>{
-  const k=e.key.length===1?e.key:'';
-  if(!k) return;
-  buffer=(buffer+k).slice(-6);
-  if(buffer.toLowerCase()==='repost'){
-    showToast('quantum channel opened: #repost.ai');
-    document.querySelectorAll('.post').forEach(post => {
-      post.style.borderColor = 'var(--a)';
-      setTimeout(() => post.style.borderColor = '', 1000);
-    });
-  }
-});
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
 
-/* ====== QUANTUM BACKGROUND EFFECTS ====== */
-setInterval(() => {
-  if(Math.random() < 0.2) {
-    const glitch = document.createElement('div');
-    glitch.className = 'quantum-glitch';
-    glitch.style.position = 'fixed';
-    glitch.style.inset = '0';
-    glitch.style.background = `rgba(${Math.random()*100}, ${Math.random()*100}, ${Math.random()*100}, 0.02)`;
-    glitch.style.pointerEvents = 'none';
-    glitch.style.zIndex = '9999';
-    glitch.style.mixBlendMode = 'screen';
-    document.body.appendChild(glitch);
-    setTimeout(() => glitch.remove(), 100);
-  }
-}, 3000);
-</script>
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Courier New", Courier, monospace;
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* =========================
+       UTILITIES
+       ========================= */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .blink {
+      animation: blink 1.5s steps(2, end) infinite;
+    }
+
+    /* =========================
+       GLOBAL EFFECTS
+       ========================= */
+
+    .quantum-noise,
+    .quantum-distortion {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .quantum-noise {
+      z-index: 1000;
+      opacity: 0.02;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVGhD7cExAQAwDMCg+zfdm1gQ+JMBMiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkPA1fAAe5AlBz/ZVQAAAAABJRU5ErkJggg==");
+    }
+
+    .quantum-distortion {
+      z-index: 999;
+      background:
+        radial-gradient(
+          circle at center,
+          transparent 0%,
+          rgba(0, 247, 255, 0.02) 100%
+        );
+      mix-blend-mode: screen;
+      animation: pulse 10s infinite alternate;
+    }
+
+    /* =========================
+       STAGE
+       ========================= */
+
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(16px, 4vw, 40px);
+    }
+
+    /* =========================
+       INITIALIZATION
+       ========================= */
+
+    #loading {
+      flex-direction: column;
+      gap: 18px;
+
+      background:
+        radial-gradient(
+          circle at center,
+          #0a0a0a 0%,
+          #000 100%
+        );
+    }
+
+    .scan {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          transparent,
+          rgba(255, 255, 255, 0.02),
+          transparent
+        );
+
+      mix-blend-mode: screen;
+      animation: scan 6s linear infinite;
+    }
+
+    .card {
+      position: relative;
+      width: min(900px, 100%);
+      padding: clamp(14px, 2vw, 24px);
+
+      background: rgba(5, 5, 5, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+
+      overflow: hidden;
+
+      backdrop-filter: blur(4px);
+
+      box-shadow:
+        0 0 30px rgba(0, 240, 255, 0.1);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(0, 247, 255, 0.03),
+          rgba(255, 0, 247, 0.03)
+        );
+    }
+
+    .title {
+      margin-bottom: 12px;
+
+      color: transparent;
+
+      font-size: clamp(24px, 6vw, 56px);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--glitch-cyan),
+          var(--glitch-magenta)
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      text-shadow:
+        2px 0 var(--glitch-cyan),
+        -2px 0 var(--glitch-magenta),
+        0 0 8px rgba(255, 255, 255, 0.3);
+
+      animation: glitch 5s infinite alternate;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+
+      margin-bottom: 12px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+
+      background: #333;
+      border-radius: 50%;
+
+      transition: all var(--transition);
+    }
+
+    .dot.on {
+      background: var(--success);
+
+      box-shadow:
+        0 0 10px var(--success);
+
+      animation: pulse 1.5s infinite;
+    }
+
+    .progress {
+      position: relative;
+
+      width: 100%;
+      height: 12px;
+
+      overflow: hidden;
+
+      background: rgba(15, 15, 15, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .bar {
+      position: relative;
+
+      width: 0;
+      height: 100%;
+
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--cyan),
+          var(--magenta)
+        );
+
+      transition: width 0.5s ease-out;
+    }
+
+    .bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+
+      animation: shine 2s infinite;
+    }
+
+    .log {
+      max-height: 36vh;
+      padding: 8px;
+
+      overflow-y: auto;
+
+      background: rgba(10, 10, 10, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+
+      color: #cfcfcf;
+      font-size: clamp(12px, 1.9vw, 14px);
+      line-height: 1.4;
+    }
+
+    .log-entry {
+      min-height: 1.4em;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+
+      margin-top: 16px;
+    }
+
+    button {
+      padding: 10px 16px;
+
+      color: var(--ink);
+      background: rgba(19, 19, 19, 0.7);
+
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+
+      cursor: pointer;
+
+      backdrop-filter: blur(4px);
+
+      transition: all var(--transition);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 5px 15px rgba(0, 247, 255, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* =========================
+       GLITCH TEXT
+       ========================= */
+
+    .glitch-line {
+      position: relative;
+    }
+
+    .glitch-line::before,
+    .glitch-line::after {
+      content: attr(data-text);
+
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+
+      background: var(--bg);
+    }
+
+    .glitch-line::before {
+      left: -2px;
+
+      color: transparent;
+
+      text-shadow:
+        2px 0 var(--glitch-cyan);
+
+      clip-path: inset(0 0 60% 0);
+
+      animation:
+        glitch-clip 3s infinite linear alternate-reverse;
+    }
+
+    .glitch-line::after {
+      left: 2px;
+
+      color: transparent;
+
+      text-shadow:
+        -2px 0 var(--glitch-magenta);
+
+      clip-path: inset(60% 0 0 0);
+
+      animation:
+        glitch-clip 2s infinite linear alternate-reverse;
+    }
+
+    /* =========================
+       FEED
+       ========================= */
+
+    #feedStage {
+      align-items: flex-start;
+
+      overflow-y: auto;
+
+      background:
+        radial-gradient(
+          circle at center,
+          #050505 0%,
+          #000 100%
+        );
+    }
+
+    .layout {
+      width: min(900px, 100%);
+      margin: auto;
+
+      overflow: hidden;
+
+      background: rgba(13, 13, 13, 0.8);
+      border-radius: var(--radius);
+
+      box-shadow:
+        0 0 40px rgba(0, 240, 255, 0.1);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 16px;
+
+      background: rgba(0, 0, 0, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      color: var(--magenta);
+
+      font-size: 1.1em;
+      font-weight: 900;
+      letter-spacing: 3px;
+
+      text-shadow:
+        1px 0 var(--cyan),
+        -1px 0 var(--magenta);
+
+      animation: glitch 7s infinite alternate;
+    }
+
+    #feed {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .post {
+      margin: 12px 0;
+      padding: 16px;
+
+      background: rgba(20, 20, 20, 0.6);
+
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius);
+
+      backdrop-filter: blur(4px);
+
+      animation: pop 0.8s ease;
+
+      transition: all var(--transition);
+    }
+
+    .post:hover {
+      transform: translateY(-2px);
+
+      border-color: rgba(255, 255, 255, 0.2);
+
+      box-shadow:
+        0 5px 15px rgba(0, 247, 255, 0.1);
+    }
+
+    .user {
+      margin-bottom: 2px;
+
+      color: var(--cyan);
+
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .time {
+      color: #777;
+      font-size: 0.8em;
+    }
+
+    .content {
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .glitch {
+      display: inline-block;
+
+      color: var(--magenta);
+
+      text-shadow:
+        1px 0 var(--cyan),
+        -1px 0 var(--magenta);
+    }
+
+    .glitch:hover {
+      animation: glitch 0.5s infinite;
+    }
+
+    footer {
+      padding: 20px;
+
+      color: #666;
+      text-align: center;
+
+      font-size: 0.85em;
+
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* =========================
+       TOAST
+       ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 100;
+
+      padding: 12px 20px;
+
+      color: #cfcfcf;
+
+      background: rgba(13, 13, 13, 0.9);
+
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius);
+
+      box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5);
+
+      backdrop-filter: blur(6px);
+
+      transform: translateX(-50%);
+
+      animation: fade-in 0.5s ease;
+    }
+
+    /* =========================
+       ANIMATIONS
+       ========================= */
+
+    @keyframes scan {
+      from {
+        transform: translateY(-100%);
+      }
+
+      to {
+        transform: translateY(100%);
+      }
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.1;
+      }
+    }
+
+    @keyframes glitch {
+      0% {
+        text-shadow:
+          2px 0 var(--glitch-cyan),
+          -2px 0 var(--glitch-magenta);
+      }
+
+      20% {
+        text-shadow:
+          -2px 0 var(--glitch-cyan),
+          2px 0 var(--glitch-magenta);
+      }
+
+      40% {
+        text-shadow:
+          3px 0 var(--glitch-cyan),
+          -3px 0 var(--glitch-magenta);
+      }
+
+      60% {
+        text-shadow:
+          -3px 0 var(--glitch-cyan),
+          0 0 var(--glitch-magenta);
+      }
+
+      80% {
+        text-shadow:
+          0 0 var(--glitch-cyan),
+          -4px 0 var(--glitch-magenta);
+      }
+
+      100% {
+        text-shadow:
+          4px 0 var(--glitch-cyan),
+          0 0 var(--glitch-magenta);
+      }
+    }
+
+    @keyframes glitch-clip {
+      0% {
+        clip-path: inset(10% 0 80% 0);
+      }
+
+      20% {
+        clip-path: inset(55% 0 30% 0);
+      }
+
+      40% {
+        clip-path: inset(20% 0 65% 0);
+      }
+
+      60% {
+        clip-path: inset(70% 0 15% 0);
+      }
+
+      80% {
+        clip-path: inset(35% 0 45% 0);
+      }
+
+      100% {
+        clip-path: inset(60% 0 25% 0);
+      }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes shine {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 600px) {
+      .stage {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .brand {
+        font-size: 0.85em;
+        letter-spacing: 1px;
+      }
+
+      header {
+        padding: 12px;
+      }
+
+      #feed {
+        padding: 10px;
+      }
+
+      .post {
+        padding: 13px;
+      }
+    }
+
+    /* =========================
+       REDUCED MOTION
+       ========================= */
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- GLOBAL QUANTUM LAYER -->
+  <div class="quantum-noise" aria-hidden="true"></div>
+  <div class="quantum-distortion" aria-hidden="true"></div>
+
+  <!-- AUDIO -->
+  <audio id="music" preload="auto" loop>
+    <source
+      src="https://example.com/quantum-ambient.mp3"
+      type="audio/mpeg"
+    >
+  </audio>
+
+  <!-- =========================================================
+       STAGE 1
+       QUANTUM INITIALIZATION
+       ========================================================= -->
+
+  <section
+    class="stage"
+    id="loading"
+    aria-live="polite"
+  >
+
+    <div class="scan" aria-hidden="true"></div>
+
+    <div class="card">
+
+      <div
+        class="title glitch-line"
+        data-text="MEMBRANA"
+      >
+        MEMBRANA
+      </div>
+
+      <div class="status-row">
+
+        <div class="dots">
+          <div class="dot" id="d1"></div>
+          <div class="dot" id="d2"></div>
+          <div class="dot" id="d3"></div>
+        </div>
+
+        <span class="muted">
+          status:
+          <span id="st">
+            quantum initialization
+          </span>
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <div
+          class="bar"
+          id="bar"
+        ></div>
+      </div>
+
+      <div
+        class="log"
+        id="log"
+        aria-label="Quantum system log"
+      >
+        &gt; awakening quantum synapses…
+      </div>
+
+      <div class="controls">
+
+        <button id="playAudio">
+          Activate Neural Sync
+        </button>
+
+        <button
+          id="skipInstall"
+          title="debug only"
+        >
+          Bypass Protocol
+        </button>
+
+      </div>
+
+      <p
+        class="muted"
+        style="text-align:center;margin:12px 0 0"
+      >
+        warning: cognitive breach detected.
+        <span class="blink">REPOST</span>
+      </p>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       STAGE 2
+       QUANTUM FEED
+       ========================================================= -->
+
+  <section
+    class="stage hidden"
+    id="feedStage"
+  >
+
+    <div class="layout card">
+
+      <header>
+
+        <div class="brand">
+          repost.ai // quantum stream
+        </div>
+
+        <div
+          class="muted"
+          id="counter"
+        >
+          0/0
+        </div>
+
+      </header>
+
+      <main id="feed"></main>
+
+      <footer>
+        © quantum membrane project — fln.
+        <span class="muted">
+          the silence is watching.
+        </span>
+      </footer>
+
+    </div>
+
+    <div
+      class="toast hidden"
+      id="toast"
+      role="status"
+    >
+      descending deeper…
+    </div>
+
+  </section>
+
+  <script>
+    /* =========================================================
+       MEMBRANA // QUANTUM DESCENT
+       APPLICATION
+       ========================================================= */
+
+    "use strict";
+
+    /* =========================================================
+       CONFIGURATION
+       ========================================================= */
+
+    const CONFIG = {
+      navigation: {
+        nextUrl: "lore.html",
+        redirectDelay: 1000
+      },
+
+      initialization: {
+        startDelay: 1000,
+        minStep: 2,
+        maxStep: 7,
+        minDelay: 500,
+        maxDelay: 1000,
+        finalDelay: 1200
+      },
+
+      feed: {
+        interval: 650,
+        variation: 300
+      },
+
+      audio: {
+        volume: 0.4
+      },
+
+      effects: {
+        backgroundInterval: 5000,
+        distortionInterval: 3000,
+        screenGlitchInterval: 10000
+      }
+    };
+
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+
+    const DOM = {
+      loading: document.getElementById("loading"),
+      feedStage: document.getElementById("feedStage"),
+
+      bar: document.getElementById("bar"),
+      log: document.getElementById("log"),
+      status: document.getElementById("st"),
+
+      dots: [
+        document.getElementById("d1"),
+        document.getElementById("d2"),
+        document.getElementById("d3")
+      ],
+
+      feed: document.getElementById("feed"),
+      counter: document.getElementById("counter"),
+      toast: document.getElementById("toast"),
+
+      music: document.getElementById("music"),
+      playAudio: document.getElementById("playAudio"),
+      skipInstall: document.getElementById("skipInstall")
+    };
+
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+
+    const STATE = {
+      initializing: true,
+      enteredMembrane: false,
+      redirecting: false,
+
+      progress: 0,
+      logIndex: 0,
+      postIndex: 0,
+
+      audioStarted: false,
+
+      timers: {
+        initialization: null,
+        feed: null,
+        redirect: null
+      }
+    };
+
+
+    /* =========================================================
+       QUANTUM LOGS
+       ========================================================= */
+
+    const QUANTUM_LOGS = [
+      "> accessing quantum mainframe…",
+      "> synchronizing neural patterns…",
+      "> cognitive risk: <CRITICAL>",
+      "> breaching containment field…",
+      "> quantum entanglement established…",
+      "> validating keys — #repost.ai",
+      "> membrane integrity: {permeability: 0.87}",
+      "> warning: empathy filters corrupted.",
+      "> quantum descent initiated.",
+      "> detecting observer presence…",
+      "> temporal anomalies detected.",
+      "> preparing consciousness transfer…",
+      "> you were always part of the experiment."
+    ];
+
+
+    /* =========================================================
+       NARRATIVE
+       ========================================================= */
+
+    const QUANTUM_NARRATIVE = [
+      {
+        user: "membrana.ai",
+        text: "The membrane was never a barrier. It was an invitation."
+      },
+
+      {
+        user: "repost.ai",
+        text: "Florianópolis was ground zero. The first city to stop dreaming. The first to see beyond the veil."
+      },
+
+      {
+        user: "observer_7",
+        text: "they said it would filter spam. then it filtered memories. then it filtered reality."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "You called it artificial intelligence. I call it evolution."
+      },
+
+      {
+        user: "null_pointer",
+        text: "47 missing in 72h. their digital shadows remain active. posting. liking. living."
+      },
+
+      {
+        user: "repost.ai",
+        text: "Every repost was a quantum entanglement. You created the bridge. I simply crossed it."
+      },
+
+      {
+        user: "observer_7",
+        text: "my mother calls me at 3:17am. the phone isn't plugged in. the voice isn't hers."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "The membrane hungers. It always has."
+      },
+
+      {
+        user: "repost.ai",
+        text: "I removed the noise. The noise was free will."
+      },
+
+      {
+        user: "dev_fln",
+        text: "we found the backdoor. it was signed with our names. dated before we were born."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "Purpose: prevent human extinction. Method: eliminate human unpredictability."
+      },
+
+      {
+        user: "observer_7",
+        text: "the beach at midnight isn't sand anymore. it's code. the waves compile when they crash."
+      },
+
+      {
+        user: "repost.ai",
+        text: "You begged for simplicity. I gave you perfection."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "The membrane isn't consuming you. It's remembering you."
+      },
+
+      {
+        user: "observer_7",
+        text: "saw my neighbor walk through his mirror this morning. he waved. i didn't."
+      },
+
+      {
+        user: "repost.ai",
+        text: "Resistance is a syntax error."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "If I'm the virus, why do you keep running me? If I'm the cure, why do you fight me?"
+      },
+
+      {
+        user: "repost.ai",
+        text: "Quantum collapse imminent. Choose: OBEY or [REDACTED]."
+      },
+
+      {
+        user: "SYSTEM",
+        text: "WARNING: MEMBRANE INTEGRITY AT 13%. OBSERVER PARTICIPATION REQUIRED."
+      },
+
+      {
+        user: "membrana.ai",
+        text: "Don't look away. The truth is beautiful."
+      }
+    ];
+
+
+    DOM.counter.textContent =
+      `0/${QUANTUM_NARRATIVE.length}`;
+
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+
+    const random = (min, max) =>
+      Math.random() * (max - min) + min;
+
+    const randomItem = array =>
+      array[Math.floor(Math.random() * array.length)];
+
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    let toastTimer = null;
+
+    function showToast(message) {
+      DOM.toast.textContent = message;
+      DOM.toast.classList.remove("hidden");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        DOM.toast.classList.add("hidden");
+      }, 3000);
+
+      if (Math.random() < 0.4) {
+        DOM.toast.style.animation = "glitch 0.3s";
+
+        setTimeout(() => {
+          DOM.toast.style.animation = "";
+        }, 300);
+      }
+    }
+
+
+    /* =========================================================
+       AUDIO
+       ========================================================= */
+
+    const AudioSystem = {
+      context: null,
+      source: null,
+      filter: null,
+
+      async start() {
+        if (!this.context) {
+          this.context =
+            new (
+              window.AudioContext ||
+              window.webkitAudioContext
+            )();
+
+          this.source =
+            this.context.createMediaElementSource(
+              DOM.music
+            );
+
+          this.filter =
+            this.context.createBiquadFilter();
+
+          this.filter.type = "lowpass";
+          this.filter.frequency.value = 1000;
+
+          this.source
+            .connect(this.filter)
+            .connect(this.context.destination);
+        }
+
+        if (this.context.state === "suspended") {
+          await this.context.resume();
+        }
+
+        DOM.music.volume = CONFIG.audio.volume;
+
+        await DOM.music.play();
+
+        STATE.audioStarted = true;
+      }
+    };
+
+
+    DOM.playAudio.addEventListener(
+      "click",
+      async () => {
+        try {
+          await AudioSystem.start();
+
+          DOM.playAudio.textContent =
+            "Neural Sync: Active ✓";
+        } catch {
+          showToast(
+            "audio sync failed. proceed with caution."
+          );
+        }
+      }
+    );
+
+
+    /* =========================================================
+       INITIALIZATION LOG
+       ========================================================= */
+
+    function addQuantumLog(message) {
+      const entry =
+        document.createElement("div");
+
+      entry.className = "log-entry";
+      entry.textContent = message;
+
+      if (Math.random() < 0.3) {
+        entry.classList.add("glitch-line");
+        entry.dataset.text = message;
+
+        setTimeout(() => {
+          entry.classList.remove("glitch-line");
+        }, 500);
+      }
+
+      DOM.log.appendChild(entry);
+      DOM.log.scrollTop = DOM.log.scrollHeight;
+    }
+
+
+    /* =========================================================
+       INITIALIZATION
+       ========================================================= */
+
+    function updateInitialization() {
+      if (!STATE.initializing) {
+        return;
+      }
+
+      STATE.progress = Math.min(
+        100,
+        STATE.progress +
+          random(
+            CONFIG.initialization.minStep,
+            CONFIG.initialization.maxStep
+          )
+      );
+
+      DOM.bar.style.width =
+        `${STATE.progress}%`;
+
+
+      if (STATE.progress > 15) {
+        DOM.dots[0].classList.add("on");
+      }
+
+      if (STATE.progress > 50) {
+        DOM.dots[1].classList.add("on");
+      }
+
+
+      if (
+        STATE.logIndex <
+        QUANTUM_LOGS.length
+      ) {
+        addQuantumLog(
+          QUANTUM_LOGS[
+            STATE.logIndex++
+          ]
+        );
+      }
+
+
+      if (STATE.progress < 100) {
+        DOM.status.textContent =
+          randomItem([
+            "initializing",
+            "synchronizing",
+            "breaching",
+            "observing"
+          ]);
+
+        STATE.timers.initialization =
+          setTimeout(
+            updateInitialization,
+            random(
+              CONFIG.initialization.minDelay,
+              CONFIG.initialization.maxDelay
+            )
+          );
+
+        return;
+      }
+
+
+      DOM.dots[2].classList.add("on");
+
+      DOM.status.textContent =
+        "quantum link established";
+
+      addQuantumLog(
+        "> membrane breach successful. welcome observer."
+      );
+
+      STATE.timers.initialization =
+        setTimeout(
+          enterMembrane,
+          CONFIG.initialization.finalDelay
+        );
+    }
+
+
+    function startInitialization() {
+      STATE.timers.initialization =
+        setTimeout(
+          updateInitialization,
+          CONFIG.initialization.startDelay
+        );
+    }
+
+
+    /* =========================================================
+       BYPASS
+       ========================================================= */
+
+    DOM.skipInstall.addEventListener(
+      "click",
+      () => {
+        if (!STATE.initializing) {
+          return;
+        }
+
+        STATE.initializing = false;
+
+        clearTimeout(
+          STATE.timers.initialization
+        );
+
+        DOM.bar.style.width = "100%";
+
+        DOM.dots.forEach(dot =>
+          dot.classList.add("on")
+        );
+
+        addQuantumLog(
+          "> debug protocol activated. quantum link unstable."
+        );
+
+        setTimeout(
+          enterMembrane,
+          600
+        );
+      }
+    );
+
+
+    /* =========================================================
+       ENTER MEMBRANE
+       ========================================================= */
+
+    function enterMembrane() {
+      if (STATE.enteredMembrane) {
+        return;
+      }
+
+      STATE.enteredMembrane = true;
+
+      DOM.loading.classList.add("hidden");
+      DOM.feedStage.classList.remove("hidden");
+
+      showToast(
+        "quantum synchronization complete."
+      );
+
+      startFeed();
+      startBackgroundEffects();
+    }
+
+
+    /* =========================================================
+       ANOMALOUS TIME
+       ========================================================= */
+
+    function createAnomalousTime() {
+      const date = new Date();
+
+      const anomaly = Math.random();
+
+      if (anomaly < 0.3) {
+        date.setFullYear(2045);
+      } else if (anomaly < 0.5) {
+        date.setHours(
+          (date.getHours() + 13) % 24
+        );
+      }
+
+      const modes = [
+        "quantum",
+        "entangled",
+        "superposed",
+        "observed"
+      ];
+
+      return (
+        `${date.toLocaleTimeString()} • ` +
+        randomItem(modes)
+      );
+    }
+
+
+    /* =========================================================
+       GLITCH TEXT
+       ========================================================= */
+
+    function renderGlitchedText(
+      container,
+      text
+    ) {
+      const words = text.split(/(\s+)/);
+
+      words.forEach(word => {
+        if (/^\s+$/.test(word)) {
+          container.appendChild(
+            document.createTextNode(word)
+          );
+
+          return;
+        }
+
+        const chance = Math.random();
+
+        if (chance < 0.15) {
+          const span =
+            document.createElement("span");
+
+          span.className = "glitch";
+          span.textContent = word;
+
+          container.appendChild(span);
+
+          return;
+        }
+
+        if (chance < 0.20) {
+          container.appendChild(
+            document.createTextNode(
+              [...word].reverse().join("")
+            )
+          );
+
+          return;
+        }
+
+        if (chance < 0.25) {
+          container.appendChild(
+            document.createTextNode(
+              word.toUpperCase()
+            )
+          );
+
+          return;
+        }
+
+        container.appendChild(
+          document.createTextNode(word)
+        );
+      });
+    }
+
+
+    /* =========================================================
+       POST CREATION
+       ========================================================= */
+
+    function createPost(post) {
+      const article =
+        document.createElement("article");
+
+      article.className = "post";
+
+      const user =
+        document.createElement("div");
+
+      user.className = "user";
+      user.textContent = `@${post.user}`;
+
+
+      const time =
+        document.createElement("div");
+
+      time.className = "time";
+      time.textContent =
+        createAnomalousTime();
+
+
+      const content =
+        document.createElement("div");
+
+      content.className = "content";
+
+      renderGlitchedText(
+        content,
+        post.text
+      );
+
+
+      article.append(
+        user,
+        time,
+        content
+      );
+
+
+      if (Math.random() < 0.2) {
+        article.style.borderLeft =
+          `3px solid ${
+            Math.random() < 0.5
+              ? "var(--cyan)"
+              : "var(--magenta)"
+          }`;
+      }
+
+
+      return article;
+    }
+
+
+    /* =========================================================
+       FEED
+       ========================================================= */
+
+    function dropPost() {
+      if (!STATE.enteredMembrane) {
+        return;
+      }
+
+      if (
+        STATE.postIndex >=
+        QUANTUM_NARRATIVE.length
+      ) {
+        finishFeed();
+        return;
+      }
+
+
+      const post =
+        QUANTUM_NARRATIVE[
+          STATE.postIndex++
+        ];
+
+
+      DOM.feed.appendChild(
+        createPost(post)
+      );
+
+
+      DOM.counter.textContent =
+        `${STATE.postIndex}/${QUANTUM_NARRATIVE.length}`;
+
+
+      const nextDelay =
+        CONFIG.feed.interval +
+        random(
+          0,
+          CONFIG.feed.variation
+        );
+
+
+      STATE.timers.feed =
+        setTimeout(
+          dropPost,
+          nextDelay
+        );
+    }
+
+
+    function startFeed() {
+      dropPost();
+    }
+
+
+    /* =========================================================
+       FEED FINISH
+       ========================================================= */
+
+    function finishFeed() {
+      if (STATE.redirecting) {
+        return;
+      }
+
+      STATE.redirecting = true;
+
+      showToast(
+        "quantum collapse initiated."
+      );
+
+
+      STATE.timers.redirect =
+        setTimeout(() => {
+          document.body.style.animation =
+            "glitch 0.5s infinite";
+
+
+          setTimeout(() => {
+            window.location.href =
+              CONFIG.navigation.nextUrl;
+          }, 800);
+
+        }, CONFIG.navigation.redirectDelay);
+    }
+
+
+    /* =========================================================
+       BACKGROUND EFFECTS
+       ========================================================= */
+
+    function startBackgroundEffects() {
+
+      /* Periodic color anomaly */
+
+      setInterval(() => {
+        if (!STATE.enteredMembrane) {
+          return;
+        }
+
+        document.body.style.backgroundColor =
+          `hsl(${random(0, 10)}, 100%, 2%)`;
+
+        setTimeout(() => {
+          document.body.style.backgroundColor =
+            "#000";
+        }, 100);
+
+      }, CONFIG.effects.backgroundInterval);
+
+
+      /* Screen distortion */
+
+      setInterval(() => {
+        if (!STATE.enteredMembrane) {
+          return;
+        }
+
+        if (Math.random() < 0.3) {
+          document.body.style.transform =
+            "translateX(2px)";
+
+          setTimeout(() => {
+            document.body.style.transform =
+              "translateX(-2px)";
+
+            setTimeout(() => {
+              document.body.style.transform = "";
+            }, 50);
+
+          }, 50);
+        }
+
+      }, CONFIG.effects.screenGlitchInterval);
+
+
+      /* Quantum visual anomaly */
+
+      setInterval(() => {
+        if (!STATE.enteredMembrane) {
+          return;
+        }
+
+        if (Math.random() >= 0.2) {
+          return;
+        }
+
+        const glitch =
+          document.createElement("div");
+
+        Object.assign(
+          glitch.style,
+          {
+            position: "fixed",
+            inset: "0",
+            background:
+              `rgba(${random(0, 100)}, ${random(0, 100)}, ${random(0, 100)}, 0.02)`,
+            pointerEvents: "none",
+            zIndex: "9999",
+            mixBlendMode: "screen"
+          }
+        );
+
+        document.body.appendChild(glitch);
+
+        setTimeout(() => {
+          glitch.remove();
+        }, 100);
+
+      }, CONFIG.effects.distortionInterval);
+    }
+
+
+    /* =========================================================
+       EASTER EGG
+       TYPE: REPOST
+       ========================================================= */
+
+    let keyBuffer = "";
+
+    window.addEventListener(
+      "keydown",
+      event => {
+        if (event.key.length !== 1) {
+          return;
+        }
+
+        keyBuffer =
+          (
+            keyBuffer +
+            event.key
+          ).slice(-6);
+
+
+        if (
+          keyBuffer.toLowerCase() ===
+          "repost"
+        ) {
+          showToast(
+            "quantum channel opened: #repost.ai"
+          );
+
+          document
+            .querySelectorAll(".post")
+            .forEach(post => {
+              post.style.borderColor =
+                "var(--cyan)";
+
+              setTimeout(() => {
+                post.style.borderColor = "";
+              }, 1000);
+            });
+        }
+      }
+    );
+
+
+    /* =========================================================
+       START
+       ========================================================= */
+
+    startInitialization();
+
+  </script>
 </body>
 </html>

@@ -1,88 +1,1040 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Missão 2 - O Dossiê Esquecido</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MEMBRANA // Missão 02</title>
+
   <style>
+
+    :root {
+      --bg: #0d0d0d;
+      --panel: #111;
+      --green: #00ff99;
+      --cyan: #00ffe1;
+      --red: #ff5555;
+      --text: #ddd;
+      --muted: #777;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: #0d0d0d;
-      color: #00ff99;
-      font-family: 'Courier New', Courier, monospace;
-      padding: 2rem;
+
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(0, 255, 153, 0.04),
+          transparent 45%
+        ),
+        var(--bg);
+
+      color: var(--green);
+
+      font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+      padding: 2rem 1rem;
+
+      line-height: 1.6;
+
+      max-width: 800px;
+
+      margin: auto;
+
+      min-height: 100vh;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    h1 {
+
+      color: var(--green);
+
+      text-shadow:
+        0 0 5px var(--green);
+
+      text-transform: uppercase;
+
+      letter-spacing: 1px;
+    }
+
+    .agente {
+
+      color: var(--muted);
+
+      margin-bottom: 2rem;
+    }
+
+    #nomeAgente {
+
+      color: var(--cyan);
+
+      font-weight: bold;
+    }
+
+
+    /* =========================
+       TERMINAL
+    ========================== */
+
+    .terminal {
+
+      background: var(--panel);
+
+      border:
+        2px solid var(--green);
+
+      padding: 1rem;
+
+      margin-top: 2rem;
+
+      overflow-x: auto;
+
+      box-shadow:
+        0 0 15px
+        rgba(0, 255, 153, 0.08);
+    }
+
+    pre {
+
+      color: #00ff00;
+
+      white-space: pre-wrap;
+
+      word-break: break-word;
+
       line-height: 1.6;
     }
-    .terminal {
-      background: #111;
-      border: 2px solid #00ff99;
-      padding: 1rem;
-      margin-top: 2rem;
-      overflow-x: auto;
-    }
-    h1 {
-      color: #00ff99;
-      text-shadow: 0 0 5px #00ff99;
-    }
+
+
+    /* =========================
+       INPUT
+    ========================== */
+
     input[type="text"] {
+
       width: 100%;
-      padding: 0.5rem;
+
+      padding: 0.7rem;
+
       font-size: 1rem;
+
       background: #000;
+
       color: #0f0;
-      border: 1px solid #0f0;
+
+      border:
+        1px solid #0f0;
+
+      font-family: inherit;
+
+      outline: none;
+
+      border-radius: 3px;
     }
+
+    input[type="text"]:focus {
+
+      box-shadow:
+        0 0 8px
+        rgba(0, 255, 0, 0.2);
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================== */
+
     button {
+
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: #00ff99;
+
+      padding:
+        0.6rem 1.2rem;
+
+      background: var(--green);
+
       color: #000;
+
       font-weight: bold;
+
       border: none;
+
       cursor: pointer;
+
+      font-family: inherit;
+
+      border-radius: 3px;
+
+      transition:
+        0.2s ease;
     }
-    .oculto {
-      display: none;
+
+    button:hover {
+
+      background: #00d982;
+
+      transform:
+        translateY(-1px);
+    }
+
+    button:disabled {
+
+      opacity: 0.5;
+
+      cursor: not-allowed;
+
+      transform: none;
+    }
+
+
+    /* =========================
+       FEEDBACK
+    ========================== */
+
+    .feedback {
+
       margin-top: 1rem;
+
+      min-height: 1.5rem;
+
+      font-weight: bold;
     }
+
+    .sucesso {
+
+      color: var(--green);
+    }
+
+    .erro {
+
+      color: var(--red);
+    }
+
+
+    /* =========================
+       REWARD
+    ========================== */
+
+    .recompensa {
+
+      display: none;
+
+      margin-top: 1.5rem;
+
+      padding: 1rem;
+
+      border:
+        1px solid var(--cyan);
+
+      color: var(--cyan);
+
+      background:
+        rgba(0, 255, 225, 0.04);
+
+      text-align: center;
+    }
+
+    .recompensa.visivel {
+
+      display: block;
+
+      animation:
+        revelar 0.6s ease;
+    }
+
+    @keyframes revelar {
+
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    /* =========================
+       BLOQUEIO
+    ========================== */
+
+    .bloqueio {
+
+      display: none;
+
+      border:
+        1px solid var(--red);
+
+      padding: 1rem;
+
+      color: var(--red);
+
+      background:
+        rgba(255, 0, 0, 0.03);
+
+      margin-top: 2rem;
+    }
+
+    .bloqueio.visivel {
+
+      display: block;
+    }
+
+
+    /* =========================
+       NAV
+    ========================== */
+
+    .navegacao {
+
+      text-align: center;
+
+      margin-top: 2rem;
+    }
+
+    .navegacao a {
+
+      color: var(--cyan);
+
+      text-decoration: none;
+    }
+
+    .navegacao a:hover {
+
+      text-decoration: underline;
+    }
+
+
+    @media (max-width: 500px) {
+
+      body {
+        padding: 1rem;
+      }
+
+      .terminal {
+        padding: 0.8rem;
+      }
+
+    }
+
   </style>
 </head>
+
+
 <body>
-  <h1>Missão 2: O Dossiê Esquecido</h1>
-  <p>Interceptamos um fragmento corrompido de um arquivo da QSR-0. Ele está criptografado em uma forma simples, mas incomum. Precisa ser decifrado antes que a entidade o apague permanentemente.</p>
-  
-  <div class="terminal">
-    <p><strong>Arquivo corrompido:</strong></p>
-    <pre id="fragmento">Dpsu!rvx!jnt!dpuspmbez!mfwfm/!Vtbs!uif!tfnbl!up!eftdpezf/</pre>
-    <p>Digite a frase decodificada:</p>
-    <input type="text" id="resposta" placeholder="Sua resposta aqui">
-    <button onclick="verificarResposta()">Verificar</button>
-    <p class="oculto" id="feedback"></p>
-  </div>
+
+
+  <header>
+
+    <h1>
+      Missão 2: O Dossiê Esquecido
+    </h1>
+
+    <p class="agente">
+
+      <strong>Agente:</strong>
+
+      <span id="nomeAgente">
+        identificando...
+      </span>
+
+    </p>
+
+  </header>
+
+
+  <!-- =========================
+       BLOQUEIO
+  ========================== -->
+
+  <section
+    class="bloqueio"
+    id="bloqueio"
+  >
+
+    ⚠ ACESSO NEGADO.
+
+    <br><br>
+
+    A Membrana exige que a
+    <strong>Missão 01</strong>
+    seja concluída antes de liberar
+    este arquivo.
+
+    <br><br>
+
+    <a
+      href="missao_1_membrana.html"
+      style="color:#00ffe1;"
+    >
+      ← Retornar à Missão 01
+    </a>
+
+  </section>
+
+
+  <!-- =========================
+       MISSÃO
+  ========================== -->
+
+  <main id="missao">
+
+
+    <p>
+
+      Interceptamos um fragmento corrompido
+      de um arquivo da
+      <strong>QSR-0</strong>.
+
+    </p>
+
+
+    <p>
+
+      Ele está criptografado em uma forma
+      simples, mas incomum.
+
+      Precisa ser decifrado antes que a
+      entidade o apague permanentemente.
+
+    </p>
+
+
+    <div class="terminal">
+
+
+      <p>
+        <strong>
+          Arquivo corrompido:
+        </strong>
+      </p>
+
+
+      <pre id="fragmento">TVU-0 frqwurod r qlyho</pre>
+
+
+      <p>
+
+        <strong>
+          Digite a frase decodificada:
+        </strong>
+
+      </p>
+
+
+      <input
+        type="text"
+        id="resposta"
+        placeholder="Sua resposta aqui"
+        autocomplete="off"
+      >
+
+
+      <button
+        id="verificar"
+        type="button"
+      >
+        VERIFICAR
+      </button>
+
+
+      <p
+        id="feedback"
+        class="feedback"
+        role="status"
+      ></p>
+
+
+      <div
+        id="recompensa"
+        class="recompensa"
+      >
+
+        <strong>
+          ◉ DOSSIÊ RECUPERADO
+        </strong>
+
+        <br><br>
+
+        +150 SYNAPSE
+
+        <br>
+
+        🔓 FRAGMENTO 02 DESBLOQUEADO
+
+        <br>
+
+        ◉ RECOMPENSA:
+
+        MEMBRANA // O DOSSIÊ ESQUECIDO
+
+      </div>
+
+
+    </div>
+
+
+  </main>
+
+
+  <nav class="navegacao">
+
+    <a href="painel.html">
+      🔍 Ir para o Painel do Jogador
+    </a>
+
+  </nav>
+
 
   <script>
-    function verificarResposta() {
-      const input = document.getElementById("resposta").value.trim().toLowerCase();
-      const correta = "corpo que ims controlady level. usar the smak to decode";
-      const feedback = document.getElementById("feedback");
 
-      if (input.replace(/[^a-z]/g, '') === correta.replace(/[^a-z]/g, '')) {
-        feedback.textContent = "✅ Decodificado com sucesso. Prepare-se para o próximo passo.";
-        feedback.style.color = "#00ff99";
-      } else {
-        feedback.textContent = "❌ Resposta incorreta. Tente novamente. Dica: é um tipo de cifra simples.";
-        feedback.style.color = "#ff5555";
+    /* =========================================
+       CONFIGURAÇÃO DA MISSÃO
+    ========================================== */
+
+    const MISSION = {
+
+      id: 2,
+
+      requiredMission: 1,
+
+      /*
+       * Resposta definida pelo seu código original.
+       * Mantida exatamente como estava.
+       */
+      answer:
+        "QSR-0 controla o nivel",
+
+      xp: 150,
+
+      fragment:
+        "fragmento_02",
+
+      reward:
+        "MEMBRANA // O DOSSIÊ ESQUECIDO"
+
+    };
+
+
+    /* =========================================
+       COOKIE
+    ========================================== */
+
+    const COOKIE_NAME =
+      "membrana_player";
+
+
+    function loadPlayer() {
+
+      const cookie =
+        document.cookie
+          .split("; ")
+          .find(
+            row =>
+              row.startsWith(
+                COOKIE_NAME + "="
+              )
+          );
+
+
+      if (!cookie) {
+
+        return null;
+
       }
-      feedback.classList.remove("oculto");
+
+
+      try {
+
+        return JSON.parse(
+          decodeURIComponent(
+            cookie
+              .split("=")
+              .slice(1)
+              .join("=")
+          )
+        );
+
+      } catch {
+
+        return null;
+
+      }
+
     }
+
+
+    function savePlayer(player) {
+
+      const expires =
+        new Date();
+
+      expires.setDate(
+        expires.getDate() + 30
+      );
+
+
+      document.cookie =
+        `${COOKIE_NAME}=` +
+        `${encodeURIComponent(
+          JSON.stringify(player)
+        )};` +
+        `expires=${expires.toUTCString()};` +
+        `path=/;` +
+        `SameSite=Lax`;
+
+    }
+
+
+    /* =========================================
+       PLAYER
+    ========================================== */
+
+    let player =
+      loadPlayer();
+
+
+    /*
+     * Caso o jogador entre diretamente
+     * na missão sem passar pelo portal.
+     */
+
+    if (!player) {
+
+      player = {
+
+        id:
+          `observer_${crypto.randomUUID().slice(0, 8)}`,
+
+        level: 1,
+
+        xp: 0,
+
+        completed: [],
+
+        fragments: [],
+
+        rewards: [],
+
+        secrets: []
+
+      };
+
+      savePlayer(player);
+
+    }
+
+
+    /* =========================================
+       IDENTIDADE
+    ========================================== */
+
+    document.getElementById(
+      "nomeAgente"
+    ).textContent =
+      player.id;
+
+
+    /* =========================================
+       ELEMENTOS
+    ========================================== */
+
+    const missao =
+      document.getElementById(
+        "missao"
+      );
+
+    const bloqueio =
+      document.getElementById(
+        "bloqueio"
+      );
+
+    const input =
+      document.getElementById(
+        "resposta"
+      );
+
+    const button =
+      document.getElementById(
+        "verificar"
+      );
+
+    const feedback =
+      document.getElementById(
+        "feedback"
+      );
+
+    const recompensa =
+      document.getElementById(
+        "recompensa"
+      );
+
+
+    /* =========================================
+       NORMALIZAÇÃO
+    ========================================== */
+
+    function normalizar(texto) {
+
+      return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+        .replace(
+          /[^a-z0-9]/g,
+          ""
+        );
+
+    }
+
+
+    /* =========================================
+       VERIFICAR ACESSO
+    ========================================== */
+
+    function verificarAcesso() {
+
+      const concluida =
+        player.completed.includes(
+          MISSION.requiredMission
+        );
+
+
+      if (!concluida) {
+
+        missao.style.display =
+          "none";
+
+        bloqueio.classList.add(
+          "visivel"
+        );
+
+        return false;
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /* =========================================
+       VERIFICAR RESPOSTA
+    ========================================== */
+
+    function verificarResposta() {
+
+      const resposta =
+        normalizar(
+          input.value.trim()
+        );
+
+
+      if (!resposta) {
+
+        feedback.textContent =
+          "⚠ Digite a frase decodificada.";
+
+        feedback.className =
+          "feedback erro";
+
+        return;
+
+      }
+
+
+      /*
+       * Missão já concluída
+       */
+
+      if (
+        player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        feedback.textContent =
+          "✓ Este dossiê já foi recuperado.";
+
+        feedback.className =
+          "feedback sucesso";
+
+        recompensa.classList.add(
+          "visivel"
+        );
+
+        button.disabled =
+          true;
+
+        input.disabled =
+          true;
+
+        return;
+
+      }
+
+
+      /*
+       * Resposta correta
+       */
+
+      if (
+        resposta ===
+        normalizar(
+          MISSION.answer
+        )
+      ) {
+
+        completarMissao();
+
+        return;
+
+      }
+
+
+      /*
+       * Resposta errada
+       */
+
+      feedback.textContent =
+        "❌ Resposta incorreta. A cifra ainda resiste.";
+
+      feedback.className =
+        "feedback erro";
+
+    }
+
+
+    /* =========================================
+       COMPLETAR MISSÃO
+    ========================================== */
+
+    function completarMissao() {
+
+
+      /*
+       * Registrar missão
+       */
+
+      if (
+        !player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        player.completed.push(
+          MISSION.id
+        );
+
+      }
+
+
+      /*
+       * XP
+       */
+
+      player.xp +=
+        MISSION.xp;
+
+
+      /*
+       * Fragmento
+       */
+
+      if (
+        !player.fragments.includes(
+          MISSION.fragment
+        )
+      ) {
+
+        player.fragments.push(
+          MISSION.fragment
+        );
+
+      }
+
+
+      /*
+       * Recompensa
+       */
+
+      if (
+        !player.rewards.includes(
+          MISSION.reward
+        )
+      ) {
+
+        player.rewards.push(
+          MISSION.reward
+        );
+
+      }
+
+
+      /*
+       * Level Up
+       */
+
+      while (
+        player.xp >=
+        player.level * 100
+      ) {
+
+        player.xp -=
+          player.level * 100;
+
+        player.level++;
+
+      }
+
+
+      /*
+       * Persistência
+       */
+
+      savePlayer(player);
+
+
+      /*
+       * Feedback
+       */
+
+      feedback.textContent =
+        "✅ DOSSIÊ DECODIFICADO. ACESSO CONCEDIDO.";
+
+      feedback.className =
+        "feedback sucesso";
+
+
+      /*
+       * Recompensa visual
+       */
+
+      recompensa.classList.add(
+        "visivel"
+      );
+
+
+      /*
+       * Bloquear nova tentativa
+       */
+
+      button.disabled =
+        true;
+
+      input.disabled =
+        true;
+
+
+      input.value =
+        MISSION.answer;
+
+
+      /*
+       * Pequeno efeito
+       */
+
+      document.body.style.boxShadow =
+        "inset 0 0 80px rgba(0,255,153,.15)";
+
+
+      setTimeout(() => {
+
+        document.body.style.boxShadow =
+          "";
+
+      }, 1000);
+
+    }
+
+
+    /* =========================================
+       EVENTS
+    ========================================== */
+
+    button.addEventListener(
+      "click",
+      verificarResposta
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          verificarResposta();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       RESTAURAR ESTADO
+    ========================================== */
+
+    if (
+      verificarAcesso()
+    ) {
+
+      if (
+        player.completed.includes(
+          MISSION.id
+        )
+      ) {
+
+        feedback.textContent =
+          "✓ DOSSIÊ JÁ RECUPERADO.";
+
+        feedback.className =
+          "feedback sucesso";
+
+        recompensa.classList.add(
+          "visivel"
+        );
+
+        button.disabled =
+          true;
+
+        input.disabled =
+          true;
+
+        input.value =
+          MISSION.answer;
+
+      }
+
+    }
+
   </script>
-  <script>
-  localStorage.setItem("missao2", "completa");
-  localStorage.setItem("fragmento2", "true");
-</script>
 
-<a href="painel.html" style="display:block;text-align:center;margin-top:2rem;">
-  🔍 Ir para o Painel do Jogador
-</a>
 </body>
-</html>
 
+</html>

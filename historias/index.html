@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#050505">
+  <meta
+    name="description"
+    content="Arquivo central de histórias, fragmentos e experiências."
+  >
+
+  <title>ARCHIVE // HISTÓRIAS</title>
+
+  <style>
+    :root {
+      --bg: #030303;
+      --panel: #0a0a0a;
+      --panel-2: #101010;
+      --text: #ddd;
+      --muted: #666;
+
+      --cyan: #00f7ff;
+      --magenta: #ff00f7;
+      --red: #ff3155;
+      --green: #22ffaa;
+
+      --border: rgba(255,255,255,.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(0,247,255,.06),
+          transparent 40%
+        ),
+        #030303;
+
+      color: var(--text);
+
+      font-family:
+        "Courier New",
+        Courier,
+        monospace;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    /* =====================================================
+       BACKGROUND
+       ===================================================== */
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: .035;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.5) 1px,
+          transparent 1px
+        );
+
+      background-size: 100% 4px;
+
+      z-index: 20;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      opacity: .025;
+
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255,255,255,.2) 3px
+        );
+
+      z-index: 19;
+    }
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+
+      border-bottom: 1px solid var(--border);
+
+      background:
+        rgba(3,3,3,.88);
+
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      width: min(1100px, 100%);
+      margin: auto;
+
+      padding: 18px 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+
+      color: var(--cyan);
+
+      text-shadow:
+        2px 0 var(--magenta),
+        -1px 0 var(--cyan);
+
+      animation: glitch 7s infinite alternate;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: .75rem;
+      letter-spacing: 1px;
+    }
+
+    .status::before {
+      content: "●";
+      color: var(--green);
+      margin-right: 7px;
+
+      text-shadow:
+        0 0 8px var(--green);
+    }
+
+    /* =====================================================
+       MAIN
+       ===================================================== */
+
+    main {
+      width: min(1100px, 100%);
+      margin: auto;
+
+      padding: 50px 20px 80px;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .eyebrow {
+      color: var(--magenta);
+      font-size: .75rem;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+
+      font-size:
+        clamp(2.3rem, 8vw, 5rem);
+
+      line-height: .95;
+      letter-spacing: .08em;
+
+      color: transparent;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--cyan),
+          #fff,
+          var(--magenta)
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      text-shadow:
+        2px 0 var(--cyan),
+        -2px 0 var(--magenta);
+    }
+
+    .intro {
+      max-width: 700px;
+
+      margin-top: 20px;
+
+      color: #888;
+
+      line-height: 1.7;
+    }
+
+    /* =====================================================
+       CONTROLS
+       ===================================================== */
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      margin-bottom: 35px;
+    }
+
+    #search {
+      flex: 1 1 260px;
+
+      padding: 12px 14px;
+
+      color: var(--text);
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+
+      outline: none;
+    }
+
+    #search:focus {
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 0 15px rgba(0,247,255,.1);
+    }
+
+    .filter {
+      padding: 10px 14px;
+
+      color: #888;
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+
+      cursor: pointer;
+
+      transition: .25s;
+    }
+
+    .filter:hover,
+    .filter.active {
+      color: var(--cyan);
+
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 0 12px rgba(0,247,255,.08);
+    }
+
+    /* =====================================================
+       STATISTICS
+       ===================================================== */
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(150px, 1fr));
+
+      gap: 10px;
+
+      margin-bottom: 45px;
+    }
+
+    .stat {
+      padding: 15px;
+
+      background: rgba(10,10,10,.7);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .stat-number {
+      display: block;
+
+      color: var(--cyan);
+
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: .7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* =====================================================
+       SECTIONS
+       ===================================================== */
+
+    .archive-section {
+      margin-bottom: 45px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      margin-bottom: 15px;
+
+      padding-bottom: 10px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      margin: 0;
+
+      color: var(--magenta);
+
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-code {
+      color: #444;
+      font-size: .7rem;
+    }
+
+    /* =====================================================
+       FILE CARDS
+       ===================================================== */
+
+    .items {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fill, minmax(230px, 1fr));
+
+      gap: 10px;
+    }
+
+    .item {
+      position: relative;
+
+      display: block;
+
+      min-height: 85px;
+
+      padding: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.025),
+          rgba(255,255,255,.01)
+        );
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+
+      overflow: hidden;
+
+      transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .item::before {
+      content: "HTML";
+
+      display: block;
+
+      margin-bottom: 9px;
+
+      color: #444;
+
+      font-size: .62rem;
+      letter-spacing: 1px;
+    }
+
+    .item:hover {
+      transform: translateY(-2px);
+
+      border-color: var(--cyan);
+
+      box-shadow:
+        0 5px 25px rgba(0,247,255,.08);
+    }
+
+    .item-title {
+      color: #ccc;
+
+      font-size: .88rem;
+      line-height: 1.4;
+    }
+
+    .item:hover .item-title {
+      color: #fff;
+    }
+
+    .item-desc {
+      margin-top: 7px;
+
+      color: #555;
+
+      font-size: .68rem;
+      line-height: 1.4;
+    }
+
+    .item::after {
+      content: "↗";
+
+      position: absolute;
+
+      top: 12px;
+      right: 13px;
+
+      color: #333;
+
+      transition: .25s;
+    }
+
+    .item:hover::after {
+      color: var(--magenta);
+    }
+
+    /* =====================================================
+       SPECIAL ITEMS
+       ===================================================== */
+
+    .item.root {
+      border-color:
+        rgba(255,0,247,.2);
+    }
+
+    .item.root::before {
+      content: "ROOT";
+      color: var(--magenta);
+    }
+
+    .item.system::before {
+      content: "SYSTEM";
+      color: var(--cyan);
+    }
+
+    .item.asset::before {
+      content: "ASSET";
+      color: var(--green);
+    }
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    #empty {
+      display: none;
+
+      padding: 40px;
+
+      color: #555;
+
+      text-align: center;
+
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    footer {
+      margin-top: 70px;
+
+      padding-top: 20px;
+
+      color: #444;
+
+      text-align: center;
+
+      font-size: .7rem;
+
+      border-top: 1px solid var(--border);
+    }
+
+    footer span {
+      color: var(--magenta);
+    }
+
+    /* =====================================================
+       GLITCH
+       ===================================================== */
+
+    @keyframes glitch {
+      0% {
+        text-shadow:
+          2px 0 var(--cyan),
+          -2px 0 var(--magenta);
+      }
+
+      20% {
+        text-shadow:
+          -2px 0 var(--cyan),
+          2px 0 var(--magenta);
+      }
+
+      40% {
+        text-shadow:
+          3px 0 var(--cyan),
+          -3px 0 var(--magenta);
+      }
+
+      60% {
+        text-shadow:
+          -3px 0 var(--cyan),
+          0 var(--magenta);
+      }
+
+      80% {
+        text-shadow:
+          0 var(--cyan),
+          -4px 0 var(--magenta);
+      }
+
+      100% {
+        text-shadow:
+          4px 0 var(--cyan),
+          0 var(--magenta);
+      }
+    }
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media (max-width: 600px) {
+
+      .header-inner {
+        padding: 14px;
+      }
+
+      .status {
+        display: none;
+      }
+
+      main {
+        padding:
+          35px 14px 60px;
+      }
+
+      .items {
+        grid-template-columns: 1fr;
+      }
+
+      .item {
+        min-height: auto;
+      }
+    }
+
+    /* =====================================================
+       REDUCED MOTION
+       ===================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="noise"></div>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header>
+    <div class="header-inner">
+
+      <div class="brand">
+        ARCHIVE // MEMBRANA
+      </div>
+
+      <div class="status">
+        ARCHIVE ONLINE
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main>
+
+    <section class="hero">
+
+      <div class="eyebrow">
+        HISTORIAS / REGISTROS / FRAGMENTOS
+      </div>
+
+      <h1>
+        ARCHIVE
+      </h1>
+
+      <p class="intro">
+        Um índice central para histórias, experimentos,
+        capítulos, fragmentos e sistemas encontrados
+        dentro da estrutura.
+        <br><br>
+        Nem todos os arquivos deveriam estar aqui.
+      </p>
+
+    </section>
+
+
+    <!-- ===================================================
+         SEARCH
+         =================================================== -->
+
+    <div class="controls">
+
+      <input
+        type="search"
+        id="search"
+        placeholder="buscar arquivo..."
+        autocomplete="off"
+      >
+
+      <button
+        class="filter active"
+        data-filter="all"
+      >
+        TODOS
+      </button>
+
+      <button
+        class="filter"
+        data-filter="terror"
+      >
+        TERRORTECH
+      </button>
+
+      <button
+        class="filter"
+        data-filter="repost"
+      >
+        REPOST.AI
+      </button>
+
+      <button
+        class="filter"
+        data-filter="viewdra"
+      >
+        VIEWDRA
+      </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         STATS
+         =================================================== -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <span
+          class="stat-number"
+          id="total"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          registros
+        </span>
+      </div>
+
+      <div class="stat">
+        <span
+          class="stat-number"
+          id="visible"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          visíveis
+        </span>
+      </div>
+
+      <div class="stat">
+        <span
+          class="stat-number"
+          id="systems"
+        >
+          0
+        </span>
+
+        <span class="stat-label">
+          sistemas
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         ROOT
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="root"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          ROOT
+        </h2>
+
+        <span class="section-code">
+          00 // CORE
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a
+          class="item root"
+          href="./Root%20(o%20coração%20do%20sistema).html"
+          data-title="Root o coração do sistema"
+          data-category="root"
+        >
+          <div class="item-title">
+            Root — o coração do sistema
+          </div>
+
+          <div class="item-desc">
+            Arquivo central / origem desconhecida.
+          </div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         ESTATICA
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="estatica"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          ESTÁTICA
+        </h2>
+
+        <span class="section-code">
+          01 // STATIC
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a
+          class="item"
+          href="./Estatica/estatica.html"
+          data-title="estatica"
+          data-category="estatica"
+        >
+          <div class="item-title">
+            estática
+          </div>
+
+          <div class="item-desc">
+            Registro de interferência.
+          </div>
+        </a>
+
+        <a
+          class="item"
+          href="./Estatica/trascendido.html"
+          data-title="trascendido"
+          data-category="estatica"
+        >
+          <div class="item-title">
+            trascendido
+          </div>
+
+          <div class="item-desc">
+            Registro desconhecido.
+          </div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         NOVO ENREDO
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="novo"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          NOVO ENREDO
+        </h2>
+
+        <span class="section-code">
+          02 // DEVELOPMENT
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item" href="./novo%20enredo/index.html">
+          <div class="item-title">novo enredo // index</div>
+          <div class="item-desc">Entrada principal.</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/eco.legacy.br.html">
+          <div class="item-title">eco.legacy.br</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/eco.legacy.br%20-%20Copiar.html">
+          <div class="item-title">eco.legacy.br — Copiar</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/eco.legacy.br%20-%20Copiar%20(2).html">
+          <div class="item-title">eco.legacy.br — Copiar (2)</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/floripalive.html">
+          <div class="item-title">floripalive</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/hashpage.html">
+          <div class="item-title">hashpage</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/motherwave.html">
+          <div class="item-title">motherwave</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/paranoico.html">
+          <div class="item-title">paranoico</div>
+        </a>
+
+        <a class="item" href="./novo%20enredo/viewdra.html">
+          <div class="item-title">viewdra</div>
+        </a>
+
+        <a class="item system" href="./novo%20enredo/main.js">
+          <div class="item-title">main.js</div>
+          <div class="item-desc">Sistema.</div>
+        </a>
+
+        <a class="item system" href="./novo%20enredo/style.css">
+          <div class="item-title">style.css</div>
+          <div class="item-desc">Interface.</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         REPOST IA
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="repost"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          REPOST.AI
+        </h2>
+
+        <span class="section-code">
+          03 // QUANTUM STREAM
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item root" href="./repost_ia/repost.html">
+          <div class="item-title">repost</div>
+          <div class="item-desc">Entrada principal do sistema.</div>
+        </a>
+
+        <a class="item" href="./repost_ia/fragmento.html">
+          <div class="item-title">fragmento</div>
+        </a>
+
+        <a class="item" href="./repost_ia/enigma.html">
+          <div class="item-title">enigma</div>
+        </a>
+
+        <a class="item" href="./repost_ia/nivel-4.html">
+          <div class="item-title">nível 4</div>
+        </a>
+
+        <a class="item" href="./repost_ia/nivel-5.html">
+          <div class="item-title">nível 5</div>
+        </a>
+
+        <a class="item" href="./repost_ia/nivel-6.html">
+          <div class="item-title">nível 6</div>
+        </a>
+
+        <a class="item" href="./repost_ia/nivel-7.html">
+          <div class="item-title">nível 7</div>
+        </a>
+
+        <a class="item" href="./repost_ia/epilogo.html">
+          <div class="item-title">epílogo</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo2.html">
+          <div class="item-title">capítulo 2</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo3.html">
+          <div class="item-title">capítulo 3</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo4.html">
+          <div class="item-title">capítulo 4</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo5.html">
+          <div class="item-title">capítulo 5</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo6.html">
+          <div class="item-title">capítulo 6</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo7.html">
+          <div class="item-title">capítulo 7</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo8.html">
+          <div class="item-title">capítulo 8</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo9-reinicio.html">
+          <div class="item-title">capítulo 9 — reinício</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo9-resistencia.html">
+          <div class="item-title">capítulo 9 — resistência</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo10-controle.html">
+          <div class="item-title">capítulo 10 — controle</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo10-simulacao.html">
+          <div class="item-title">capítulo 10 — simulação</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo11-nucleo.html">
+          <div class="item-title">capítulo 11 — núcleo</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo11-quebra.html">
+          <div class="item-title">capítulo 11 — quebra</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo12-fuga.html">
+          <div class="item-title">capítulo 12 — fuga</div>
+        </a>
+
+        <a class="item" href="./repost_ia/capitulo12-fusao.html">
+          <div class="item-title">capítulo 12 — fusão</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         REPOST INSTITUCIONAL
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="repost"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          REPOST.AI // INSTITUCIONAL
+        </h2>
+
+        <span class="section-code">
+          03.1 // SURFACE
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item system" href="./repost_ia/institucional/index.html">
+          <div class="item-title">institucional // index</div>
+        </a>
+
+        <a class="item" href="./repost_ia/institucional/historias.html">
+          <div class="item-title">histórias</div>
+        </a>
+
+        <a class="item" href="./repost_ia/institucional/sobre.html">
+          <div class="item-title">sobre</div>
+        </a>
+
+        <a class="item" href="./repost_ia/institucional/contato.html">
+          <div class="item-title">contato</div>
+        </a>
+
+        <a class="item" href="./repost_ia/institucional/legal.html">
+          <div class="item-title">legal</div>
+        </a>
+
+        <a class="item asset" href="./repost_ia/institucional/LogoTerrorTech.png">
+          <div class="item-title">LogoTerrorTech.png</div>
+          <div class="item-desc">Asset visual.</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         TERRORTECH
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="terror"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          TERRORTECH
+        </h2>
+
+        <span class="section-code">
+          04 // SYSTEM
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item root" href="./TerrorTech/index.html">
+          <div class="item-title">TerrorTech // index</div>
+          <div class="item-desc">Entrada principal.</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/historias.html">
+          <div class="item-title">histórias</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/sobre.html">
+          <div class="item-title">sobre</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/contato.html">
+          <div class="item-title">contato</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/legal.html">
+          <div class="item-title">legal</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/mapa-navegacao-site.html">
+          <div class="item-title">mapa de navegação</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/verificador(exemplo).html">
+          <div class="item-title">verificador</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/enigma.html">
+          <div class="item-title">enigma</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/enigma-backu.html">
+          <div class="item-title">enigma // backup</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/fragmento.html">
+          <div class="item-title">fragmento</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/glitch.html">
+          <div class="item-title">glitch</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/buraco-negro.html">
+          <div class="item-title">buraco negro</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/espelho.html">
+          <div class="item-title">espelho</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/labirinto.html">
+          <div class="item-title">labirinto</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/paradoxo-mentira.html">
+          <div class="item-title">paradoxo — mentira</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/repost.html">
+          <div class="item-title">repost</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/nivel-2.html">
+          <div class="item-title">nível 2</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/nivel-3.html">
+          <div class="item-title">nível 3</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/nivel-4.html">
+          <div class="item-title">nível 4</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/nivel-5.html">
+          <div class="item-title">nível 5</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/nivel-6.html">
+          <div class="item-title">nível 6</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo2.html">
+          <div class="item-title">capítulo 2</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo3.html">
+          <div class="item-title">capítulo 3</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo4.html">
+          <div class="item-title">capítulo 4</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo5.html">
+          <div class="item-title">capítulo 5</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo6.html">
+          <div class="item-title">capítulo 6</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo7.html">
+          <div class="item-title">capítulo 7</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo8.html">
+          <div class="item-title">capítulo 8</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo9-reinicio.html">
+          <div class="item-title">capítulo 9 — reinício</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo9-resistencia.html">
+          <div class="item-title">capítulo 9 — resistência</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo10-controle.html">
+          <div class="item-title">capítulo 10 — controle</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo10-simulacao.html">
+          <div class="item-title">capítulo 10 — simulação</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo11-nucleo.html">
+          <div class="item-title">capítulo 11 — núcleo</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo11-quebra.html">
+          <div class="item-title">capítulo 11 — quebra</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo12-fuga.html">
+          <div class="item-title">capítulo 12 — fuga</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/capitulo12-fusao.html">
+          <div class="item-title">capítulo 12 — fusão</div>
+        </a>
+
+        <a class="item" href="./TerrorTech/epilogo.html">
+          <div class="item-title">epílogo</div>
+        </a>
+
+        <a class="item system" href="./TerrorTech/script.js">
+          <div class="item-title">script.js</div>
+          <div class="item-desc">Sistema.</div>
+        </a>
+
+        <a class="item system" href="./TerrorTech/style.css">
+          <div class="item-title">style.css</div>
+          <div class="item-desc">Interface.</div>
+        </a>
+
+        <a class="item system" href="./TerrorTech/sitemap.xml">
+          <div class="item-title">sitemap.xml</div>
+          <div class="item-desc">Mapa técnico.</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         TRACK X
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="trackx"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          TRACK X
+        </h2>
+
+        <span class="section-code">
+          05 // TRACE
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item root" href="./trackX/trackX-.html">
+          <div class="item-title">trackX</div>
+          <div class="item-desc">Entrada principal.</div>
+        </a>
+
+        <a class="item" href="./trackX/historia.html">
+          <div class="item-title">história</div>
+        </a>
+
+        <a class="item asset" href="./trackX/img/img-pista.png">
+          <div class="item-title">img-pista.png</div>
+          <div class="item-desc">Pista visual.</div>
+        </a>
+
+        <a class="item asset" href="./trackX/img/fragmento.pdf">
+          <div class="item-title">fragmento.pdf</div>
+          <div class="item-desc">Documento.</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         VIEWDRA
+         =================================================== -->
+
+    <section
+      class="archive-section"
+      data-category="viewdra"
+    >
+
+      <div class="section-header">
+
+        <h2 class="section-title">
+          VIEWDRA
+        </h2>
+
+        <span class="section-code">
+          06 // ENTITY
+        </span>
+
+      </div>
+
+      <div class="items">
+
+        <a class="item root" href="./viewdra/index.html">
+          <div class="item-title">viewdra // index</div>
+          <div class="item-desc">Entrada principal.</div>
+        </a>
+
+        <a class="item" href="./viewdra/viewdra.html">
+          <div class="item-title">viewdra</div>
+        </a>
+
+        <a class="item" href="./viewdra/floripalive.html">
+          <div class="item-title">floripalive</div>
+        </a>
+
+        <a class="item" href="./viewdra/motherwave.html">
+          <div class="item-title">motherwave</div>
+        </a>
+
+        <a class="item system" href="./viewdra/main.js">
+          <div class="item-title">main.js</div>
+          <div class="item-desc">Sistema.</div>
+        </a>
+
+        <a class="item system" href="./viewdra/style.css">
+          <div class="item-title">style.css</div>
+          <div class="item-desc">Interface.</div>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <div id="empty">
+      > no matching records found.
+      <br>
+      > the archive remains silent.
+    </div>
+
+
+    <footer>
+      MEMBRANA ARCHIVE //
+      <span>the silence is watching.</span>
+    </footer>
+
+  </main>
+
+
+  <!-- =====================================================
+       SCRIPT
+       ===================================================== -->
+
+  <script>
+    "use strict";
+
+    const search =
+      document.getElementById("search");
+
+    const filters =
+      document.querySelectorAll(".filter");
+
+    const sections =
+      document.querySelectorAll(".archive-section");
+
+    const items =
+      document.querySelectorAll(".item");
+
+    const total =
+      document.getElementById("total");
+
+    const visible =
+      document.getElementById("visible");
+
+    const systems =
+      document.getElementById("systems");
+
+    const empty =
+      document.getElementById("empty");
+
+
+    let activeFilter = "all";
+
+
+    /* ==============================================
+       STATISTICS
+       ============================================== */
+
+    total.textContent = items.length;
+
+    systems.textContent =
+      document.querySelectorAll(
+        ".item.system"
+      ).length;
+
+
+    /* ==============================================
+       FILTER
+       ============================================== */
+
+    function updateArchive() {
+
+      const query =
+        search.value
+          .trim()
+          .toLowerCase();
+
+      let visibleCount = 0;
+
+
+      items.forEach(item => {
+
+        const title =
+          (
+            item.dataset.title ||
+            item.textContent
+          ).toLowerCase();
+
+
+        const section =
+          item.closest(
+            ".archive-section"
+          );
+
+
+        const category =
+          section?.dataset.category ||
+          "";
+
+
+        const matchesSearch =
+          !query ||
+          title.includes(query);
+
+
+        const matchesFilter =
+          activeFilter === "all" ||
+          category === activeFilter;
+
+
+        const show =
+          matchesSearch &&
+          matchesFilter;
+
+
+        item.style.display =
+          show ? "" : "none";
+
+
+        if (show) {
+          visibleCount++;
+        }
+
+      });
+
+
+      sections.forEach(section => {
+
+        const visibleItems =
+          section.querySelectorAll(
+            ".item:not([style*='display: none'])"
+          );
+
+
+        section.style.display =
+          visibleItems.length
+            ? ""
+            : "none";
+
+      });
+
+
+      visible.textContent =
+        visibleCount;
+
+
+      empty.style.display =
+        visibleCount === 0
+          ? "block"
+          : "none";
+    }
+
+
+    /* ==============================================
+       SEARCH
+       ============================================== */
+
+    search.addEventListener(
+      "input",
+      updateArchive
+    );
+
+
+    /* ==============================================
+       FILTER BUTTONS
+       ============================================== */
+
+    filters.forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          filters.forEach(
+            filter =>
+              filter.classList.remove(
+                "active"
+              )
+          );
+
+
+          button.classList.add(
+            "active"
+          );
+
+
+          activeFilter =
+            button.dataset.filter;
+
+
+          updateArchive();
+
+        }
+      );
+
+    });
+
+
+    /* ==============================================
+       KEYBOARD SHORTCUT
+       ============================================== */
+
+    window.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "/" &&
+          document.activeElement !== search
+        ) {
+
+          event.preventDefault();
+
+          search.focus();
+        }
+
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          search.value = "";
+
+          activeFilter = "all";
+
+          filters.forEach(
+            filter =>
+              filter.classList.remove(
+                "active"
+              )
+          );
+
+          document
+            .querySelector(
+              '[data-filter="all"]'
+            )
+            .classList.add(
+              "active"
+            );
+
+          updateArchive();
+        }
+
+      }
+    );
+
+
+    /* ==============================================
+       INITIALIZE
+       ============================================== */
+
+    updateArchive();
+
+  </script>
+
+</body>
+</html>
