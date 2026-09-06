@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JOB-042 — Analysis</title>
+
+<meta
+    name="description"
+    content="Análise técnica do sistema de armazenamento recuperado — JOB-042."
+>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #0b0d0e;
+        color: #c9d1d9;
+        font-family: monospace;
+        line-height: 1.6;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    h1,
+    h2 {
+        color: #e6edf3;
+        font-weight: normal;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        border-bottom: 1px solid #30363d;
+        padding-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 1rem;
+        margin-top: 32px;
+    }
+
+    .warning {
+        border-left: 3px solid #8b949e;
+        padding: 12px 16px;
+        margin: 24px 0;
+        background: #111416;
+    }
+
+    pre {
+        overflow-x: auto;
+        padding: 16px;
+        background: #111416;
+        border: 1px solid #21262d;
+    }
+
+    code {
+        color: #d2a8ff;
+    }
+
+    .meta {
+        color: #8b949e;
+    }
+
+    footer {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid #30363d;
+        color: #6e7681;
+        font-size: 0.85rem;
+    }
+</style>
+
+</head><body><main><h1>JOB-042 / ANALYSIS</h1>
+
+<p class="meta">
+    Documento: 04-analysis.html<br>
+    Responsável: L. Morrow<br>
+    Data: 16/08/2026<br>
+    Classificação: INTERNO
+</p>
+
+<section>
+    <h2>01 — Objetivo</h2>
+
+    <p>
+        Determinar a origem da entrada encontrada em
+        <code>/membrane/manifest</code> durante a recuperação do
+        sistema de armazenamento referente ao JOB-042.
+    </p>
+
+    <p>
+        O principal ponto de interesse é uma entrada que aparenta
+        possuir timestamp posterior ao momento em que foi observada.
+    </p>
+</section>
+
+<section>
+    <h2>02 — Dados observados</h2>
+
+    <pre>
+
+JOB-042
+created: 2026-08-16 14:37:12
+source: local
+state: active
+operation: catalog
+target: /membrane
+operator: L.Morrow
+</pre>
+
+    <p>
+        Horário observado durante a primeira leitura:
+    </p>
+
+    <pre>
+
+2026-08-16 14:11:03
+</pre>
+
+    <p>
+        Diferença aproximada:
+    </p>
+
+    <pre>
+
+00:26:09
+</pre>
+</section>
+
+<section>
+    <h2>03 — Hipóteses</h2>
+
+    <p>
+        Foram consideradas inicialmente as seguintes possibilidades:
+    </p>
+
+    <ol>
+        <li>Relógio incorreto no equipamento original.</li>
+        <li>Timezone incorreto.</li>
+        <li>Corrupção de metadata.</li>
+        <li>Snapshot inconsistente.</li>
+        <li>Ferramenta de recuperação reconstruindo timestamps.</li>
+        <li>Arquivo pertencente a uma execução anterior do JOB-042.</li>
+    </ol>
+</section>
+
+<section>
+    <h2>04 — Verificação do relógio</h2>
+
+    <p>
+        O relógio do ambiente utilizado para recuperação foi comparado
+        com o timestamp dos demais arquivos.
+    </p>
+
+    <pre>
+
+System clock       OK
+Timezone           UTC-03:00
+Recovery host      OK
+Image timestamp    OK
+Filesystem data    CONSISTENTE
+</pre>
+
+    <p>
+        Não foi encontrada diferença temporal capaz de explicar
+        o timestamp observado.
+    </p>
+</section>
+
+<section>
+    <h2>05 — Integridade do arquivo</h2>
+
+    <p>
+        O arquivo <code>manifest</code> foi lido em duas montagens
+        independentes da imagem.
+    </p>
+
+    <p>
+        O hash permaneceu idêntico:
+    </p>
+
+    <pre>
+
+91a7c2e4...
+</pre>
+
+    <p>
+        Não foram observadas alterações durante a leitura.
+    </p>
+</section>
+
+<section>
+    <h2>06 — Snapshot</h2>
+
+    <p>
+        Ainda não foi possível confirmar a existência de um snapshot
+        anterior contendo o diretório <code>/membrane</code>.
+    </p>
+
+    <p>
+        A busca continuará nos blocos não indexados.
+    </p>
+</section>
+
+<section>
+    <h2>07 — Resultado parcial</h2>
+
+    <div class="warning">
+        <strong>CONCLUSÃO:</strong><br>
+        Não foi encontrada evidência suficiente para classificar o
+        timestamp como corrupção simples de metadata.
+    </div>
+
+    <p>
+        A entrada é consistente em termos de integridade.
+        O conteúdo permanece estável entre leituras.
+        O relógio do sistema não apresenta discrepância relevante.
+    </p>
+
+    <p>
+        Isso elimina algumas explicações convencionais, mas não
+        estabelece uma causa alternativa.
+    </p>
+
+    <p>
+        Portanto, a hipótese mais conservadora continua sendo:
+    </p>
+
+    <pre>
+
+CAUSA DESCONHECIDA
+</pre>
+</section>
+
+<section>
+    <h2>08 — Observação adicional</h2>
+
+    <p>
+        Há um detalhe que não consegui explicar.
+    </p>
+
+    <p>
+        A entrada registra:
+    </p>
+
+    <pre>
+
+operation: catalog
+target: /membrane
+operator: L.Morrow
+</pre>
+
+    <p>
+        Minha primeira operação de catalogação desse diretório ocorreu
+        depois que essa entrada já havia sido encontrada.
+    </p>
+
+    <p>
+        Pode ser que o sistema esteja registrando uma operação anterior
+        que não aparece nos logs disponíveis.
+    </p>
+
+    <p>
+        Essa possibilidade precisa ser testada antes de qualquer
+        conclusão.
+    </p>
+</section>
+
+<section>
+    <h2>09 — Próximos passos</h2>
+
+    <ul>
+        <li>Pesquisar referências externas a <code>/membrane</code>.</li>
+        <li>Comparar com snapshots antigos.</li>
+        <li>Verificar blocos não indexados.</li>
+        <li>Pesquisar ocorrências de <code>JOB-042</code>.</li>
+        <li>Verificar origem do identificador do operador.</li>
+        <li>Não executar arquivos desconhecidos.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>10 — Nota</h2>
+
+    <p>
+        Não alterar o timestamp.
+    </p>
+
+    <p>
+        Não renomear os arquivos.
+    </p>
+
+    <p>
+        Não "corrigir" o que parece errado.
+    </p>
+
+    <p>
+        Se existe uma inconsistência, a inconsistência faz parte dos
+        dados.
+    </p>
+
+    <p>
+        Removê-la não resolve o problema.
+    </p>
+</section>
+
+<footer>
+    JOB-042<br>
+    L. Morrow<br>
+    Status: EM INVESTIGAÇÃO
+</footer>
+
+</main></body>
+</html>

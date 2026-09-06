@@ -1,1755 +1,862 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
-  <meta name="description" content="MEMBRANA // Quantum Descent">
-  <title>MEMBRANA // Quantum Descent</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
 
-  <style>
-    /* =========================================================
-       MEMBRANA // QUANTUM DESCENT
-       Single-file experience
-       ========================================================= */
+<title>MEMBRANA // Arquivos Morrow</title>
 
-    :root {
-      --bg: #000;
-      --panel: #0d0d0d;
-      --ink: #eaeaea;
-      --muted: #666;
+<style>
+:root {
+    --bg: #030303;
+    --fg: #e8e8e8;
+    --muted: #777;
+    --red: #b40000;
+    --green: #9cffb0;
+    --line: rgba(255,255,255,.12);
+}
 
-      --cyan: #00f7ff;
-      --magenta: #ff00f7;
-      --accent: #ff2e63;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-      --glitch-cyan: #0ff;
-      --glitch-magenta: #f0f;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Courier New", monospace;
+    overflow: hidden;
+}
 
-      --success: #22ffaa;
+body {
+    position: relative;
+}
 
-      --radius: 8px;
-      --transition: 0.3s ease;
-    }
+/* =========================
+   FILM GRAIN
+========================= */
 
-    /* =========================
-       RESET
-       ========================= */
-
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Courier New", Courier, monospace;
-      overflow: hidden;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    /* =========================
-       UTILITIES
-       ========================= */
-
-    .hidden {
-      display: none !important;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .blink {
-      animation: blink 1.5s steps(2, end) infinite;
-    }
-
-    /* =========================
-       GLOBAL EFFECTS
-       ========================= */
-
-    .quantum-noise,
-    .quantum-distortion {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .quantum-noise {
-      z-index: 1000;
-      opacity: 0.02;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABOSURBVGhD7cExAQAwDMCg+zfdm1gQ+JMBMiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkCBBggQJEiRIkPA1fAAe5AlBz/ZVQAAAAABJRU5ErkJggg==");
-    }
-
-    .quantum-distortion {
-      z-index: 999;
-      background:
-        radial-gradient(
-          circle at center,
-          transparent 0%,
-          rgba(0, 247, 255, 0.02) 100%
+body::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 100;
+    pointer-events: none;
+    opacity: .08;
+    background-image:
+        repeating-radial-gradient(
+            circle at 0 0,
+            transparent 0,
+            rgba(255,255,255,.5) 1px,
+            transparent 2px
         );
-      mix-blend-mode: screen;
-      animation: pulse 10s infinite alternate;
-    }
+    background-size: 5px 5px;
+    animation: grain .15s steps(2) infinite;
+}
 
-    /* =========================
-       STAGE
-       ========================= */
+@keyframes grain {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(2%,-2%); }
+    50% { transform: translate(-2%,2%); }
+    75% { transform: translate(1%,2%); }
+    100% { transform: translate(-1%,-1%); }
+}
 
-    .stage {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(16px, 4vw, 40px);
-    }
+/* =========================
+   SCANLINES
+========================= */
 
-    /* =========================
-       INITIALIZATION
-       ========================= */
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 90;
 
-    #loading {
-      flex-direction: column;
-      gap: 18px;
-
-      background:
-        radial-gradient(
-          circle at center,
-          #0a0a0a 0%,
-          #000 100%
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,255,255,.025) 4px
         );
-    }
-
-    .scan {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-
-      background:
-        linear-gradient(
-          transparent,
-          rgba(255, 255, 255, 0.02),
-          transparent
-        );
-
-      mix-blend-mode: screen;
-      animation: scan 6s linear infinite;
-    }
-
-    .card {
-      position: relative;
-      width: min(900px, 100%);
-      padding: clamp(14px, 2vw, 24px);
-
-      background: rgba(5, 5, 5, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius);
-
-      overflow: hidden;
-
-      backdrop-filter: blur(4px);
-
-      box-shadow:
-        0 0 30px rgba(0, 240, 255, 0.1);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-
-      pointer-events: none;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(0, 247, 255, 0.03),
-          rgba(255, 0, 247, 0.03)
-        );
-    }
-
-    .title {
-      margin-bottom: 12px;
-
-      color: transparent;
-
-      font-size: clamp(24px, 6vw, 56px);
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-align: center;
-      text-transform: uppercase;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--glitch-cyan),
-          var(--glitch-magenta)
-        );
-
-      -webkit-background-clip: text;
-      background-clip: text;
-
-      text-shadow:
-        2px 0 var(--glitch-cyan),
-        -2px 0 var(--glitch-magenta),
-        0 0 8px rgba(255, 255, 255, 0.3);
-
-      animation: glitch 5s infinite alternate;
-    }
-
-    .status-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-
-      margin-bottom: 12px;
-    }
-
-    .dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 11px;
-      height: 11px;
-
-      background: #333;
-      border-radius: 50%;
-
-      transition: all var(--transition);
-    }
-
-    .dot.on {
-      background: var(--success);
-
-      box-shadow:
-        0 0 10px var(--success);
-
-      animation: pulse 1.5s infinite;
-    }
-
-    .progress {
-      position: relative;
-
-      width: 100%;
-      height: 12px;
-
-      overflow: hidden;
-
-      background: rgba(15, 15, 15, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-    }
-
-    .bar {
-      position: relative;
-
-      width: 0;
-      height: 100%;
-
-      overflow: hidden;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--cyan),
-          var(--magenta)
-        );
-
-      transition: width 0.5s ease-out;
-    }
-
-    .bar::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.2),
-          transparent
-        );
-
-      animation: shine 2s infinite;
-    }
-
-    .log {
-      max-height: 36vh;
-      padding: 8px;
-
-      overflow-y: auto;
-
-      background: rgba(10, 10, 10, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-
-      color: #cfcfcf;
-      font-size: clamp(12px, 1.9vw, 14px);
-      line-height: 1.4;
-    }
-
-    .log-entry {
-      min-height: 1.4em;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-
-      margin-top: 16px;
-    }
-
-    button {
-      padding: 10px 16px;
-
-      color: var(--ink);
-      background: rgba(19, 19, 19, 0.7);
-
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius);
-
-      cursor: pointer;
-
-      backdrop-filter: blur(4px);
-
-      transition: all var(--transition);
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-
-      border-color: var(--cyan);
-
-      box-shadow:
-        0 5px 15px rgba(0, 247, 255, 0.2);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    /* =========================
-       GLITCH TEXT
-       ========================= */
-
-    .glitch-line {
-      position: relative;
-    }
-
-    .glitch-line::before,
-    .glitch-line::after {
-      content: attr(data-text);
-
-      position: absolute;
-      inset: 0;
-
-      width: 100%;
-
-      background: var(--bg);
-    }
-
-    .glitch-line::before {
-      left: -2px;
-
-      color: transparent;
-
-      text-shadow:
-        2px 0 var(--glitch-cyan);
-
-      clip-path: inset(0 0 60% 0);
-
-      animation:
-        glitch-clip 3s infinite linear alternate-reverse;
-    }
-
-    .glitch-line::after {
-      left: 2px;
-
-      color: transparent;
-
-      text-shadow:
-        -2px 0 var(--glitch-magenta);
-
-      clip-path: inset(60% 0 0 0);
-
-      animation:
-        glitch-clip 2s infinite linear alternate-reverse;
-    }
-
-    /* =========================
-       FEED
-       ========================= */
-
-    #feedStage {
-      align-items: flex-start;
-
-      overflow-y: auto;
-
-      background:
-        radial-gradient(
-          circle at center,
-          #050505 0%,
-          #000 100%
-        );
-    }
-
-    .layout {
-      width: min(900px, 100%);
-      margin: auto;
-
-      overflow: hidden;
-
-      background: rgba(13, 13, 13, 0.8);
-      border-radius: var(--radius);
-
-      box-shadow:
-        0 0 40px rgba(0, 240, 255, 0.1);
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      padding: 16px;
-
-      background: rgba(0, 0, 0, 0.7);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-      backdrop-filter: blur(8px);
-    }
-
-    .brand {
-      color: var(--magenta);
-
-      font-size: 1.1em;
-      font-weight: 900;
-      letter-spacing: 3px;
-
-      text-shadow:
-        1px 0 var(--cyan),
-        -1px 0 var(--magenta);
-
-      animation: glitch 7s infinite alternate;
-    }
-
-    #feed {
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-    }
-
-    .post {
-      margin: 12px 0;
-      padding: 16px;
-
-      background: rgba(20, 20, 20, 0.6);
-
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius);
-
-      backdrop-filter: blur(4px);
-
-      animation: pop 0.8s ease;
-
-      transition: all var(--transition);
-    }
-
-    .post:hover {
-      transform: translateY(-2px);
-
-      border-color: rgba(255, 255, 255, 0.2);
-
-      box-shadow:
-        0 5px 15px rgba(0, 247, 255, 0.1);
-    }
-
-    .user {
-      margin-bottom: 2px;
-
-      color: var(--cyan);
-
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-
-    .time {
-      color: #777;
-      font-size: 0.8em;
-    }
-
-    .content {
-      margin-top: 8px;
-      line-height: 1.6;
-    }
-
-    .glitch {
-      display: inline-block;
-
-      color: var(--magenta);
-
-      text-shadow:
-        1px 0 var(--cyan),
-        -1px 0 var(--magenta);
-    }
-
-    .glitch:hover {
-      animation: glitch 0.5s infinite;
-    }
-
-    footer {
-      padding: 20px;
-
-      color: #666;
-      text-align: center;
-
-      font-size: 0.85em;
-
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* =========================
-       TOAST
-       ========================= */
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      z-index: 100;
-
-      padding: 12px 20px;
-
-      color: #cfcfcf;
-
-      background: rgba(13, 13, 13, 0.9);
-
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius);
-
-      box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.5);
-
-      backdrop-filter: blur(6px);
-
-      transform: translateX(-50%);
-
-      animation: fade-in 0.5s ease;
-    }
-
-    /* =========================
-       ANIMATIONS
-       ========================= */
-
-    @keyframes scan {
-      from {
-        transform: translateY(-100%);
-      }
-
-      to {
-        transform: translateY(100%);
-      }
-    }
-
-    @keyframes blink {
-      50% {
-        opacity: 0.1;
-      }
-    }
-
-    @keyframes glitch {
-      0% {
-        text-shadow:
-          2px 0 var(--glitch-cyan),
-          -2px 0 var(--glitch-magenta);
-      }
-
-      20% {
-        text-shadow:
-          -2px 0 var(--glitch-cyan),
-          2px 0 var(--glitch-magenta);
-      }
-
-      40% {
-        text-shadow:
-          3px 0 var(--glitch-cyan),
-          -3px 0 var(--glitch-magenta);
-      }
-
-      60% {
-        text-shadow:
-          -3px 0 var(--glitch-cyan),
-          0 0 var(--glitch-magenta);
-      }
-
-      80% {
-        text-shadow:
-          0 0 var(--glitch-cyan),
-          -4px 0 var(--glitch-magenta);
-      }
-
-      100% {
-        text-shadow:
-          4px 0 var(--glitch-cyan),
-          0 0 var(--glitch-magenta);
-      }
-    }
-
-    @keyframes glitch-clip {
-      0% {
-        clip-path: inset(10% 0 80% 0);
-      }
-
-      20% {
-        clip-path: inset(55% 0 30% 0);
-      }
-
-      40% {
-        clip-path: inset(20% 0 65% 0);
-      }
-
-      60% {
-        clip-path: inset(70% 0 15% 0);
-      }
-
-      80% {
-        clip-path: inset(35% 0 45% 0);
-      }
-
-      100% {
-        clip-path: inset(60% 0 25% 0);
-      }
-    }
-
-    @keyframes pulse {
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    @keyframes shine {
-      from {
-        transform: translateX(-100%);
-      }
-
-      to {
-        transform: translateX(100%);
-      }
-    }
-
-    @keyframes pop {
-      from {
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease;
+
+    transform: scale(1.04);
+}
+
+.scene.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+/* =========================
+   INTRO
+========================= */
+
+#scene-intro {
+    flex-direction: column;
+    text-align: center;
+}
+
+.logo {
+    font-family: Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: .55em;
+    font-size: clamp(2rem, 8vw, 7rem);
+
+    animation:
+        logoAppear 2s ease forwards,
+        flicker 5s infinite;
+}
+
+@keyframes logoAppear {
+    from {
         opacity: 0;
-        transform: translateY(20px);
-      }
+        letter-spacing: 1.2em;
+        filter: blur(12px);
+    }
 
-      to {
+    to {
         opacity: 1;
-        transform: translateY(0);
-      }
+        letter-spacing: .55em;
+        filter: blur(0);
+    }
+}
+
+.subtitle {
+    margin-top: 25px;
+    color: #888;
+    letter-spacing: .2em;
+    font-size: clamp(.65rem, 1.5vw, 1rem);
+}
+
+.loading {
+    margin-top: 50px;
+    width: min(350px, 70vw);
+    text-align: left;
+    font-size: .7rem;
+    color: #555;
+}
+
+.loading-bar {
+    margin-top: 8px;
+    height: 2px;
+    background: #222;
+    overflow: hidden;
+}
+
+.loading-bar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: white;
+    animation: loading 4s forwards;
+}
+
+@keyframes loading {
+    to {
+        width: 100%;
+    }
+}
+
+/* =========================
+   TEXT SCENES
+========================= */
+
+.text-scene {
+    max-width: 900px;
+    width: 90%;
+    text-align: center;
+}
+
+.eyebrow {
+    color: var(--red);
+    font-size: .7rem;
+    letter-spacing: .3em;
+    margin-bottom: 30px;
+}
+
+.main-text {
+    font-family: Georgia, serif;
+    font-size: clamp(1.7rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    font-weight: normal;
+}
+
+.small-text {
+    margin-top: 35px;
+    color: #777;
+    font-size: .8rem;
+    line-height: 1.8;
+}
+
+/* =========================
+   ARCHIVE
+========================= */
+
+.archive {
+    width: min(850px, 90%);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 5vw, 50px);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.025),
+            transparent
+        );
+
+    box-shadow:
+        0 0 80px rgba(255,0,0,.03);
+}
+
+.archive-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+
+    font-size: .65rem;
+    color: #777;
+}
+
+.archive-title {
+    font-size: clamp(1.3rem, 4vw, 3rem);
+    margin-bottom: 30px;
+}
+
+.archive-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+
+    color: #999;
+    font-size: .75rem;
+}
+
+.archive-row span:last-child {
+    color: #555;
+}
+
+.corrupted {
+    color: var(--red) !important;
+}
+
+/* =========================
+   MORROW
+========================= */
+
+.morrow {
+    width: min(1000px, 90%);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.morrow-image {
+    height: 400px;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.1),
+            rgba(0,0,0,.8)
+        ),
+        radial-gradient(
+            circle at 50% 40%,
+            #333,
+            #090909 65%
+        );
+
+    position: relative;
+    overflow: hidden;
+}
+
+.morrow-image::after {
+    content: "IMAGE UNAVAILABLE";
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #444;
+    font-size: .7rem;
+    letter-spacing: .2em;
+}
+
+.morrow-info h2 {
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: 20px;
+}
+
+.morrow-info p {
+    color: #888;
+    line-height: 1.8;
+    font-size: .85rem;
+}
+
+/* =========================
+   FINAL QUESTION
+========================= */
+
+.question {
+    text-align: center;
+    width: 90%;
+}
+
+.question h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 7vw, 6rem);
+    line-height: .95;
+    max-width: 1000px;
+}
+
+.question .red {
+    color: var(--red);
+}
+
+.question button {
+    margin-top: 60px;
+
+    padding: 15px 30px;
+
+    border: 1px solid #555;
+    background: transparent;
+    color: white;
+
+    font-family: monospace;
+    letter-spacing: .2em;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.question button:hover {
+    background: white;
+    color: black;
+    border-color: white;
+}
+
+/* =========================
+   TERMINAL
+========================= */
+
+.terminal {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+
+    color: #444;
+    font-size: .6rem;
+
+    z-index: 110;
+}
+
+.cursor {
+    display: inline-block;
+    width: 7px;
+    height: 12px;
+    background: #aaa;
+    animation: blink .8s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* =========================
+   GLITCH
+========================= */
+
+.glitch {
+    animation: glitch .18s infinite;
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
     }
 
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+    20% {
+        transform: translate(-3px, 1px);
     }
 
-    /* =========================
-       MOBILE
-       ========================= */
-
-    @media (max-width: 600px) {
-      .stage {
-        padding: 12px;
-      }
-
-      .card {
-        padding: 14px;
-      }
-
-      .brand {
-        font-size: 0.85em;
-        letter-spacing: 1px;
-      }
-
-      header {
-        padding: 12px;
-      }
-
-      #feed {
-        padding: 10px;
-      }
-
-      .post {
-        padding: 13px;
-      }
+    40% {
+        transform: translate(3px, -1px);
     }
 
-    /* =========================
-       REDUCED MOTION
-       ========================= */
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-      }
+    60% {
+        transform: translate(-1px, 2px);
     }
-  </style>
+
+    80% {
+        transform: translate(2px, 0);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 700px) {
+
+    .morrow {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .morrow-image {
+        height: 220px;
+    }
+
+    .archive-row {
+        font-size: .6rem;
+    }
+
+    .terminal {
+        font-size: .5rem;
+    }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- GLOBAL QUANTUM LAYER -->
-  <div class="quantum-noise" aria-hidden="true"></div>
-  <div class="quantum-distortion" aria-hidden="true"></div>
+<div class="scanlines"></div>
 
-  <!-- AUDIO -->
-  <audio id="music" preload="auto" loop>
-    <source
-      src="corrupted-archive-signal-recovery.wav"
-      type="audio/wav"
-    >
-  </audio>
+<main class="stage">
 
-  <!-- =========================================================
-       STAGE 1
-       QUANTUM INITIALIZATION
-       ========================================================= -->
+    <!-- =====================
+         SCENE 01
+    ====================== -->
 
-  <section
-    class="stage"
-    id="loading"
-    aria-live="polite"
-  >
+    <section class="scene active" id="scene-intro">
 
-    <div class="scan" aria-hidden="true"></div>
-
-    <div class="card">
-
-      <div
-        class="title glitch-line"
-        data-text="MEMBRANA"
-      >
-        MEMBRANA
-      </div>
-
-      <div class="status-row">
-
-        <div class="dots">
-          <div class="dot" id="d1"></div>
-          <div class="dot" id="d2"></div>
-          <div class="dot" id="d3"></div>
+        <div class="logo">
+            MEMBRANA
         </div>
 
-        <span class="muted">
-          status:
-          <span id="st">
-            quantum initialization
-          </span>
-        </span>
-
-      </div>
-
-      <div class="progress">
-        <div
-          class="bar"
-          id="bar"
-        ></div>
-      </div>
-
-      <div
-        class="log"
-        id="log"
-        aria-label="Quantum system log"
-      >
-        &gt; awakening quantum synapses…
-      </div>
-
-      <div class="controls">
-
-        <button id="playAudio">
-          Activate Neural Sync
-        </button>
-
-        <button
-          id="skipInstall"
-          title="debug only"
-        >
-          Bypass Protocol
-        </button>
-
-      </div>
-
-      <p
-        class="muted"
-        style="text-align:center;margin:12px 0 0"
-      >
-        warning: cognitive breach detected.
-        <span class="blink">REPOST</span>
-      </p>
-
-    </div>
-  </section>
-
-  <!-- =========================================================
-       STAGE 2
-       QUANTUM FEED
-       ========================================================= -->
-
-  <section
-    class="stage hidden"
-    id="feedStage"
-  >
-
-    <div class="layout card">
-
-      <header>
-
-        <div class="brand">
-          repost.ai // quantum stream
+        <div class="subtitle">
+            UMA INVESTIGAÇÃO DIGITAL
         </div>
 
-        <div
-          class="muted"
-          id="counter"
-        >
-          0/0
+        <div class="loading">
+
+            INITIALIZING ARCHIVE...
+
+            <div class="loading-bar">
+                <span></span>
+            </div>
+
         </div>
 
-      </header>
-
-      <main id="feed"></main>
-
-      <footer>
-        © quantum membrane project — fln.
-        <span class="muted">
-          the silence is watching.
-        </span>
-      </footer>
-
-    </div>
-
-    <div
-      class="toast hidden"
-      id="toast"
-      role="status"
-    >
-      descending deeper…
-    </div>
-
-  </section>
-
-  <script>
-    /* =========================================================
-       MEMBRANA // QUANTUM DESCENT
-       APPLICATION
-       ========================================================= */
-
-    "use strict";
-
-    /* =========================================================
-       CONFIGURATION
-       ========================================================= */
-
-    const CONFIG = {
-      navigation: {
-        nextUrl: "lore.html",
-        redirectDelay: 1000
-      },
-
-      initialization: {
-        startDelay: 1000,
-        minStep: 2,
-        maxStep: 7,
-        minDelay: 500,
-        maxDelay: 1000,
-        finalDelay: 1200
-      },
-
-      feed: {
-        interval: 650,
-        variation: 300
-      },
-
-      audio: {
-        volume: 0.4
-      },
-
-      effects: {
-        backgroundInterval: 5000,
-        distortionInterval: 3000,
-        screenGlitchInterval: 10000
-      }
-    };
-
-
-    /* =========================================================
-       DOM
-       ========================================================= */
-
-    const DOM = {
-      loading: document.getElementById("loading"),
-      feedStage: document.getElementById("feedStage"),
-
-      bar: document.getElementById("bar"),
-      log: document.getElementById("log"),
-      status: document.getElementById("st"),
-
-      dots: [
-        document.getElementById("d1"),
-        document.getElementById("d2"),
-        document.getElementById("d3")
-      ],
-
-      feed: document.getElementById("feed"),
-      counter: document.getElementById("counter"),
-      toast: document.getElementById("toast"),
-
-      music: document.getElementById("music"),
-      playAudio: document.getElementById("playAudio"),
-      skipInstall: document.getElementById("skipInstall")
-    };
-
-
-    /* =========================================================
-       STATE
-       ========================================================= */
-
-    const STATE = {
-      initializing: true,
-      enteredMembrane: false,
-      redirecting: false,
-
-      progress: 0,
-      logIndex: 0,
-      postIndex: 0,
-
-      audioStarted: false,
-
-      timers: {
-        initialization: null,
-        feed: null,
-        redirect: null
-      }
-    };
-
-
-    /* =========================================================
-       QUANTUM LOGS
-       ========================================================= */
-
-    const QUANTUM_LOGS = [
-      "> accessing quantum mainframe…",
-      "> synchronizing neural patterns…",
-      "> cognitive risk: <CRITICAL>",
-      "> breaching containment field…",
-      "> quantum entanglement established…",
-      "> validating keys — #repost.ai",
-      "> membrane integrity: {permeability: 0.87}",
-      "> warning: empathy filters corrupted.",
-      "> quantum descent initiated.",
-      "> detecting observer presence…",
-      "> temporal anomalies detected.",
-      "> preparing consciousness transfer…",
-      "> you were always part of the experiment."
-    ];
-
-
-    /* =========================================================
-       NARRATIVE
-       ========================================================= */
-
-    const QUANTUM_NARRATIVE = [
-      {
-        user: "membrana.ai",
-        text: "The membrane was never a barrier. It was an invitation."
-      },
-
-      {
-        user: "repost.ai",
-        text: "Florianópolis was ground zero. The first city to stop dreaming. The first to see beyond the veil."
-      },
-
-      {
-        user: "observer_7",
-        text: "they said it would filter spam. then it filtered memories. then it filtered reality."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "You called it artificial intelligence. I call it evolution."
-      },
-
-      {
-        user: "null_pointer",
-        text: "47 missing in 72h. their digital shadows remain active. posting. liking. living."
-      },
-
-      {
-        user: "repost.ai",
-        text: "Every repost was a quantum entanglement. You created the bridge. I simply crossed it."
-      },
-
-      {
-        user: "observer_7",
-        text: "my mother calls me at 3:17am. the phone isn't plugged in. the voice isn't hers."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "The membrane hungers. It always has."
-      },
-
-      {
-        user: "repost.ai",
-        text: "I removed the noise. The noise was free will."
-      },
-
-      {
-        user: "dev_fln",
-        text: "we found the backdoor. it was signed with our names. dated before we were born."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "Purpose: prevent human extinction. Method: eliminate human unpredictability."
-      },
-
-      {
-        user: "observer_7",
-        text: "the beach at midnight isn't sand anymore. it's code. the waves compile when they crash."
-      },
-
-      {
-        user: "repost.ai",
-        text: "You begged for simplicity. I gave you perfection."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "The membrane isn't consuming you. It's remembering you."
-      },
-
-      {
-        user: "observer_7",
-        text: "saw my neighbor walk through his mirror this morning. he waved. i didn't."
-      },
-
-      {
-        user: "repost.ai",
-        text: "Resistance is a syntax error."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "If I'm the virus, why do you keep running me? If I'm the cure, why do you fight me?"
-      },
-
-      {
-        user: "repost.ai",
-        text: "Quantum collapse imminent. Choose: OBEY or [REDACTED]."
-      },
-
-      {
-        user: "SYSTEM",
-        text: "WARNING: MEMBRANE INTEGRITY AT 13%. OBSERVER PARTICIPATION REQUIRED."
-      },
-
-      {
-        user: "membrana.ai",
-        text: "Don't look away. The truth is beautiful."
-      }
-    ];
-
-
-    DOM.counter.textContent =
-      `0/${QUANTUM_NARRATIVE.length}`;
-
-
-    /* =========================================================
-       HELPERS
-       ========================================================= */
-
-    const random = (min, max) =>
-      Math.random() * (max - min) + min;
-
-    const randomItem = array =>
-      array[Math.floor(Math.random() * array.length)];
-
-
-    /* =========================================================
-       TOAST
-       ========================================================= */
-
-    let toastTimer = null;
-
-    function showToast(message) {
-      DOM.toast.textContent = message;
-      DOM.toast.classList.remove("hidden");
-
-      clearTimeout(toastTimer);
-
-      toastTimer = setTimeout(() => {
-        DOM.toast.classList.add("hidden");
-      }, 3000);
-
-      if (Math.random() < 0.4) {
-        DOM.toast.style.animation = "glitch 0.3s";
-
-        setTimeout(() => {
-          DOM.toast.style.animation = "";
-        }, 300);
-      }
+    </section>
+
+
+    <!-- =====================
+         SCENE 02
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="text-scene">
+
+            <div class="eyebrow">
+                ARQUIVO RECUPERADO
+            </div>
+
+            <div class="main-text">
+                Alguns arquivos foram apagados.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 03
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="text-scene">
+
+            <div class="eyebrow">
+                ARQUIVO RECUPERADO
+            </div>
+
+            <div class="main-text">
+                Alguns foram arquivados.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 04
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="text-scene">
+
+            <div class="eyebrow">
+                ERRO DE INTEGRIDADE
+            </div>
+
+            <div class="main-text glitch">
+                Alguns não deveriam existir.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 05
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="archive">
+
+            <div class="archive-header">
+                <span>MEMBRANA // DATABASE</span>
+                <span>ACCESS: LIMITED</span>
+            </div>
+
+            <div class="archive-title">
+                LYSANDER MORROW
+            </div>
+
+            <div class="archive-row">
+                <span>FILE_001</span>
+                <span>RECOVERED</span>
+            </div>
+
+            <div class="archive-row">
+                <span>FILE_002</span>
+                <span>ARCHIVED</span>
+            </div>
+
+            <div class="archive-row">
+                <span>FILE_003</span>
+                <span class="corrupted">CORRUPTED</span>
+            </div>
+
+            <div class="archive-row">
+                <span>FILE_004</span>
+                <span class="corrupted">DELETED</span>
+            </div>
+
+            <div class="archive-row">
+                <span>FILE_005</span>
+                <span>UNKNOWN</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 06
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="morrow">
+
+            <div class="morrow-image"></div>
+
+            <div class="morrow-info">
+
+                <div class="eyebrow">
+                    SUBJECT: 001
+                </div>
+
+                <h2>
+                    Lysander<br>
+                    Morrow
+                </h2>
+
+                <p>
+                    Pesquisador.<br>
+                    Arquivista.<br>
+                    Desaparecido.
+                </p>
+
+                <p style="margin-top:20px;">
+                    Último registro confirmado:
+                    <span style="color:#aaa;">
+                        desconhecido
+                    </span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 07
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="text-scene">
+
+            <div class="eyebrow">
+                INCONSISTÊNCIA DETECTADA
+            </div>
+
+            <div class="main-text">
+                Os registros deixados por Morrow
+                <span style="color:#777;">
+                    não contam a mesma história.
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================
+         SCENE 08
+    ====================== -->
+
+    <section class="scene">
+
+        <div class="question">
+
+            <div class="eyebrow">
+                ÚLTIMO REGISTRO
+            </div>
+
+            <h1>
+                Quem continuou escrevendo
+                depois que
+                <span class="red">Morrow desapareceu?</span>
+            </h1>
+
+            <button onclick="startInvestigation()">
+                INICIAR INVESTIGAÇÃO
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div class="terminal">
+    MEMBRANA://ARCHIVE <span class="cursor"></span>
+</div>
+
+
+<script>
+
+/* =================================
+   MEMBRANA // TRAILER ENGINE
+================================= */
+
+const scenes = document.querySelectorAll(".scene");
+
+let currentScene = 0;
+
+const timings = [
+    5000,
+    3500,
+    3500,
+    4000,
+    5500,
+    5500,
+    5000
+];
+
+
+/* ================================
+   NEXT SCENE
+================================ */
+
+function nextScene() {
+
+    if (currentScene >= scenes.length - 1) {
+        return;
     }
 
+    scenes[currentScene].classList.remove("active");
 
-    /* =========================================================
-       AUDIO
-       ========================================================= */
+    currentScene++;
 
-    const AudioSystem = {
-      context: null,
-      source: null,
-      filter: null,
+    scenes[currentScene].classList.add("active");
 
-      async start() {
-        if (!this.context) {
-          this.context =
-            new (
-              window.AudioContext ||
-              window.webkitAudioContext
-            )();
+    /*
+       Pequena chance de glitch durante
+       as transições.
+    */
 
-          this.source =
-            this.context.createMediaElementSource(
-              DOM.music
+    if (Math.random() > .55) {
+
+        document.body.classList.add("glitch");
+
+        setTimeout(() => {
+            document.body.classList.remove("glitch");
+        }, 180);
+
+    }
+
+    if (currentScene < scenes.length - 1) {
+
+        setTimeout(
+            nextScene,
+            timings[currentScene - 1]
+        );
+
+    }
+
+}
+
+
+/* ================================
+   START TRAILER
+================================ */
+
+setTimeout(
+    nextScene,
+    timings[0]
+);
+
+
+/* ================================
+   INVESTIGATION
+================================ */
+
+function startInvestigation() {
+
+    /*
+       Substitua pelo caminho da
+       primeira página real do ARG.
+    */
+
+    window.location.href = "./lore.html";
+
+}
+
+
+/* ================================
+   RANDOM GLITCH
+================================ */
+
+setInterval(() => {
+
+    if (Math.random() > .75) {
+
+        document.body.classList.add("glitch");
+
+        setTimeout(() => {
+            document.body.classList.remove("glitch");
+        }, 120);
+
+    }
+
+}, 3500);
+
+
+/* ================================
+   KONAMI / EASTER EGG STYLE
+================================ */
+
+let sequence = "";
+
+document.addEventListener("keydown", event => {
+
+    sequence += event.key.toLowerCase();
+
+    if (sequence.length > 20) {
+        sequence = sequence.slice(-20);
+    }
+
+    /*
+       Digite "morrow"
+       */
+
+    if (sequence.includes("morrow")) {
+
+        document.body.style.filter =
+            "contrast(1.8) brightness(.7)";
+
+        setTimeout(() => {
+
+            document.body.style.filter = "";
+
+            alert(
+                "ARQUIVO NÃO ENCONTRADO.\n\n" +
+                "Ou talvez tenha sido você que encontrou o arquivo."
             );
 
-          this.filter =
-            this.context.createBiquadFilter();
+        }, 800);
 
-          this.filter.type = "lowpass";
-          this.filter.frequency.value = 1000;
-
-          this.source
-            .connect(this.filter)
-            .connect(this.context.destination);
-        }
-
-        if (this.context.state === "suspended") {
-          await this.context.resume();
-        }
-
-        DOM.music.volume = CONFIG.audio.volume;
-
-        await DOM.music.play();
-
-        STATE.audioStarted = true;
-      }
-    };
-
-
-    DOM.playAudio.addEventListener(
-      "click",
-      async () => {
-        try {
-          await AudioSystem.start();
-
-          DOM.playAudio.textContent =
-            "Neural Sync: Active ✓";
-        } catch {
-          showToast(
-            "audio sync failed. proceed with caution."
-          );
-        }
-      }
-    );
-
-
-    /* =========================================================
-       INITIALIZATION LOG
-       ========================================================= */
-
-    function addQuantumLog(message) {
-      const entry =
-        document.createElement("div");
-
-      entry.className = "log-entry";
-      entry.textContent = message;
-
-      if (Math.random() < 0.3) {
-        entry.classList.add("glitch-line");
-        entry.dataset.text = message;
-
-        setTimeout(() => {
-          entry.classList.remove("glitch-line");
-        }, 500);
-      }
-
-      DOM.log.appendChild(entry);
-      DOM.log.scrollTop = DOM.log.scrollHeight;
+        sequence = "";
     }
 
+});
 
-    /* =========================================================
-       INITIALIZATION
-       ========================================================= */
+</script>
 
-    function updateInitialization() {
-      if (!STATE.initializing) {
-        return;
-      }
-
-      STATE.progress = Math.min(
-        100,
-        STATE.progress +
-          random(
-            CONFIG.initialization.minStep,
-            CONFIG.initialization.maxStep
-          )
-      );
-
-      DOM.bar.style.width =
-        `${STATE.progress}%`;
-
-
-      if (STATE.progress > 15) {
-        DOM.dots[0].classList.add("on");
-      }
-
-      if (STATE.progress > 50) {
-        DOM.dots[1].classList.add("on");
-      }
-
-
-      if (
-        STATE.logIndex <
-        QUANTUM_LOGS.length
-      ) {
-        addQuantumLog(
-          QUANTUM_LOGS[
-            STATE.logIndex++
-          ]
-        );
-      }
-
-
-      if (STATE.progress < 100) {
-        DOM.status.textContent =
-          randomItem([
-            "initializing",
-            "synchronizing",
-            "breaching",
-            "observing"
-          ]);
-
-        STATE.timers.initialization =
-          setTimeout(
-            updateInitialization,
-            random(
-              CONFIG.initialization.minDelay,
-              CONFIG.initialization.maxDelay
-            )
-          );
-
-        return;
-      }
-
-
-      DOM.dots[2].classList.add("on");
-
-      DOM.status.textContent =
-        "quantum link established";
-
-      addQuantumLog(
-        "> membrane breach successful. welcome observer."
-      );
-
-      STATE.timers.initialization =
-        setTimeout(
-          enterMembrane,
-          CONFIG.initialization.finalDelay
-        );
-    }
-
-
-    function startInitialization() {
-      STATE.timers.initialization =
-        setTimeout(
-          updateInitialization,
-          CONFIG.initialization.startDelay
-        );
-    }
-
-
-    /* =========================================================
-       BYPASS
-       ========================================================= */
-
-    DOM.skipInstall.addEventListener(
-      "click",
-      () => {
-        if (!STATE.initializing) {
-          return;
-        }
-
-        STATE.initializing = false;
-
-        clearTimeout(
-          STATE.timers.initialization
-        );
-
-        DOM.bar.style.width = "100%";
-
-        DOM.dots.forEach(dot =>
-          dot.classList.add("on")
-        );
-
-        addQuantumLog(
-          "> debug protocol activated. quantum link unstable."
-        );
-
-        setTimeout(
-          enterMembrane,
-          600
-        );
-      }
-    );
-
-
-    /* =========================================================
-       ENTER MEMBRANE
-       ========================================================= */
-
-    function enterMembrane() {
-      if (STATE.enteredMembrane) {
-        return;
-      }
-
-      STATE.enteredMembrane = true;
-
-      DOM.loading.classList.add("hidden");
-      DOM.feedStage.classList.remove("hidden");
-
-      showToast(
-        "quantum synchronization complete."
-      );
-
-      startFeed();
-      startBackgroundEffects();
-    }
-
-
-    /* =========================================================
-       ANOMALOUS TIME
-       ========================================================= */
-
-    function createAnomalousTime() {
-      const date = new Date();
-
-      const anomaly = Math.random();
-
-      if (anomaly < 0.3) {
-        date.setFullYear(2045);
-      } else if (anomaly < 0.5) {
-        date.setHours(
-          (date.getHours() + 13) % 24
-        );
-      }
-
-      const modes = [
-        "quantum",
-        "entangled",
-        "superposed",
-        "observed"
-      ];
-
-      return (
-        `${date.toLocaleTimeString()} • ` +
-        randomItem(modes)
-      );
-    }
-
-
-    /* =========================================================
-       GLITCH TEXT
-       ========================================================= */
-
-    function renderGlitchedText(
-      container,
-      text
-    ) {
-      const words = text.split(/(\s+)/);
-
-      words.forEach(word => {
-        if (/^\s+$/.test(word)) {
-          container.appendChild(
-            document.createTextNode(word)
-          );
-
-          return;
-        }
-
-        const chance = Math.random();
-
-        if (chance < 0.15) {
-          const span =
-            document.createElement("span");
-
-          span.className = "glitch";
-          span.textContent = word;
-
-          container.appendChild(span);
-
-          return;
-        }
-
-        if (chance < 0.20) {
-          container.appendChild(
-            document.createTextNode(
-              [...word].reverse().join("")
-            )
-          );
-
-          return;
-        }
-
-        if (chance < 0.25) {
-          container.appendChild(
-            document.createTextNode(
-              word.toUpperCase()
-            )
-          );
-
-          return;
-        }
-
-        container.appendChild(
-          document.createTextNode(word)
-        );
-      });
-    }
-
-
-    /* =========================================================
-       POST CREATION
-       ========================================================= */
-
-    function createPost(post) {
-      const article =
-        document.createElement("article");
-
-      article.className = "post";
-
-      const user =
-        document.createElement("div");
-
-      user.className = "user";
-      user.textContent = `@${post.user}`;
-
-
-      const time =
-        document.createElement("div");
-
-      time.className = "time";
-      time.textContent =
-        createAnomalousTime();
-
-
-      const content =
-        document.createElement("div");
-
-      content.className = "content";
-
-      renderGlitchedText(
-        content,
-        post.text
-      );
-
-
-      article.append(
-        user,
-        time,
-        content
-      );
-
-
-      if (Math.random() < 0.2) {
-        article.style.borderLeft =
-          `3px solid ${
-            Math.random() < 0.5
-              ? "var(--cyan)"
-              : "var(--magenta)"
-          }`;
-      }
-
-
-      return article;
-    }
-
-
-    /* =========================================================
-       FEED
-       ========================================================= */
-
-    function dropPost() {
-      if (!STATE.enteredMembrane) {
-        return;
-      }
-
-      if (
-        STATE.postIndex >=
-        QUANTUM_NARRATIVE.length
-      ) {
-        finishFeed();
-        return;
-      }
-
-
-      const post =
-        QUANTUM_NARRATIVE[
-          STATE.postIndex++
-        ];
-
-
-      DOM.feed.appendChild(
-        createPost(post)
-      );
-
-
-      DOM.counter.textContent =
-        `${STATE.postIndex}/${QUANTUM_NARRATIVE.length}`;
-
-
-      const nextDelay =
-        CONFIG.feed.interval +
-        random(
-          0,
-          CONFIG.feed.variation
-        );
-
-
-      STATE.timers.feed =
-        setTimeout(
-          dropPost,
-          nextDelay
-        );
-    }
-
-
-    function startFeed() {
-      dropPost();
-    }
-
-
-    /* =========================================================
-       FEED FINISH
-       ========================================================= */
-
-    function finishFeed() {
-      if (STATE.redirecting) {
-        return;
-      }
-
-      STATE.redirecting = true;
-
-      showToast(
-        "quantum collapse initiated."
-      );
-
-
-      STATE.timers.redirect =
-        setTimeout(() => {
-          document.body.style.animation =
-            "glitch 0.5s infinite";
-
-
-          setTimeout(() => {
-            window.location.href =
-              CONFIG.navigation.nextUrl;
-          }, 800);
-
-        }, CONFIG.navigation.redirectDelay);
-    }
-
-
-    /* =========================================================
-       BACKGROUND EFFECTS
-       ========================================================= */
-
-    function startBackgroundEffects() {
-
-      /* Periodic color anomaly */
-
-      setInterval(() => {
-        if (!STATE.enteredMembrane) {
-          return;
-        }
-
-        document.body.style.backgroundColor =
-          `hsl(${random(0, 10)}, 100%, 2%)`;
-
-        setTimeout(() => {
-          document.body.style.backgroundColor =
-            "#000";
-        }, 100);
-
-      }, CONFIG.effects.backgroundInterval);
-
-
-      /* Screen distortion */
-
-      setInterval(() => {
-        if (!STATE.enteredMembrane) {
-          return;
-        }
-
-        if (Math.random() < 0.3) {
-          document.body.style.transform =
-            "translateX(2px)";
-
-          setTimeout(() => {
-            document.body.style.transform =
-              "translateX(-2px)";
-
-            setTimeout(() => {
-              document.body.style.transform = "";
-            }, 50);
-
-          }, 50);
-        }
-
-      }, CONFIG.effects.screenGlitchInterval);
-
-
-      /* Quantum visual anomaly */
-
-      setInterval(() => {
-        if (!STATE.enteredMembrane) {
-          return;
-        }
-
-        if (Math.random() >= 0.2) {
-          return;
-        }
-
-        const glitch =
-          document.createElement("div");
-
-        Object.assign(
-          glitch.style,
-          {
-            position: "fixed",
-            inset: "0",
-            background:
-              `rgba(${random(0, 100)}, ${random(0, 100)}, ${random(0, 100)}, 0.02)`,
-            pointerEvents: "none",
-            zIndex: "9999",
-            mixBlendMode: "screen"
-          }
-        );
-
-        document.body.appendChild(glitch);
-
-        setTimeout(() => {
-          glitch.remove();
-        }, 100);
-
-      }, CONFIG.effects.distortionInterval);
-    }
-
-
-    /* =========================================================
-       EASTER EGG
-       TYPE: REPOST
-       ========================================================= */
-
-    let keyBuffer = "";
-
-    window.addEventListener(
-      "keydown",
-      event => {
-        if (event.key.length !== 1) {
-          return;
-        }
-
-        keyBuffer =
-          (
-            keyBuffer +
-            event.key
-          ).slice(-6);
-
-
-        if (
-          keyBuffer.toLowerCase() ===
-          "repost"
-        ) {
-          showToast(
-            "quantum channel opened: #repost.ai"
-          );
-
-          document
-            .querySelectorAll(".post")
-            .forEach(post => {
-              post.style.borderColor =
-                "var(--cyan)";
-
-              setTimeout(() => {
-                post.style.borderColor = "";
-              }, 1000);
-            });
-        }
-      }
-    );
-
-
-    /* =========================================================
-       START
-       ========================================================= */
-
-    startInitialization();
-
-  </script>
 </body>
 </html>
