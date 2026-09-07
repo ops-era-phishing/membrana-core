@@ -1,33 +1,132 @@
-# Gradle files
+# ==========================================================
+# Android / Gradle
+# ==========================================================
+
 .gradle/
 build/
+*/build/
 
-# Local configuration file (sdk path, etc)
 local.properties
 
-# Log/OS Files
-*.log
+# Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
 
-# Android Studio generated files and folders
 captures/
 .externalNativeBuild/
 .cxx/
+
+# APK / AAB / generated metadata
 *.apk
+*.aab
 output-metadata.json
 
-# IntelliJ
-*.iml
-.idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
 
-# Keystore files
+# ==========================================================
+# Logs
+# ==========================================================
+
+*.log
+
+
+# ==========================================================
+# Local / OS files
+# ==========================================================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+
+# ==========================================================
+# IDE / Editor
+# ==========================================================
+
+.vscode/
+
+# Uncomment if you don't want editor-specific settings
+# .fleet/
+
+
+# ==========================================================
+# Java / JVM
+# ==========================================================
+
+*.class
+*.hprof
+
+
+# ==========================================================
+# Android signing / secrets
+# ==========================================================
+
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
+# Google Services
 google-services.json
 
-# Android Profiling
+# Environment / local secrets
+.env
+.env.*
+!.env.example
+
+
+# ==========================================================
+# Profiling / generated reports
+# ==========================================================
+
 *.hprof
+*.prof
+
+
+# ==========================================================
+# Local shell configuration
+# ==========================================================
+
+# Personal shell configuration
+.bashrc
+.bash_profile
+.bash_login
+.bash_logout
+
+.zshrc
+.zprofile
+.zshenv
+.zlogin
+.zlogout
+
+# Shell history
+.bash_history
+.zsh_history
+
+
+# ==========================================================
+# Node / JavaScript (if used by tooling)
+# ==========================================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package manager caches
+.pnpm-debug.log*
+
+
+# ==========================================================
+# Generated / temporary project files
+# ==========================================================
+
+*.bak
+*.orig
+*.rej
