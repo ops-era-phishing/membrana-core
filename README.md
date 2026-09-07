@@ -38,7 +38,7 @@ A “invasão” é psicológica, não digital.
 ## ⚖️ SEUS TERMOS AO ENTRAR
 
 > Ao continuar para além desta tela, você declara estar ciente de que MEMBRANA pode induzir estados de desconforto proposital, paranoia lúdica e reavaliação de percepções.  
-> Você concorda voluntariamente com a **[Política de Privacidade e Termos de Responsabilidade](./info.html)**.
+> Você concorda voluntariamente com a **[Política de Privacidade e Termos de Responsabilidade](https://ops-era-phishing.github.io/membrana-core/info.html)**.
 
 O link está aberto. Leia antes de prosseguir.  
 Não há coleta invisível. Não há armadilhas jurídicas.  
