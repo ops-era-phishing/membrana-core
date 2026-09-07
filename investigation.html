@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Participantes Sob Investigação - Dr. Lysander Morrow</title>
+
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init('MmlV5QPWGKuK5zdEV'); // Inicializa o EmailJS
+  </script>
+
+  <style>
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background: #0d1117;
+      color: #c9d1d9;
+      margin: 0 auto;
+      padding: 2rem;
+      max-width: 900px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+      color: #58a6ff;
+      margin-bottom: 2rem;
+    }
+
+    h2, h3 {
+      color: #58a6ff;
+      margin-top: 2rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .info-box,
+    .notice {
+      background: #161b22;
+      border-left: 6px solid #f85149;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #c9d1d9;
+    }
+
+    .forum-thread {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgb(88 166 255 / 0.05);
+    }
+
+    .thread-title {
+      font-weight: bold;
+      color: #58a6ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .thread-body {
+      margin-top: 0.5rem;
+      white-space: pre-wrap;
+      color: #c9d1d9;
+    }
+
+    /* Estilos do novo formulário */
+    .form-container-emailjs {
+      width: 100%;
+      max-width: 450px;
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.6);
+      margin: 2rem auto;
+      border: 1px solid #30363d;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-container-emailjs input,
+    .form-container-emailjs textarea {
+      width: 100%;
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      resize: none;
+    }
+
+    .form-container-emailjs input:focus,
+    .form-container-emailjs textarea:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+    }
+
+    .form-container-emailjs textarea {
+      min-height: 120px;
+    }
+
+    .form-container-emailjs label {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.8rem;
+      font-size: 1rem;
+      color: #8b949e;
+      pointer-events: none;
+      transition: 0.2s ease all;
+      background: #161b22;
+      padding: 0 0.3rem;
+    }
+
+    .form-container-emailjs input:focus ~ label,
+    .form-container-emailjs input:not(:placeholder-shown) ~ label,
+    .form-container-emailjs textarea:focus ~ label,
+    .form-container-emailjs textarea:not(:placeholder-shown) ~ label {
+      top: -0.6rem;
+      left: 0.5rem;
+      font-size: 0.8rem;
+      color: #58a6ff;
+    }
+
+    .form-container-emailjs button {
+      background: linear-gradient(135deg, #238636, #2ea043);
+      color: white;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 0.5rem;
+      width: 100%;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .form-container-emailjs button:hover {
+      background: linear-gradient(135deg, #2ea043, #238636);
+    }
+
+    /* Notificação */
+    #emailjs-notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2ea043;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+    }
+
+    #emailjs-notification.show {
+      opacity: 1;
+    }
+
+    #emailjs-notification.error {
+      background: #f85149;
+    }
+
+    /* Restante do seu CSS existente */
+    .error {
+      color: #f85149;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #3fb950;
+      font-weight: bold;
+    }
+
+    .list {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgb(88 166 255 / 0.3);
+    }
+
+    .participant {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .participant:last-child {
+      border-bottom: none;
+    }
+
+    .name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #58a6ff;
+    }
+
+    .contact {
+      font-size: 0.95rem;
+      color: #8b949e;
+    }
+
+    .masked {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 0.3rem 0.5rem;
+      user-select: none;
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+      color: #bbb;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .glitch::before {
+      animation: glitchTop 1.5s infinite linear alternate-reverse;
+      color: #f85149;
+    }
+
+    .glitch::after {
+      animation: glitchBottom 1.5s infinite linear alternate-reverse;
+      color: #58a6ff;
+    }
+
+    @keyframes glitchTop {
+      0% { clip: rect(0, 9999px, 0, 0); }
+      10% { clip: rect(0, 9999px, 15px, 0); transform: translate(-2px, -2px); }
+      20% { clip: rect(5px, 9999px, 25px, 0); transform: translate(2px, 2px); }
+      30%, 100% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+    }
+
+    @keyframes glitchBottom {
+      0% { clip: rect(0, 9999px, 0, 0); }
+      10% { clip: rect(15px, 9999px, 40px, 0); transform: translate(2px, 2px); }
+      20% { clip: rect(20px, 9999px, 35px, 0); transform: translate(-2px, -2px); }
+      30%, 100% { clip: rect(0, 9999px, 0, 0); transform: translate(0); }
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.85rem;
+      text-align: center;
+      color: #6e7681;
+    }
+      .github-comment-container {
+    margin: 2rem 0;
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .github-comment-box {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1.5rem;
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .github-comment-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #58a6ff, #f85149);
+  }
+
+  .github-comment-title {
+    color: #58a6ff;
+    margin-top: 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 0.5rem;
+  }
+
+  .github-comment-desc {
+    color: #8b949e;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .github-comment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #238636;
+    color: white !important;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 1px solid #2ea043;
+  }
+
+  .github-comment-btn:hover {
+    background: #2ea043;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 160, 67, 0.2);
+  }
+
+  .github-icon {
+    fill: white;
+  }
+
+  .github-comment-warning {
+    font-size: 0.8rem;
+    color: #f85149;
+    margin-top: 1rem;
+    text-align: right;
+  }
+
+  /* Efeito glitch no hover (opcional) */
+  .github-comment-btn:hover .github-icon {
+    animation: glitchIcon 0.5s linear infinite;
+  }
+
+  @keyframes glitchIcon {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+  </style>
+</head>
+
+<body>
+  <h1>Fórum E.G.O. Technologies</h1>
+  <p>Bem-vindo ao fórum oficial de discussões do projeto. Criado por <strong>Dr. Lysander Morrow</strong> para manter a comunidade informada e segura.</p>
+
+  <div class="info-box">
+    <strong>Importante:</strong> Todos os dados pessoais fornecidos aqui (telefone e email) serão tratados com extremo cuidado e confidencialidade, e armazenados sob protocolos avançados. A QSR-0 não deve ter acesso, mas permaneça atento a qualquer anomalia de comunicação.
+  </div>
+
+  <h2>Tópicos recentes</h2>
+  <div id="threads-container">
+    <p>Carregando tópicos...</p>
+  </div>
+
+
+
+
+  <div class="github-comment-container">
+  <div class="github-comment-box">
+    <h3 class="github-comment-title">Contribua com a Investigação</h3>
+    <p class="github-comment-desc">Compartilhe informações anonimamente ou deixe seu comentário na thread oficial:</p>
+    <a href="https://github.com/ops-era-phishing/Membrana/issues/" target="_blank" rel="noopener noreferrer" class="github-comment-btn">
+      <svg class="github-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+      </svg>
+      Comentar na Issue #Membrana
+    </a>
+    <p class="github-comment-warning">⚠️ Acesso monitorado pelo Portal Floripa. Use VPN.</p>
+  </div>
+</div>
+
+
+
+
+  <!-- Novo formulário com EmailJS -->
+  <div class="form-container-emailjs">
+    <h2>Contato Direto</h2>
+    <p>Envie uma mensagem confidencial diretamente para o Dr. Lysander Morrow</p>
+
+    <form id="emailjs-form" novalidate>
+      <div class="form-group">
+        <input type="text" id="emailjs-name" name="from_name" placeholder=" " required autocomplete="name" aria-label="Nome Completo">
+        <label for="emailjs-name">Nome Completo</label>
+      </div>
+
+      <div class="form-group">
+        <input type="email" id="emailjs-email" name="from_email" placeholder=" " required autocomplete="email" aria-label="Seu Email">
+        <label for="emailjs-email">Seu Email</label>
+      </div>
+
+      <div class="form-group">
+        <textarea id="emailjs-message" name="message" placeholder=" " aria-label="Mensagem" required></textarea>
+        <label for="emailjs-message">Mensagem Confidencial</label>
+      </div>
+
+      <button type="submit" aria-label="Enviar mensagem">Enviar Mensagem</button>
+    </form>
+  </div>
+
+  <div id="emailjs-notification" class="hidden">Mensagem enviada com sucesso!</div>
+
+  <h1>Participantes Sob Investigação</h1>
+
+  <div class="notice">
+    <strong>Alerta:</strong> Os indivíduos listados abaixo participaram da discussão sobre <em>Membrana</em> e <em>QSR-0</em> e atualmente estão sendo monitorados pelo Departamento de Investigação responsável, assim como estão na mira do Portal Floripa.
+    <br /><br />
+    Todas as informações de contato são protegidas e tratadas sob os cuidados do Dr. Lysander Morrow, garantindo confidencialidade e segurança máxima.
+  </div>
+
+  <div class="list" role="list" aria-label="Lista de participantes investigados">
+    <div class="participant" role="listitem">
+      <div class="name">Lucas Altieri</div>
+      <div class="contact">
+        <span class="glitch masked" data-text="l****@ex***.com">l****@ex***.com</span><br />
+        <span class="glitch masked" data-text="(48) 9****-1234">(48) 9****-1234</span>
+      </div>
+    </div>
+
+    <div class="participant" role="listitem">
+      <div class="name">Renata Velasco</div>
+      <div class="contact">
+        <span class="glitch masked" data-text="r****@mail***.com">r****@mail***.com</span><br />
+        <span class="glitch masked" data-text="(48) 9****-5678">(48) 9****-5678</span>
+      </div>
+    </div>
+
+    <div class="participant" role="listitem">
+      <div class="name">Geraldo Santos</div>
+      <div class="contact">
+        <span class="glitch masked" data-text="g***@server***.net">g***@server***.net</span><br />
+        <span class="glitch masked" data-text="(48) 9****-9876">(48) 9****-9876</span>
+      </div>
+    </div>
+
+    <div class="participant" role="listitem">
+      <div class="name">Isabeli Moura</div>
+      <div class="contact">
+        <span class="glitch masked" data-text="i****@eco***.org">i****@eco***.org</span><br />
+        <span class="glitch masked" data-text="(48) 9****-4321">(48) 9****-4321</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Criado e mantido pelo Dr. Lysander Morrow – Segurança e Privacidade Garantidas
+  </footer>
+
+  <script>
+    // Script do formulário EmailJS
+    document.getElementById('emailjs-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const notification = document.getElementById('emailjs-notification');
+      notification.textContent = "Enviando mensagem...";
+      notification.className = "";
+      notification.classList.add('show');
+
+      const templateParams = {
+        from_name: document.getElementById('emailjs-name').value,
+        from_email: document.getElementById('emailjs-email').value,
+        message: document.getElementById('emailjs-message').value,
+        to_name: "Dr. Lysander Morrow"
+      };
+
+      emailjs.send('service_fs66ql8', 'template_te6b5gr', templateParams)
+        .then(function(response) {
+          notification.textContent = "Mensagem enviada com sucesso!";
+          notification.className = "show";
+          document.getElementById('emailjs-form').reset();
+
+          setTimeout(() => {
+            notification.classList.remove('show');
+          }, 4000);
+        }, function(error) {
+          notification.textContent = "Erro ao enviar mensagem. Tente novamente.";
+          notification.className = "show error";
+          console.error('Erro:', error);
+        });
+    });
+
+    // Seu código existente para carregar threads
+    const repoOwner = "ops-era-phishing";
+    const repoName = "Membrana";
+    const threadsContainer = document.getElementById("threads-container");
+
+    async function loadThreads() {
+      try {
+        const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=open&per_page=5`);
+        if (!response.ok) throw new Error("Falha ao buscar tópicos");
+        const issues = await response.json();
+
+        if (issues.length === 0) {
+          threadsContainer.innerHTML = "<p>Não há tópicos recentes.</p>";
+          return;
+        }
+
+        threadsContainer.innerHTML = "";
+        issues.forEach(issue => {
+          const thread = document.createElement("div");
+          thread.className = "forum-thread";
+
+          const title = document.createElement("div");
+          title.className = "thread-title";
+          title.textContent = issue.title;
+          title.onclick = () => {
+            const body = thread.querySelector('.thread-body');
+            body.style.display = body.style.display === "none" ? "block" : "none";
+          };
+
+          const body = document.createElement("div");
+          body.className = "thread-body";
+          body.textContent = issue.body || "(Sem descrição)";
+          body.style.display = "none";
+
+          thread.appendChild(title);
+          thread.appendChild(body);
+          threadsContainer.appendChild(thread);
+        });
+      } catch (error) {
+        threadsContainer.innerHTML = `<p>Erro ao carregar tópicos: ${error.message}</p>`;
+      }
+    }
+
+    loadThreads();
+  </script>
+</body>
+</html>

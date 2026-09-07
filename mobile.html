@@ -2,16 +2,12 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>iHorror 13 · iPhone fake 2026</title>
     <link rel="manifest" href="/manifest.json">
-<!-- Permite que o site seja adicionado à tela de início no iOS -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<!-- Define a cor da barra de status no iOS -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<!-- Ícone para o iOS (não usa o manifesto) -->
-<link rel="apple-touch-icon" href="/img/icon-192.png">
-    <!-- Font Awesome for icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/img/icon-192.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -22,28 +18,27 @@
         }
 
         body {
-            background: #1a1a1a;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
-            padding: 20px;
+            padding: 16px;
         }
 
-        /* iPhone container */
         .iphone {
-            width: 380px;
-            height: 680px;
+            width: min(380px, 92%);
+            height: 90vh;
+            max-height: 700px;
             background: #111;
-            border-radius: 48px;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.6), 0 0 0 8px #333, 0 0 0 12px #555;
+            border-radius: 44px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.6), 0 0 0 6px #333, 0 0 0 10px #555;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(2px);
+            transition: all 0.2s ease;
         }
 
-        /* dynamic notch area */
         .notch {
             position: absolute;
             top: 0;
@@ -58,7 +53,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 12px;
             color: #eee;
             font-size: 12px;
             font-weight: 600;
@@ -71,12 +66,10 @@
         }
 
         .notch .icons i {
-            margin-left: 4px;
+            margin-left: 5px;
             font-size: 10px;
-            color: #ddd;
         }
 
-        /* tela principal */
         .screen {
             width: 100%;
             height: 100%;
@@ -85,8 +78,8 @@
             position: relative;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 40px 12px 12px 12px;
-            scrollbar-width: none;
+            padding: 40px 12px 20px 12px;
+            scrollbar-width: thin;
             transition: filter 0.2s ease;
         }
 
@@ -97,20 +90,18 @@
 
         @keyframes glitchSkew {
             0% { transform: skew(0deg); }
-            20% { transform: skew(2deg); }
-            40% { transform: skew(-2deg); }
-            60% { transform: skew(1deg); }
-            80% { transform: skew(-1deg); }
+            20% { transform: skew(1.5deg); }
+            40% { transform: skew(-1.5deg); }
+            60% { transform: skew(0.8deg); }
+            80% { transform: skew(-0.8deg); }
             100% { transform: skew(0deg); }
         }
 
-        /* HOME SCREEN – grelha de ícones */
         .home-screen {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px 8px;
-            margin-top: 20px;
-            padding-bottom: 60px;
+            gap: 18px 8px;
+            padding-bottom: 30px;
         }
 
         .app-icon {
@@ -118,11 +109,12 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.15s ease, filter 0.2s;
+            transition: transform 0.12s ease, filter 0.2s;
+            position: relative;
         }
 
         .app-icon:active {
-            transform: scale(0.92);
+            transform: scale(0.94);
         }
 
         .icon-bg {
@@ -134,29 +126,62 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 30px;
             color: white;
-            box-shadow: 0 8px 12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.2);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.15);
             margin-bottom: 6px;
+            position: relative;
         }
 
         .app-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
             color: #f0f0f0;
-            text-shadow: 0 1px 3px black;
+            text-shadow: 0 1px 2px black;
             max-width: 70px;
             text-align: center;
+            line-height: 1.3;
         }
 
-        /* ícones específicos (cores Apple like) */
         .icon-spotify .icon-bg { background: #1DB954; }
         .icon-instagram .icon-bg { background: linear-gradient(45deg, #f09433, #d62976, #962fbf); }
         .icon-safari .icon-bg { background: #007aff; }
         .icon-files .icon-bg { background: #636366; }
         .icon-game .icon-bg { background: #5e5ce0; }
+        .icon-membrana .icon-bg { background: #8b00ff; box-shadow: 0 0 12px magenta; }
+        .icon-darkwiki .icon-bg { background: #1a1a2e; border: 1px solid #00ffff; }
+        .icon-ppd .icon-bg { background: #004d66; }
+        .icon-terms .icon-bg { background: #2c3e50; }
+        .icon-jornal .icon-bg { background: #b45f06; }
+        .icon-lysander .icon-bg { background: #5e2a6e; }
+        .icon-enigmas .icon-bg { background: #d4af37; color: black; }
+        .icon-ego .icon-bg { background: #ff3366; }
+        .icon-historias .icon-bg { background: #e67e22; }
+        .icon-github .icon-bg { background: #24292e; }
+        .icon-store .icon-bg { background: #007aff; }
 
-        /* APP VIEWS (overlay) */
+        /* Cores dinâmicas para apps instalados */
+        .icon-calc .icon-bg { background: #5856d6; }
+        .icon-notes .icon-bg { background: #ffcc00; color: #000; }
+        .icon-camera .icon-bg { background: #1a1a1a; }
+        .icon-weather .icon-bg { background: #34aadc; }
+        .icon-clock .icon-bg { background: #1c1c1e; }
+        .icon-maps .icon-bg { background: #34c759; }
+        .icon-music .icon-bg { background: #ff2d55; }
+        .icon-phone .icon-bg { background: #34c759; }
+        .icon-messages .icon-bg { background: #34c759; }
+        .icon-mail .icon-bg { background: #007aff; }
+        .icon-photos .icon-bg { background: #ff2d55; }
+        .icon-settings .icon-bg { background: #8e8e93; }
+        .icon-apple .icon-bg { background: #a2a2a6; }
+        .icon-facetime .icon-bg { background: #34c759; }
+        .icon-calendar .icon-bg { background: #ff3b30; }
+        .icon-reminders .icon-bg { background: #ff9500; }
+        .icon-notes .icon-bg { background: #ffcc00; color: #000; }
+        .icon-news .icon-bg { background: #ff3b30; }
+        .icon-health .icon-bg { background: #ff2d55; }
+        .icon-wallet .icon-bg { background: #007aff; }
+
         .app-view {
             position: absolute;
             top: 40px;
@@ -174,21 +199,11 @@
             box-shadow: 0 -4px 20px black;
         }
 
-        .app-view .status-bar-placeholder {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #8e8e93;
-            padding: 0 6px;
-        }
-
         .back-home {
             background: #2c2c2e;
             border: none;
             color: #0a84ff;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             padding: 8px 16px;
             border-radius: 30px;
@@ -197,109 +212,349 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            width: auto;
         }
 
-        .back-home i {
-            font-size: 18px;
-        }
-
-        /* Instagram */
-        .stories {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 8px 0 16px 0;
-            margin-bottom: 8px;
-        }
-
-        .story {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 64px;
-        }
-
-        .story-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #d62976);
-            padding: 3px;
-            margin-bottom: 5px;
-        }
-
-        .story-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid #1c1c1e;
-            object-fit: cover;
-        }
-
-        .story-name {
-            font-size: 11px;
-            color: #ccc;
-        }
-
-        .feed-post {
-            background: #262628;
-            border-radius: 16px;
-            margin-bottom: 20px;
+        .creep-clock {
+            background: #2c2c2e;
             padding: 12px;
+            border-radius: 24px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #ff3b30;
+            box-shadow: 0 0 15px #ff3b3044;
+        }
+        .creep-clock .label { font-size: 11px; color: #ff9a9a; letter-spacing: 2px; }
+        .creep-clock .value { font-size: 28px; font-weight: 800; color: #ff3b30; text-shadow: 0 0 8px red; font-family: monospace; }
+
+        .stories { display: flex; gap: 12px; overflow-x: auto; padding: 8px 0 16px; }
+        .story { display: flex; flex-direction: column; align-items: center; min-width: 64px; }
+        .story-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(45deg, #f09433, #d62976); padding: 3px; margin-bottom: 5px; }
+        .story-avatar img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #1c1c1e; object-fit: cover; }
+        .feed-post { background: #262628; border-radius: 16px; margin-bottom: 20px; padding: 12px; }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .post-avatar { width: 36px; height: 36px; background: #aaa; border-radius: 50%; overflow: hidden; }
+        .post-image { width: 100%; height: 160px; background: #3a3a3c; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #8e8e93; }
+
+        .browser-url { background: #2c2c2e; border-radius: 30px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .browser-url input { background: transparent; border: none; color: white; width: 100%; outline: none; }
+        .browser-content { background: #2c2c2e; border-radius: 20px; padding: 20px; text-align: center; height: 300px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+
+        .search-terminal {
+            width: min(700px, 92%);
+            margin: 2rem auto;
+            padding: 14px 16px;
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-family: "Courier New", monospace;
+            color: #aaa;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.02);
         }
 
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .search-terminal > span {
+            display: block;
             margin-bottom: 10px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #666;
+            text-transform: uppercase;
         }
 
-        .post-avatar {
-            width: 36px;
-            height: 36px;
-            background: #aaa;
-            border-radius: 50%;
-        }
-
-        .post-image {
-            width: 100%;
-            height: 180px;
-            background: #3a3a3c;
-            border-radius: 16px;
+        .search-terminal form {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #8e8e93;
+            gap: 8px;
+        }
+
+        .search-terminal input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #292929;
+            border-radius: 2px;
+            outline: none;
+            color: #ddd;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-terminal input::placeholder {
+            color: #444;
+        }
+
+        .search-terminal input:focus {
+            border-color: #666;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+        }
+
+        .search-terminal button {
+            width: 44px;
+            height: 42px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 2px;
+            color: #aaa;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .search-terminal button:hover {
+            background: #151515;
+            border-color: #666;
+            color: #fff;
+        }
+
+        .search-terminal button:active {
+            transform: translateY(1px);
+        }
+
+        .file-item { display: flex; align-items: center; gap: 16px; padding: 12px; background: #2c2c2e; border-radius: 14px; margin-bottom: 8px; }
+        .file-item i { font-size: 22px; width: 30px; }
+
+        .floating-game {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            width: calc(100% - 40px);
+            max-width: 320px;
+            height: 500px;
+            background: #1d1d1f;
+            border-radius: 24px;
+            border: 2px solid #5e5ce0;
+            box-shadow: 0 20px 40px black, 0 0 30px #5e5ce0;
+            z-index: 50;
+            display: none;
+            cursor: move;
+            resize: both;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        .floating-header { background: #2c2c2e; padding: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #5e5ce0; cursor: move; }
+        .floating-header i { color: #5e5ce0; }
+        .close-float { margin-left: auto; cursor: pointer; background: #3a3a3c; border: none; color: white; border-radius: 20px; padding: 4px 10px; font-size: 12px; }
+        .floating-content { height: calc(100% - 48px); background: #111; }
+        .floating-content iframe { width: 100%; height: 100%; border: none; background: #222; }
+
+        .glitch-time { animation: timeGlitch 0.6s infinite; }
+        @keyframes timeGlitch {
+            0% { opacity: 1; text-shadow: -1px 0 red; }
+            30% { opacity: 0.9; transform: translateX(1px); }
+            60% { opacity: 0.8; text-shadow: 1px 0 cyan; }
+            100% { opacity: 1; transform: translateX(-1px); }
+        }
+
+        .screen::-webkit-scrollbar { width: 4px; }
+        .screen::-webkit-scrollbar-track { background: #1a1a1a; }
+        .screen::-webkit-scrollbar-thumb { background: #ff3b30; border-radius: 4px; }
+
+        /* Estilos da App Store */
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #3a3a3c;
+        }
+
+        .store-header h2 {
+            font-size: 22px;
+            background: linear-gradient(45deg, #007aff, #5856d6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .store-search {
+            background: #2c2c2e;
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .store-search input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
             font-size: 14px;
         }
 
-        /* Spotify */
-        .spotify-header {
+        .store-search i {
+            color: #8e8e93;
+        }
+
+        .store-categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 0 16px;
+            margin-bottom: 8px;
+        }
+
+        .category-btn {
+            background: #2c2c2e;
+            border: none;
+            color: #8e8e93;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn.active {
+            background: #007aff;
+            color: white;
+        }
+
+        .category-btn:hover {
+            background: #3a3a3c;
+            color: white;
+        }
+
+        .app-card {
+            background: #2c2c2e;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
+            transition: all 0.2s;
         }
 
-        .spotify-logo {
-            background: #1DB954;
-            width: 40px;
-            height: 40px;
+        .app-card:hover {
+            background: #3a3a3c;
+        }
+
+        .app-card .icon-bg {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            border-radius: 12px;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        .app-card .app-info {
+            flex: 1;
+        }
+
+        .app-card .app-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .app-card .app-desc {
+            font-size: 11px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .app-card .app-category {
+            font-size: 10px;
+            color: #007aff;
+            margin-top: 2px;
+        }
+
+        .install-btn {
+            background: #007aff;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .install-btn:hover {
+            background: #0055cc;
+            transform: scale(1.05);
+        }
+
+        .install-btn.installed {
+            background: #34c759;
+        }
+
+        .install-btn.installed:hover {
+            background: #28a745;
+        }
+
+        .toast {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c2c2e;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 100;
+            animation: slideUp 0.3s ease;
+            border: 1px solid #007aff;
+            display: none;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .installed-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #34c759;
+            color: white;
             border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
         }
 
-        .recent-title {
-            font-size: 18px;
-            font-weight: 700;
+        .transmission {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .transmission-header {
+            font-family: monospace;
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 2px;
             margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
+        }
+
+        .transmission-footer {
+            font-family: monospace;
+            font-size: 10px;
+            color: #444;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .spotify-player {
+            margin: 8px 0;
         }
 
         .track-item {
@@ -310,180 +565,14 @@
             border-bottom: 1px solid #3a3a3c;
         }
 
-        .track-cover {
-            width: 48px;
-            height: 48px;
-            background: #3a3a3c;
-            border-radius: 8px;
-        }
-
-        .track-info {
-            flex: 1;
-        }
-
-        .track-name {
-            font-weight: 600;
-        }
-
-        .track-artist {
-            font-size: 13px;
-            color: #98989e;
-        }
-
-        .creep-clock {
-            background: #2c2c2e;
-            padding: 12px;
-            border-radius: 24px;
-            margin: 20px 0;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            border: 1px solid #ff3b30;
-            box-shadow: 0 0 15px #ff3b3044;
-        }
-
-        .creep-clock .label {
-            font-size: 12px;
-            color: #ff9a9a;
-            letter-spacing: 2px;
-        }
-
-        .creep-clock .value {
-            font-size: 32px;
-            font-weight: 800;
-            color: #ff3b30;
-            text-shadow: 0 0 8px red;
-        }
-
-        /* Safari (browser) */
-        .browser-url {
-            background: #2c2c2e;
-            border-radius: 30px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .browser-url i {
-            color: #0a84ff;
-        }
-
-        .browser-url input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            outline: none;
-        }
-
-        .browser-content {
-            background: #2c2c2e;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            color: #8e8e93;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Files (gerenciador) */
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px;
-            background: #2c2c2e;
-            border-radius: 14px;
-            margin-bottom: 8px;
-        }
-
-        .file-item i {
-            font-size: 24px;
-            width: 30px;
-        }
-
-        /* Floating game menu (draggable) */
-        .floating-game {
-            position: absolute;
-            top: 30px;
-            left: 0px;
-            width: 320px;
-            height: 620px;
-            background: #1d1d1f;
-            border-radius: 24px;
-            border: 2px solid #5e5ce0;
-            box-shadow: 0 20px 40px black, 0 0 30px #5e5ce0;
-            z-index: 50;
-            display: none;
-            cursor: move;
-            resize: both;
-            overflow: hidden;
-            min-width: 260px;
-            min-height: 620px;
-            backdrop-filter: blur(20px);
-        }
-
-        .floating-header {
-            background: #2c2c2e;
-            padding: 12px;
-            font-weight: 260;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #5e5ce0;
-            cursor: move;
-        }
-
-        .floating-header i {
-            color: #5e5ce0;
-        }
-
-        .floating-content {
-            height: 580px;
-            
-            background: #111;
-        }
-
-        .floating-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #222;
-        }
-
-        .close-float {
-            margin-left: auto;
-            cursor: pointer;
-            background: #3a3a3c;
-            border: none;
-            color: white;
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 12px;
-        }
-
-        /* status time modificado (horror) */
-        .glitch-time {
-            animation: timeGlitch 0.8s infinite;
-        }
-
-        @keyframes timeGlitch {
-            0% { opacity: 1; text-shadow: -2px 0 red; }
-            20% { opacity: 0.9; transform: translate(2px, -1px); }
-            40% { opacity: 0.8; text-shadow: 2px 0 cyan; }
-            60% { opacity: 1; transform: translate(-2px, 1px); }
-            80% { opacity: 0.9; text-shadow: -1px 0 lime; }
-            100% { opacity: 1; }
+        .track-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
 
 <div class="iphone">
-    <!-- notch / status bar always visible -->
     <div class="notch">
         <span class="time" id="liveTime">13:37</span>
         <span class="icons">
@@ -493,79 +582,123 @@
         </span>
     </div>
 
-    <!-- tela principal (conteúdo mutável) -->
     <div class="screen" id="mainScreen">
-
-        <!-- HOME SCREEN (ícones) -->
+        <!-- HOME SCREEN -->
         <div class="home-screen" id="homeScreen">
-            <!-- Spotify -->
+            <!-- Apps originais -->
             <div class="app-icon icon-spotify" data-app="spotify">
                 <div class="icon-bg"><i class="fab fa-spotify"></i></div>
                 <span class="app-label">Spotify</span>
             </div>
-            <!-- Instagram -->
             <div class="app-icon icon-instagram" data-app="instagram">
                 <div class="icon-bg"><i class="fab fa-instagram"></i></div>
                 <span class="app-label">Instagram</span>
             </div>
-            <!-- Safari / Browser -->
             <div class="app-icon icon-safari" data-app="safari">
                 <div class="icon-bg"><i class="fas fa-compass"></i></div>
                 <span class="app-label">Safari</span>
             </div>
-            <!-- Files -->
             <div class="app-icon icon-files" data-app="files">
                 <div class="icon-bg"><i class="fas fa-folder"></i></div>
                 <span class="app-label">Arquivos</span>
             </div>
-            <!-- Game App (menu flutuante) -->
             <div class="app-icon icon-game" id="gameLauncher">
                 <div class="icon-bg"><i class="fas fa-gamepad"></i></div>
-                <span class="app-label">Game</span>
+                <span class="app-label">Membrana Game</span>
             </div>
+
+            <!-- Apps do lore -->
+            <div class="app-icon icon-membrana" data-url="#">
+                <div class="icon-bg"><i class="fas fa-dharmachakra"></i></div>
+                <span class="app-label">Membrana</span>
+            </div>
+            <div class="app-icon icon-darkwiki" data-url="wiki/qsr-init.html">
+                <div class="icon-bg"><i class="fas fa-skull"></i></div>
+                <span class="app-label">Dark Wiki</span>
+            </div>
+            <div class="app-icon icon-ppd" data-url="paranoicos_digitais_anonimos/index.html">
+                <div class="icon-bg"><i class="fas fa-shield-alt"></i></div>
+                <span class="app-label">PDA</span>
+            </div>
+            <div class="app-icon icon-terms" data-url="https://ops-era-phishing.github.io/membrana-core/info.html">
+                <div class="icon-bg"><i class="fas fa-file-contract"></i></div>
+                <span class="app-label">Termos</span>
+            </div>
+            <div class="app-icon icon-jornal" data-url="jornal/jornal.html">
+                <div class="icon-bg"><i class="fas fa-newspaper"></i></div>
+                <span class="app-label">Observador</span>
+            </div>
+            <div class="app-icon icon-lysander" data-url="https://github.com/ops-era-phishing/membrana-core/blob/main/dr_Lysander_Morrow/story/ato-1-descoberta/01-profile.md">
+                <div class="icon-bg"><i class="fas fa-user-secret"></i></div>
+                <span class="app-label">Dr. Lysander</span>
+            </div>
+            <div class="app-icon icon-enigmas" data-url="missoes/painel.html">
+                <div class="icon-bg"><i class="fas fa-puzzle-piece"></i></div>
+                <span class="app-label">Enigmas</span>
+            </div>
+            <div class="app-icon icon-ego" data-url="ego-technologies.com.html">
+                <div class="icon-bg"><i class="fas fa-microchip"></i></div>
+                <span class="app-label">E.G.O. Tech</span>
+            </div>
+            <div class="app-icon icon-historias" data-url="historias/index.html">
+                <div class="icon-bg"><i class="fas fa-book-open"></i></div>
+                <span class="app-label">Histórias</span>
+            </div>
+            <div class="app-icon icon-github" data-url="https://github.com/ops-era-phishing/membrana-core.git">
+                <div class="icon-bg"><i class="fab fa-github"></i></div>
+                <span class="app-label">GitHub</span>
+            </div>
+
+            <!-- App Store -->
+            <div class="app-icon icon-store" data-app="store">
+                <div class="icon-bg"><i class="fas fa-store"></i></div>
+                <span class="app-label">App Store</span>
+            </div>
+
+            <!-- Apps instalados via loja aparecerão aqui -->
         </div>
 
-        <!-- APP VIEWS (inicialmente ocultos) -->
-
+        <!-- VIEWS INTERNAS -->
         <!-- Spotify view -->
         <div class="app-view" id="spotifyView">
             <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
-            <div class="spotify-header">
-                <div class="spotify-logo"><i class="fab fa-spotify"></i></div>
+            <div class="spotify-header" style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <div style="background:#1DB954; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;"><i class="fab fa-spotify"></i></div>
                 <h2>Boa noite</h2>
             </div>
-            <!-- relógio psicológico -->
             <div class="creep-clock" id="creepClockSpotify">
                 <div class="label">⏳ TEMPO REAL</div>
                 <div class="value" id="spotifyTime">13:37:01</div>
                 <div style="font-size: 11px; color: #ff6b6b;">você está sendo observado</div>
             </div>
-            <div class="recent-title">
-                <span>ouvidas recentemente</span>
-                <span style="color:#1DB954;">ver tudo</span>
+            <div style="display:flex; justify-content:space-between; margin:16px 0 8px;"><span>ouvidas recentemente</span><span style="color:#1DB954;">ver tudo</span></div>
+            <div class="transmission">
+                <div class="transmission-header">AUDIO SIGNAL // 001</div>
+                <div class="spotify-player">
+                    <iframe src="https://open.spotify.com/embed/track/64l2UDLAACB1Bo1th5r9an" width="100%" height="152" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <div class="transmission-footer">SOURCE: SPOTIFY</div>
+            </div>
+            <div class="transmission">
+                <div class="transmission-header">AUDIO SIGNAL // 002</div>
+                <div class="spotify-player">
+                    <iframe src="https://open.spotify.com/embed/track/59AUHYXj5iKhJGwDsbU1CZ" width="100%" height="152" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <div class="transmission-footer">SOURCE: SPOTIFY</div>
             </div>
             <div class="track-item">
-                <div class="track-cover" style="background:#a0a0a0;"></div>
-                <div class="track-info">
-                    <div class="track-name">Echoes in the Void</div>
-                    <div class="track-artist">Static Lullaby</div>
-                </div>
+                <div style="width:48px; height:48px; background:#a0a0a0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Echoes in the Void</div><div class="track-artist" style="font-size:13px; color:#98989e;">Static Lullaby</div></div>
                 <i class="fas fa-play" style="color:#1DB954;"></i>
             </div>
             <div class="track-item">
-                <div class="track-cover" style="background:#b0b0b0;"></div>
-                <div class="track-info">
-                    <div class="track-name">Midnight Glitch</div>
-                    <div class="track-artist">Phantom System</div>
-                </div>
+                <div style="width:48px; height:48px; background:#b0b0b0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Midnight Glitch</div><div class="track-artist">Phantom System</div></div>
                 <i class="fas fa-play" style="color:#1DB954;"></i>
             </div>
             <div class="track-item">
-                <div class="track-cover" style="background:#c0c0c0;"></div>
-                <div class="track-info">
-                    <div class="track-name">Hollow Faces</div>
-                    <div class="track-artist">Nine Inch Nails (cover)</div>
-                </div>
+                <div style="width:48px; height:48px; background:#c0c0c0; border-radius:8px;"></div>
+                <div style="flex:1;"><div class="track-name">Hollow Faces</div><div class="track-artist">Nine Inch Nails (cover)</div></div>
                 <i class="fas fa-play" style="color:#1DB954;"></i>
             </div>
         </div>
@@ -580,36 +713,28 @@
                 <div class="story"><div class="story-avatar"><img src="https://i.pravatar.cc/64?u=4" alt=""></div><span class="story-name">void.exe</span></div>
             </div>
             <div class="feed-post">
-                <div class="post-header">
-                    <div class="post-avatar"><img src="https://i.pravatar.cc/36?u=10" style="width:100%; border-radius:50%;"></div>
-                    <span><strong>horror_daily</strong> • 2h</span>
-                </div>
-                <div class="post-image" style="background: #2e2e32;">
-                    <span style="filter: blur(2px);">⏚⌂⌋⌉⌊</span>
-                </div>
+                <div class="post-header"><div class="post-avatar"><img src="https://i.pravatar.cc/36?u=10" style="width:100%;"></div><span><strong>horror_daily</strong> • 2h</span></div>
+                <div class="post-image" style="background:#2e2e32;"><span style="filter: blur(2px);">⏚⌂⌋⌉⌊</span></div>
                 <p style="margin-top:8px;">🌑 17:77 • #sinais</p>
             </div>
             <div class="feed-post">
-                <div class="post-header">
-                    <div class="post-avatar"><img src="https://i.pravatar.cc/36?u=11" style="width:100%; border-radius:50%;"></div>
-                    <span><strong>simulacro_</strong> • 6h</span>
-                </div>
-                <div class="post-image" style="background:#3e3e42;">🇯​​​👁️</div>
+                <div class="post-header"><div class="post-avatar"><img src="https://i.pravatar.cc/36?u=11" style="width:100%;"></div><span><strong>simulacro_</strong> • 6h</span></div>
+                <div class="post-image" style="background:#3e3e42;">🇯👁️</div>
                 <p style="margin-top:8px;">você viu isso?</p>
             </div>
         </div>
 
-        <!-- Safari / Browser view -->
+        <!-- Safari view -->
         <div class="app-view" id="safariView">
             <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
-            <div class="browser-url">
-                <i class="fas fa-lock"></i>
-                <input type="text" value="app.horror.2026" readonly>
-                <i class="fas fa-rotate-right"></i>
-            </div>
-            <div class="browser-content">
-                <span style="opacity:0.5; font-size:24px;">⌂⌂⌂</span><br>
-                <span style="color: #ff453a;">ERRO 0x00000000</span>
+            <div class="browser-url"><i class="fas fa-lock"></i><input type="text" value="app.horror.onion" readonly><i class="fas fa-rotate-right"></i></div>
+            <div class="browser-content"><span style="opacity:0.5; font-size:24px;">⌂⌂⌂</span><br><span style="color:#ff453a;">ERRO 0x00000000</span></div>
+            <div class="search-terminal">
+                <span>SEARCH_NODE://</span>
+                <form action="https://duckduckgo.com/" method="get" target="_blank">
+                    <input type="search" name="q" placeholder="query..." autocomplete="off">
+                    <button type="submit">↵</button>
+                </form>
             </div>
         </div>
 
@@ -622,47 +747,90 @@
             <div class="file-item"><i class="fas fa-folder" style="color:#66aaff;"></i> Música <span style="margin-left:auto;">9 músicas</span></div>
             <div class="file-item"><i class="fas fa-folder" style="color:#aa44ff;"></i> Arquivos ocultos <span style="margin-left:auto;">???</span></div>
         </div>
+
+        <!-- App Store view -->
+        <div class="app-view" id="storeView">
+            <button class="back-home" onclick="showHome()"><i class="fas fa-chevron-left"></i> Home</button>
+            <div class="store-header">
+                <h2>📱 App Store</h2>
+                <span style="color:#8e8e93; font-size:12px;" id="installedCount">0 instalados</span>
+            </div>
+            <div class="store-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="storeSearch" placeholder="Buscar apps..." oninput="filterApps()">
+            </div>
+            <div class="store-categories" id="categoriesContainer">
+                <button class="category-btn active" data-category="all" onclick="filterByCategory('all')">Todos</button>
+                <button class="category-btn" data-category="ferramentas" onclick="filterByCategory('ferramentas')">🛠️ Ferramentas</button>
+                <button class="category-btn" data-category="redes" onclick="filterByCategory('redes')">🌐 Redes</button>
+                <button class="category-btn" data-category="jogos" onclick="filterByCategory('jogos')">🎮 Jogos</button>
+                <button class="category-btn" data-category="produtividade" onclick="filterByCategory('produtividade')">📋 Produtividade</button>
+                <button class="category-btn" data-category="entretenimento" onclick="filterByCategory('entretenimento')">🎬 Entretenimento</button>
+            </div>
+            <div id="appList"></div>
+        </div>
     </div>
 
-    <!-- Floating Game Menu (draggable) -->
+    <!-- Floating Game -->
     <div class="floating-game" id="floatingGame">
         <div class="floating-header" id="dragHandle">
-            <i class="fas fa-gamepad"></i> GAME FLOAT
+            <i class="fas fa-gamepad"></i> MEMBRANA · QRS-0
             <button class="close-float" id="closeFloatBtn"><i class="fas fa-times"></i></button>
         </div>
         <div class="floating-content">
-            <!-- iframe simulando jogo / site, pode ser um link real (coloquei um jogo classico) -->
-            <iframe src="https://knnrz.github.io/qrs-zero/game/membrana/main.html?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPNTY3MDY3MzQzMzUyNDI3AAGnhPpGgHGOShvzmzOxJwmFsvUcxTRnfP5ZYfQlp7HVP2jlhd_0WeohjAtOlzk_aem_snXyEHGzNrKOF7I64GyXOw/" title="jogo flutuante"></iframe>
+            <iframe src="./pages/arquivo.html" title="jogo flutuante"></iframe>
         </div>
     </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
 </div>
 
 <script>
     (function() {
-        // elementos principais
+        // ========== CONFIGURAÇÃO DA LOJA ==========
+        const appStore = [
+            { id: 'calc', name: 'Calculadora', icon: 'fa-calculator', category: 'ferramentas', desc: 'Faça cálculos básicos' },
+            { id: 'notes', name: 'Notas', icon: 'fa-note-sticky', category: 'produtividade', desc: 'Anote suas ideias' },
+            { id: 'camera', name: 'Câmera', icon: 'fa-camera', category: 'ferramentas', desc: 'Capture momentos' },
+            { id: 'weather', name: 'Clima', icon: 'fa-cloud-sun', category: 'ferramentas', desc: 'Previsão do tempo' },
+            { id: 'clock', name: 'Relógio', icon: 'fa-clock', category: 'ferramentas', desc: 'Horário mundial' },
+            { id: 'maps', name: 'Mapas', icon: 'fa-map-location-dot', category: 'ferramentas', desc: 'Navegação' },
+            { id: 'music', name: 'Música', icon: 'fa-music', category: 'entretenimento', desc: 'Sua biblioteca' },
+            { id: 'phone', name: 'Telefone', icon: 'fa-phone', category: 'redes', desc: 'Chamadas' },
+            { id: 'messages', name: 'Mensagens', icon: 'fa-message', category: 'redes', desc: 'Envie mensagens' },
+            { id: 'mail', name: 'E-mail', icon: 'fa-envelope', category: 'redes', desc: 'Seu e-mail' },
+            { id: 'photos', name: 'Fotos', icon: 'fa-image', category: 'entretenimento', desc: 'Galeria' },
+            { id: 'settings', name: 'Ajustes', icon: 'fa-gear', category: 'ferramentas', desc: 'Configurações' },
+            { id: 'calendar', name: 'Calendário', icon: 'fa-calendar-days', category: 'produtividade', desc: 'Agenda' },
+            { id: 'reminders', name: 'Lembretes', icon: 'fa-list-check', category: 'produtividade', desc: 'Lista de tarefas' },
+            { id: 'news', name: 'Notícias', icon: 'fa-newspaper', category: 'entretenimento', desc: 'Últimas notícias' },
+            { id: 'health', name: 'Saúde', icon: 'fa-heart-pulse', category: 'ferramentas', desc: 'Monitoramento' },
+            { id: 'wallet', name: 'Carteira', icon: 'fa-wallet', category: 'ferramentas', desc: 'Pagamentos' },
+            { id: 'facetime', name: 'FaceTime', icon: 'fa-video', category: 'redes', desc: 'Chamadas de vídeo' },
+        ];
+
+        // ========== ESTADO ==========
+        let installedApps = JSON.parse(localStorage.getItem('installedApps')) || [];
+        let currentCategory = 'all';
+        let searchTerm = '';
+
+        // ========== ELEMENTOS ==========
         const home = document.getElementById('homeScreen');
         const spotifyView = document.getElementById('spotifyView');
         const instagramView = document.getElementById('instagramView');
         const safariView = document.getElementById('safariView');
         const filesView = document.getElementById('filesView');
-        const appViews = [spotifyView, instagramView, safariView, filesView];
-
+        const storeView = document.getElementById('storeView');
+        const appViews = [spotifyView, instagramView, safariView, filesView, storeView];
         const liveTimeSpan = document.getElementById('liveTime');
         const spotifyTimeSpan = document.getElementById('spotifyTime');
         const mainScreenDiv = document.getElementById('mainScreen');
+        const appList = document.getElementById('appList');
+        const installedCount = document.getElementById('installedCount');
+        const toast = document.getElementById('toast');
 
-        // controle do menu flutuante
-        const gameLauncher = document.getElementById('gameLauncher');
-        const floatMenu = document.getElementById('floatingGame');
-        const closeFloatBtn = document.getElementById('closeFloatBtn');
-        const dragHandle = document.getElementById('dragHandle');
-
-        // estado do tempo "horror"
-        let normalTime = true;
-        let creepInterval = null;
-        let baseSeconds = 0;
-
-        // função atualizar relógio normal
+        // ========== RELÓGIO NORMAL ==========
         function updateNormalTime() {
             const now = new Date();
             const hh = String(now.getHours()).padStart(2,'0');
@@ -672,70 +840,50 @@
         setInterval(updateNormalTime, 1000);
         updateNormalTime();
 
-        // função creep para o spotify (tempo que se mexe sozinho + glitch)
+        // ========== RELÓGIO PERTURBADOR ==========
+        let creepInterval = null;
         function startCreepTime() {
             if (creepInterval) clearInterval(creepInterval);
-            let seconds = 0;
-            const start = Date.now();
-
             creepInterval = setInterval(() => {
-                // tempo real modificado -> aparenta ser "real" mas acelera
                 const now = new Date();
                 let hh = now.getHours();
                 let mm = now.getMinutes();
                 let ss = now.getSeconds();
 
-                // manipulação psicológica: às vezes muda o formato
                 if (mm % 7 === 0) {
                     liveTimeSpan.classList.add('glitch-time');
-                    // mostra hora com segundos no status bar?
                     liveTimeSpan.textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
                 } else {
                     liveTimeSpan.classList.remove('glitch-time');
                     liveTimeSpan.textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
                 }
 
-                // no relógio interno do spotify, mostramos algo perturbador
                 if (spotifyTimeSpan) {
-                    // faz o tempo andar mais rápido (segundos duplicados)
                     let fakeSs = (ss + 30) % 60;
                     let fakeMm = (fakeSs < 30) ? mm : (mm + 1) % 60;
                     let fakeHh = (fakeMm === 0 && fakeSs > 30) ? (hh + 1) % 24 : hh;
                     spotifyTimeSpan.textContent = `${String(fakeHh).padStart(2,'0')}:${String(fakeMm).padStart(2,'0')}:${String(fakeSs).padStart(2,'0')}`;
-
-                    // adiciona mensagem ocasional
-                    if (ss % 13 === 0) {
-                        document.querySelector('.creep-clock .label').innerText = '⏳ VOCÊ ESTÁ AQUI HÁ';
-                    } else {
-                        document.querySelector('.creep-clock .label').innerText = '⏳ TEMPO REAL';
-                    }
+                    if (ss % 13 === 0) document.querySelector('.creep-clock .label').innerText = '⏳ VOCÊ ESTÁ AQUI HÁ';
+                    else document.querySelector('.creep-clock .label').innerText = '⏳ TEMPO REAL';
                 }
 
-                // horror na tela principal (ligeiro glitch)
                 if (ss % 10 === 0) {
                     mainScreenDiv.classList.add('glitch');
                     setTimeout(() => mainScreenDiv.classList.remove('glitch'), 200);
                 }
             }, 1000);
         }
-
-        // parar o creep (quando sai do spotify)
         function stopCreepTime() {
-            if (creepInterval) {
-                clearInterval(creepInterval);
-                creepInterval = null;
-            }
+            if (creepInterval) { clearInterval(creepInterval); creepInterval = null; }
             liveTimeSpan.classList.remove('glitch-time');
-            // volta à hora normal
             updateNormalTime();
-            setInterval(updateNormalTime, 1000); // re-estabiliza
         }
 
-        // funções de navegação
+        // ========== NAVEGAÇÃO ==========
         window.showHome = function() {
             appViews.forEach(v => v.style.display = 'none');
             home.style.display = 'grid';
-            stopCreepTime(); // se estava no spotify, desliga o creep
+            stopCreepTime();
         };
 
         function showApp(appId) {
@@ -743,89 +891,247 @@
             appViews.forEach(v => v.style.display = 'none');
             const selected = document.getElementById(appId);
             if (selected) selected.style.display = 'block';
-
-            // se for spotify, ativa o relógio perturbador
-            if (appId === 'spotifyView') {
-                startCreepTime();
-            } else {
-                stopCreepTime();
-            }
+            if (appId === 'spotifyView') startCreepTime();
+            else stopCreepTime();
+            if (appId === 'storeView') renderStore();
         }
 
-        // listeners dos ícones home
+        // ========== EVENTOS DOS ÍCONES ==========
         document.querySelectorAll('.app-icon[data-app]').forEach(icon => {
-            icon.addEventListener('click', (e) => {
+            icon.addEventListener('click', () => {
                 const app = icon.dataset.app;
                 if (app === 'spotify') showApp('spotifyView');
                 else if (app === 'instagram') showApp('instagramView');
                 else if (app === 'safari') showApp('safariView');
                 else if (app === 'files') showApp('filesView');
+                else if (app === 'store') showApp('storeView');
+                else {
+                    // App instalado
+                    showToast(`Abrindo ${app}...`);
+                }
             });
         });
 
-        // GAME: menu flutuante (PHP simbólico)
-        gameLauncher.addEventListener('click', () => {
-            floatMenu.style.display = 'block';
-            // toque psicológico: aplicar glitch na tela
-            mainScreenDiv.classList.add('glitch');
-            setTimeout(() => mainScreenDiv.classList.remove('glitch'), 400);
-            // opcional: atualizar algo com "hora do game"
+        document.querySelectorAll('.app-icon[data-url]').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const url = icon.dataset.url;
+                if (url && url !== '#') {
+                    window.open(url, '_blank');
+                } else {
+                    showToast('Página em construção.');
+                }
+            });
         });
 
+        // ========== FUNÇÕES DA LOJA ==========
+        function renderStore() {
+            const filtered = appStore.filter(app => {
+                const matchesCategory = currentCategory === 'all' || app.category === currentCategory;
+                const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                     app.desc.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                appList.innerHTML = `<div style="text-align:center; padding:40px 0; color:#8e8e93;">Nenhum app encontrado</div>`;
+                return;
+            }
+
+            appList.innerHTML = filtered.map(app => {
+                const isInstalled = installedApps.includes(app.id);
+                return `
+                    <div class="app-card">
+                        <div class="icon-bg" style="background:${getColorForApp(app.id)};">
+                            <i class="fas ${app.icon}"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">${app.name}</div>
+                            <div class="app-desc">${app.desc}</div>
+                            <div class="app-category">${getCategoryLabel(app.category)}</div>
+                        </div>
+                        <button class="install-btn ${isInstalled ? 'installed' : ''}" 
+                                onclick="toggleInstall('${app.id}')">
+                            ${isInstalled ? '✓ Instalado' : 'Instalar'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            updateInstalledCount();
+        }
+
+        function getColorForApp(id) {
+            const colors = {
+                'calc': '#5856d6',
+                'notes': '#ffcc00',
+                'camera': '#1a1a1a',
+                'weather': '#34aadc',
+                'clock': '#1c1c1e',
+                'maps': '#34c759',
+                'music': '#ff2d55',
+                'phone': '#34c759',
+                'messages': '#34c759',
+                'mail': '#007aff',
+                'photos': '#ff2d55',
+                'settings': '#8e8e93',
+                'calendar': '#ff3b30',
+                'reminders': '#ff9500',
+                'news': '#ff3b30',
+                'health': '#ff2d55',
+                'wallet': '#007aff',
+                'facetime': '#34c759'
+            };
+            return colors[id] || '#5856d6';
+        }
+
+        function getCategoryLabel(category) {
+            const labels = {
+                'ferramentas': '🛠️ Ferramentas',
+                'redes': '🌐 Redes',
+                'jogos': '🎮 Jogos',
+                'produtividade': '📋 Produtividade',
+                'entretenimento': '🎬 Entretenimento'
+            };
+            return labels[category] || category;
+        }
+
+        window.filterByCategory = function(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.category === category);
+            });
+            renderStore();
+        };
+
+        window.filterApps = function() {
+            const input = document.getElementById('storeSearch');
+            searchTerm = input ? input.value : '';
+            renderStore();
+        };
+
+        window.toggleInstall = function(appId) {
+            const index = installedApps.indexOf(appId);
+            if (index > -1) {
+                // Desinstalar
+                installedApps.splice(index, 1);
+                removeAppFromHome(appId);
+                showToast(`🗑️ ${appStore.find(a => a.id === appId)?.name || 'App'} desinstalado`);
+            } else {
+                // Instalar
+                installedApps.push(appId);
+                addAppToHome(appId);
+                showToast(`✅ ${appStore.find(a => a.id === appId)?.name || 'App'} instalado com sucesso!`);
+            }
+            localStorage.setItem('installedApps', JSON.stringify(installedApps));
+            renderStore();
+        };
+
+        function addAppToHome(appId) {
+            const app = appStore.find(a => a.id === appId);
+            if (!app) return;
+
+            // Remove se já existir
+            const existing = document.querySelector(`.app-icon[data-app="${appId}"]`);
+            if (existing) return;
+
+            const newIcon = document.createElement('div');
+            newIcon.className = `app-icon icon-${appId}`;
+            newIcon.dataset.app = appId;
+            newIcon.innerHTML = `
+                <div class="icon-bg" style="background:${getColorForApp(appId)};">
+                    <i class="fas ${app.icon}"></i>
+                </div>
+                <span class="app-label">${app.name}</span>
+            `;
+            newIcon.addEventListener('click', () => {
+                showToast(`Abrindo ${app.name}...`);
+            });
+            home.appendChild(newIcon);
+        }
+
+        function removeAppFromHome(appId) {
+            const existing = document.querySelector(`.app-icon[data-app="${appId}"]`);
+            if (existing) existing.remove();
+        }
+
+        function updateInstalledCount() {
+            if (installedCount) {
+                installedCount.textContent = `${installedApps.length} instalados`;
+            }
+        }
+
+        // ========== TOAST ==========
+        let toastTimeout = null;
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2500);
+        }
+
+        // ========== GAME FLUTUANTE ==========
+        const gameLauncher = document.getElementById('gameLauncher');
+        const floatMenu = document.getElementById('floatingGame');
+        const closeFloatBtn = document.getElementById('closeFloatBtn');
+        const dragHandle = document.getElementById('dragHandle');
+
+        gameLauncher.addEventListener('click', () => {
+            floatMenu.style.display = 'block';
+            mainScreenDiv.classList.add('glitch');
+            setTimeout(() => mainScreenDiv.classList.remove('glitch'), 400);
+        });
         closeFloatBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             floatMenu.style.display = 'none';
         });
 
-        // --- tornar o menu flutuante arrastável (JS simples) ---
-        let dragActive = false;
-        let offsetX, offsetY;
-
+        let dragActive = false, offsetX, offsetY;
         dragHandle.addEventListener('mousedown', (e) => {
             dragActive = true;
             offsetX = e.clientX - floatMenu.getBoundingClientRect().left;
             offsetY = e.clientY - floatMenu.getBoundingClientRect().top;
             floatMenu.style.cursor = 'grabbing';
         });
-
         document.addEventListener('mousemove', (e) => {
             if (dragActive) {
                 e.preventDefault();
                 const left = e.clientX - offsetX;
                 const top = e.clientY - offsetY;
-                // limites dentro do iphone (aproximado)
                 const parentRect = document.querySelector('.iphone').getBoundingClientRect();
                 floatMenu.style.left = Math.min(parentRect.width - 80, Math.max(10, left - parentRect.left)) + 'px';
                 floatMenu.style.top = Math.min(parentRect.height - 100, Math.max(40, top - parentRect.top)) + 'px';
             }
         });
-
-        document.addEventListener('mouseup', () => {
-            dragActive = false;
-            floatMenu.style.cursor = 'default';
-        });
-
-        // evita que o iframe atrapalhe o drag
+        document.addEventListener('mouseup', () => { dragActive = false; floatMenu.style.cursor = 'default'; });
         dragHandle.ondragstart = () => false;
 
-        // iniciar com home visível
+        // ========== CARREGAR APPS INSTALADOS ==========
+        function loadInstalledApps() {
+            installedApps.forEach(appId => {
+                addAppToHome(appId);
+            });
+            updateInstalledCount();
+        }
+
+        // ========== INICIALIZAR ==========
         showHome();
+        loadInstalledApps();
+
+        console.log('%c📱 iHorror 13 · App Store funcional carregada!', 'color: #007aff; font-size: 14px;');
+        console.log('%c🛒 Apps disponíveis: ' + appStore.length, 'color: #34c759;');
+        console.log('%c📦 Apps instalados: ' + installedApps.length, 'color: #ff9500;');
     })();
 </script>
 
-<!-- SVG para efeito glitch (filtro simples) -->
 <svg style="display: none;">
     <filter id="glitch">
         <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
-        <feComponentTransfer>
-            <feFuncR type="linear" slope="1.5" intercept="-0.2"/>
-            <feFuncG type="linear" slope="0.8" intercept="0.1"/>
-            <feFuncB type="linear" slope="1.2" intercept="-0.1"/>
-        </feComponentTransfer>
-        <feOffset dx="2" dy="1" result="off1"/>
-        <feOffset dx="-2" dy="-1" result="off2"/>
-        <feBlend in="SourceGraphic" in2="off1" mode="screen"/>
-        <feBlend in2="off2" mode="overlay"/>
+        <feComponentTransfer><feFuncR type="linear" slope="1.5" intercept="-0.2"/><feFuncG type="linear" slope="0.8"/><feFuncB type="linear" slope="1.2"/></feComponentTransfer>
+        <feOffset dx="2" dy="1" result="off1"/><feOffset dx="-2" dy="-1" result="off2"/>
+        <feBlend in="SourceGraphic" in2="off1" mode="screen"/><feBlend in2="off2" mode="overlay"/>
     </filter>
 </svg>
 
